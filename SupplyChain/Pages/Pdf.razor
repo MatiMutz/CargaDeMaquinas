@@ -1,8 +1,14 @@
 ﻿@page "/Pdf/{codigo}"
 
-<embed src="@(codigo.Substring(0,7)).pdf" type="application/pdf" width="100%" height="600px" />
+
+<embed src="20.Digital/planos/ENS52506_3.pdf" type="application/pdf" width="100%" height="600px" />
+
+
+@*<embed src="20.Digital/planos/@(codigo.Substring(0,7)).pdf" type="application/pdf" width="100%" height="600px" />*@
 
 @code {
+    protected List<Solution> Rutas;
+
     [Parameter]
     public string codigo { get; set; }
 
