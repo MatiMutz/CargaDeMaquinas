@@ -329,6 +329,9 @@ else
                                                                     <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                         <label>Plano</label>
                                                                     </td>
+                                                                    <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                        <label>Programa</label>
+                                                                    </td>
                                                                     <td width="10%" style="margin-left:10px;text-align:right;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                         <label>Cantidad</label>
                                                                     </td>
@@ -344,7 +347,10 @@ else
                                                                         <label>@ordenFabricacion.DES_PROD</label>
                                                                     </td>
                                                                     <td>
-                                                                        <label><a href="Pdf/@ordenFabricacion.CG_PROD" target="_blank">Ver Plano</a></label>
+                                                                        <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/OFRUTA1" target="_blank">Ver Plano</a></label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/CNC" target="_blank">Ver Programa</a></label>
                                                                     </td>
                                                                     <td style="text-align:right">
                                                                         <label>@ordenFabricacion.CANT</label>
