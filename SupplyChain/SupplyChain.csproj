@@ -7,7 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
-    <PackageReference Include="Syncfusion.Blazor" Version="18.2.0.56" />
+    <PackageReference Include="Syncfusion.Blazor" Version="18.3.0.47" />
+    <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="18.3.0.47" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
   </ItemGroup>

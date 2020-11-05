@@ -28,7 +28,7 @@ namespace SupplyChain
         {
             try
             {
-                string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'OFRUTA1' OR CAMPO = 'CNCRUTA'");
+                string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF' OR CAMPO = 'RUTACNC'");
                 return _context.Solution.FromSqlRaw(xSQL).ToList<Solution>();
             }
             catch

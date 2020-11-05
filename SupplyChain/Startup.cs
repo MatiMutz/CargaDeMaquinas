@@ -26,12 +26,13 @@ namespace SupplyChain
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddSingleton<CustomHttpClient>();
             services.AddSyncfusionBlazor();
+            services.AddServerSideBlazor().AddHubOptions(o => { o.MaximumReceiveMessageSize = 102400000; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjkyOTAxQDMxMzgyZTMyMmUzMEs4Qi9Qejg1Mk9FR0VmVkMzRG0zQ3N0QlpLOFA1b0xRc3hNME1rQU40VG89");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzQ3MDcxQDMxMzgyZTMzMmUzMFFKM3ZwVjJ3aUgvL2ExdGxjMG1JNG5POUIwWWJTQkUydXlpWmdDTjVvc1k9");
 
             if (env.IsDevelopment())
             {
