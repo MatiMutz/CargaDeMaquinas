@@ -1,4 +1,5 @@
 ﻿@page "/PageCargaMaquina"
+@page "/"
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
 @using Syncfusion.Blazor.Inputs
@@ -347,10 +348,10 @@ else
                                                                         <label>@ordenFabricacion.DES_PROD</label>
                                                                     </td>
                                                                     <td>
-                                                                        <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/OFRUTA1" target="_blank">Ver Plano</a></label>
+                                                                        <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTAOF" target="_blank">Ver Plano</a></label>
                                                                     </td>
                                                                     <td>
-                                                                        <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/CNC" target="_blank">Ver Programa</a></label>
+                                                                        <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
                                                                     </td>
                                                                     <td style="text-align:right">
                                                                         <label>@ordenFabricacion.CANT</label>
