@@ -2,6 +2,11 @@
 @page "/"
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
+@using Syncfusion.Pdf;
+@using Syncfusion.Pdf.Graphics;
+@using Syncfusion.Pdf.Grid;
+@using System.Drawing;
+@using System.IO;
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.DropDowns
@@ -350,7 +355,11 @@ else
                                                                     <td>
                                                                         <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTAOF" target="_blank">Ver Plano</a></label>
                                                                     </td>
+                                                                    @code{
+
+                                                                    }
                                                                     <td>
+                                                                        <button @onclick="@exprotdata"> xd</button>
                                                                         <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
                                                                     </td>
                                                                     <td style="text-align:right">
@@ -697,6 +706,47 @@ else
     protected List<ModeloGenericoStringString> dbCeldas;
     protected List<ModeloGenericoStringString> dbProcesos;
     protected string Usuario = "USER";
+
+    [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+    public async void exprotdata()
+    {
+        //Create a new PDF document
+        PdfDocument pdfDocument = new PdfDocument();
+        //Create the page
+        PdfPage pdfPage = pdfDocument.Pages.Add();
+        //Create new PdfGrid
+        PdfGrid pdfGrid = new PdfGrid();
+        //Add columns
+        pdfGrid.Columns.Add(2);
+        //Add row
+        PdfGridRow row1 = pdfGrid.Rows.Add();
+        row1.Cells[0].Value = $"Pedido: {ordenFabricacion.CG_CELDA}";
+        row1.Cells[1].Value = "Description";
+        PdfGridRow row2 = pdfGrid.Rows.Add();
+        row2.Cells[0].Value = "Essential PDF";
+
+        /*
+        string htmlText = "<font color='#0000F8'><b>Essential PDF</b></font> is a <u><i>.NET library</i></u> " + "with the capability to produce <i>Adobe PDF files </i>.";
+        //Render HTML text
+        PdfTextElement richTextElement = new PdfTextElement(htmlText, new PdfStandardFont(Syncfusion.Pdf.Graphics.PdfFontFamily.TimesRoman, 12), Syncfusion.Pdf.Graphics.PdfBrushes.Black);
+        //Set HTML styled text value to the table cell
+        row2.Cells[1].Value = richTextElement;
+        */
+
+        //Draw PDF grid into the PDF page
+        pdfGrid.Draw(pdfPage, new Syncfusion.Drawing.PointF(0, 0));
+
+        //Saving the PDF to the MemoryStream
+        MemoryStream stream = new MemoryStream();
+
+        pdfDocument.Save(stream);
+
+        pdfDocument.Close(true);
+
+        //Download the PDF in the browser.
+        await JS.SaveAs(ordenFabricacion.PEDIDO + ".pdf", stream.ToArray());
+
+    }
 
     protected override async Task OnInitializedAsync()
     {
