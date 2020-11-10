@@ -720,11 +720,11 @@ else
         pdfGrid.Columns.Add(2);
         //Add row
         PdfGridRow row1 = pdfGrid.Rows.Add();
-        row1.Cells[0].Value = $"Pedido: {ordenFabricacion.CG_CELDA}";
-        row1.Cells[1].Value = "Description";
+        row1.Cells[0].Value = $"OF ALTA: {ordenFabricacion.CG_CELDA}";
+        row1.Cells[1].Value = $"Description: {ordenFabricacion.DES_PROD}";
         PdfGridRow row2 = pdfGrid.Rows.Add();
-        row2.Cells[0].Value = "Essential PDF";
-
+        row2.Cells[0].Value = $"CANTIDAD: {ordenFabricacion.CANT}";
+        row1.Cells[1].Value = $"FECHA: {ordenFabricacion.FECHA_INICIO_REAL_FABRICACION}";
         /*
         string htmlText = "<font color='#0000F8'><b>Essential PDF</b></font> is a <u><i>.NET library</i></u> " + "with the capability to produce <i>Adobe PDF files </i>.";
         //Render HTML text
