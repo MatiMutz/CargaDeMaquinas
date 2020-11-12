@@ -12,6 +12,7 @@
 @using Syncfusion.Blazor.DropDowns
 @inject IJSRuntime JsRuntime
 @inject CustomHttpClient Http
+@using Syncfusion.Pdf.Tables 
 <head>
 </head>
 <h3 class="titulo">
@@ -710,42 +711,38 @@ else
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
     public async void exprotdata()
     {
-        //Create a new PDF document
-        PdfDocument pdfDocument = new PdfDocument();
+        PdfDocument document1 = new PdfDocument();
+        //Create a PdfGrid
+        PdfGrid pdfGrid1 = new PdfGrid();
         //Create the page
-        PdfPage pdfPage = pdfDocument.Pages.Add();
-        //Create new PdfGrid
-        PdfGrid pdfGrid = new PdfGrid();
-        //Add columns
-        pdfGrid.Columns.Add(2);
-        //Add row
-        PdfGridRow row1 = pdfGrid.Rows.Add();
+        PdfPage page = document1.Pages.Add();
+        //Create PDF graphics for the page.
+        PdfGraphics graphics = page.Graphics;
+        //Set the standard font.
+        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+        PdfLightTable pdfTable = new PdfLightTable();
+        page.Graphics.RotateTransform(-90);
+        //Draw the text.
+        graphics.DrawString($"        OF ALTA: {ordenFabricacion.CG_ORDF}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+        document1.PageSettings.Margins.All = 0;
+        //PdfTemplate template = null;
+        MemoryStream xx = new MemoryStream();
+        document1.Save(xx);
+
+        //Set the position as '0'
+        //xx.Position = 0;
+        //Close the document 
+        document1.Close(true);
+
+        await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD + ".pdf", xx.ToArray());
+
+        /*
         row1.Cells[0].Value = $"OF ALTA: {ordenFabricacion.CG_CELDA}";
         row1.Cells[1].Value = $"Description: {ordenFabricacion.DES_PROD}";
         PdfGridRow row2 = pdfGrid.Rows.Add();
         row2.Cells[0].Value = $"CANTIDAD: {ordenFabricacion.CANT}";
         row1.Cells[1].Value = $"FECHA: {ordenFabricacion.FECHA_INICIO_REAL_FABRICACION}";
-        /*
-        string htmlText = "<font color='#0000F8'><b>Essential PDF</b></font> is a <u><i>.NET library</i></u> " + "with the capability to produce <i>Adobe PDF files </i>.";
-        //Render HTML text
-        PdfTextElement richTextElement = new PdfTextElement(htmlText, new PdfStandardFont(Syncfusion.Pdf.Graphics.PdfFontFamily.TimesRoman, 12), Syncfusion.Pdf.Graphics.PdfBrushes.Black);
-        //Set HTML styled text value to the table cell
-        row2.Cells[1].Value = richTextElement;
         */
-
-        //Draw PDF grid into the PDF page
-        pdfGrid.Draw(pdfPage, new Syncfusion.Drawing.PointF(0, 0));
-
-        //Saving the PDF to the MemoryStream
-        MemoryStream stream = new MemoryStream();
-
-        pdfDocument.Save(stream);
-
-        pdfDocument.Close(true);
-
-        //Download the PDF in the browser.
-        await JS.SaveAs(ordenFabricacion.PEDIDO + ".pdf", stream.ToArray());
-
     }
 
     protected override async Task OnInitializedAsync()
