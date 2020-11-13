@@ -12,7 +12,7 @@
 @using Syncfusion.Blazor.DropDowns
 @inject IJSRuntime JsRuntime
 @inject CustomHttpClient Http
-@using Syncfusion.Pdf.Tables 
+@using Syncfusion.Pdf.Tables
 <head>
 </head>
 <h3 class="titulo">
@@ -337,6 +337,9 @@ else
                                                                         <label>Plano</label>
                                                                     </td>
                                                                     <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                        <label>Chapita</label>
+                                                                    </td>
+                                                                    <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                         <label>Programa</label>
                                                                     </td>
                                                                     <td width="10%" style="margin-left:10px;text-align:right;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
@@ -356,11 +359,10 @@ else
                                                                     <td>
                                                                         <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTAOF" target="_blank">Ver Plano</a></label>
                                                                     </td>
-                                                                    @code{
-
-                                                                    }
                                                                     <td>
-                                                                        <button @onclick="@exprotdata"> xd</button>
+                                                                        <button @onclick="@exportdata">Pdf Para chapa</button>
+                                                                    </td>
+                                                                    <td>
                                                                         <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
                                                                     </td>
                                                                     <td style="text-align:right">
@@ -709,7 +711,7 @@ else
     protected string Usuario = "USER";
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
-    public async void exprotdata()
+    public async void exportdata()
     {
         PdfDocument document1 = new PdfDocument();
         //Create a PdfGrid
@@ -731,10 +733,10 @@ else
 
         //Set the position as '0'
         //xx.Position = 0;
-        //Close the document 
+        //Close the document
         document1.Close(true);
 
-        await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD + ".pdf", xx.ToArray());
+        await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
 
         /*
         row1.Cells[0].Value = $"OF ALTA: {ordenFabricacion.CG_CELDA}";
