@@ -340,6 +340,9 @@ else
                                                                         <label>Chapita</label>
                                                                     </td>
                                                                     <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                        <label>Txt</label>
+                                                                    </td>
+                                                                    <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                         <label>Programa</label>
                                                                     </td>
                                                                     <td width="10%" style="margin-left:10px;text-align:right;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
@@ -361,6 +364,9 @@ else
                                                                     </td>
                                                                     <td>
                                                                         <button @onclick="@exportdata">Pdf Para chapa</button>
+                                                                    </td>
+                                                                    <td>
+                                                                        <button @onclick="@exportdataTXT">Pdf Para chapa</button>
                                                                     </td>
                                                                     <td>
                                                                         <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
@@ -737,6 +743,41 @@ else
         document1.Close(true);
 
         await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
+
+        /*
+        row1.Cells[0].Value = $"OF ALTA: {ordenFabricacion.CG_CELDA}";
+        row1.Cells[1].Value = $"Description: {ordenFabricacion.DES_PROD}";
+        PdfGridRow row2 = pdfGrid.Rows.Add();
+        row2.Cells[0].Value = $"CANTIDAD: {ordenFabricacion.CANT}";
+        row1.Cells[1].Value = $"FECHA: {ordenFabricacion.FECHA_INICIO_REAL_FABRICACION}";
+        */
+    }
+    public async void exportdataTXT()
+    {
+        PdfDocument document1 = new PdfDocument();
+        //Create a PdfGrid
+        PdfGrid pdfGrid1 = new PdfGrid();
+        //Create the page
+        PdfPage page = document1.Pages.Add();
+        //Create PDF graphics for the page.
+        PdfGraphics graphics = page.Graphics;
+        //Set the standard font.
+        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+        PdfLightTable pdfTable = new PdfLightTable();
+        page.Graphics.RotateTransform(-90);
+        //Draw the text.
+        graphics.DrawString($"        OF ALTA: {ordenFabricacion.CG_ORDF}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+        document1.PageSettings.Margins.All = 0;
+        //PdfTemplate template = null;
+        MemoryStream xx = new MemoryStream();
+        document1.Save(xx);
+
+        //Set the position as '0'
+        //xx.Position = 0;
+        //Close the document
+        document1.Close(true);
+
+        await JS.SaveAs("ETOF" + ordenFabricacion.PEDIDO.Trim() + ".txt", xx.ToArray());
 
         /*
         row1.Cells[0].Value = $"OF ALTA: {ordenFabricacion.CG_CELDA}";
