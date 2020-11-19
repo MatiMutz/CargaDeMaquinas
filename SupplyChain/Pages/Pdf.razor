@@ -40,7 +40,6 @@ else
                 {
                     <label>No hay un plano asociado a la orden de Fabricación.</label>
                 }
-
             }
         }
     }
@@ -84,10 +83,5 @@ else
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         await base.OnInitializedAsync();
-    }
-
-    protected override void OnInitialized()
-    {
-        codigo = codigo ?? "fantastic";
     }
 }
