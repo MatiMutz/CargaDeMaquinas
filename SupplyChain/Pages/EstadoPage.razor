@@ -4,7 +4,7 @@
 @using System.Diagnostics
 @inherits SupplyChain.Pages.Modelos.ModeloPageBase
 
-<SfKanban TValue="PedCli" KeyField="@nameof(PedCli.CG_ESTADPEDCLI)" DataSource="Pedclis">
+@*<SfKanban TValue="Solution" KeyField="@nameof(PedCli.CG_ESTADPEDCLI)" DataSource="Pedclis">
     <KanbanColumns>
         @foreach (ColumnModel item in columnData)
         {
@@ -14,7 +14,7 @@
     <KanbanCardSettings HeaderField="@nameof(PedCli.PEDIDO)" ContentField="@nameof(PedCli.PEDIDO)"></KanbanCardSettings>
     <KanbanSwimlaneSettings KeyField="@nameof(PedCli.CG_ESTADPEDCLI)" TextField="@nameof(PedCli.PEDIDO)" AllowDragAndDrop=false ShowItemCount=true SortDirection=SortDirection.Ascending ShowEmptyRow=true>
     </KanbanSwimlaneSettings>
-</SfKanban>
+</SfKanban>*@
 
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">

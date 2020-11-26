@@ -17,15 +17,15 @@ namespace SupplyChain.Pages.Modelos
     {
         [Inject] protected CustomHttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
-        protected SfGrid<PedCli> Grid;
+        protected SfGrid<Solution> Grid;
         public bool Enabled = true;
         public bool Disabled = false;
 
-        protected List<PedCli> Pedclis = new List<PedCli>();
+        protected List<Solution> Pedclis = new List<Solution>();
         protected override async Task OnInitializedAsync()
         {
             
-            Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli");
+            Pedclis = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
             await base.OnInitializedAsync();
         }

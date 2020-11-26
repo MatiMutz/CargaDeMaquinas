@@ -27,7 +27,7 @@ namespace SupplyChain
         {
             try
             {
-                string xSQL = string.Format("select CAMPO, VALORC from Solution where CAMPO = 'RUTAOF' OR CAMPO = 'RUTACNC'");
+                string xSQL = string.Format("SELECT PEDIDO, ORCO FROM Pedcli");
                 return _context.PedCli.FromSqlRaw(xSQL).ToList<PedCli>();
             }
             catch
