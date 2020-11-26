@@ -10,6 +10,7 @@
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.DropDowns
+@using System.Text.Json
 @inject IJSRuntime JsRuntime
 @inject CustomHttpClient Http
 @using Syncfusion.Pdf.Tables
@@ -45,7 +46,7 @@ else
                                        border-left-color:lightgray;">
                         @x
                     </td>
-                }
+                } 
             </tr>
             @*Horas del calendario*@
             <tr class="CargaRowClass" style="height:30px">
@@ -272,51 +273,51 @@ else
                                                         </td>
                                                     </tr>
                                                     @*INFORMACION GENERAL*@
-                                                    <tr style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px">
-                                                        <td style="padding-top:20px">
-                                                            <label class="font-weight-normal"><a class="font-weight-bold">Fecha prevista de Fabricación: </a>@(ordenFabricacion.FECHA_PREVISTA_FABRICACION)</label>
-                                                        </td>
-                                                        <td style="text-align:right">
-                                                            @if (ordenFabricacion.EXIGEOA == true)
-                                                            {
-                                                                <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
-                                                            }
-                                                            else
-                                                            {
-                                                                <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacion.FE_ENTREGA</label>
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <label class="font-weight-normal"><a class="font-weight-bold">Días de fabricación: </a>@ordenFabricacion.DIASFAB</label>
-                                                        </td>
-                                                        <td style="text-align:right">
-                                                            @if (ordenFabricacion.EXIGEOA == true)
-                                                            {
-                                                                <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <label class="font-weight-normal"><a class="font-weight-bold">Horas de fabricación: </a>@ordenFabricacion.HORASFAB</label>
-                                                        </td>
-                                                        <td style="text-align:right">
-                                                            @if (ordenFabricacion.EXIGEOA == true)
-                                                            {
-                                                                <label class="font-weight-normal"><a class="font-weight-bold">Transportista: </a>@(ordenFabricacionEncabezado.CG_TRANS + " - " + ordenFabricacionEncabezado.DES_TRANS)</label>
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                    @if (ordenFabricacion.EXIGEOA == true)
-                                                    {
-                                                        <tr>
-                                                            <td colspan="2">
-                                                                <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@(ordenFabricacionEncabezado.DIRENT + " - " + ordenFabricacionEncabezado.DIRTRANS)</label>
+                                                    @*<tr style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px">
+                                                            <td style="padding-top:20px">
+                                                                <label class="font-weight-normal"><a class="font-weight-bold">Fecha prevista de Fabricación: </a>@(ordenFabricacion.FECHA_PREVISTA_FABRICACION)</label>
                                                             </td>
-                                                        </tr>
-                                                    }
+                                                            <td style="text-align:right">
+                                                                @if (ordenFabricacion.EXIGEOA == true)
+                                                                {
+                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacion.FE_ENTREGA</label>
+                                                                }
+                                                            </td>
+                                                        </tr>*@
+                                                    @*<tr>
+                                                            <td>
+                                                                <label class="font-weight-normal"><a class="font-weight-bold">Días de fabricación: </a>@ordenFabricacion.DIASFAB</label>
+                                                            </td>
+                                                            <td style="text-align:right">
+                                                                @if (ordenFabricacion.EXIGEOA == true)
+                                                                {
+                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
+                                                                }
+                                                            </td>
+                                                        </tr>*@
+                                                    @*<tr>
+                                                            <td>
+                                                                <label class="font-weight-normal"><a class="font-weight-bold">Horas de fabricación: </a>@ordenFabricacion.HORASFAB</label>
+                                                            </td>
+                                                            <td style="text-align:right">
+                                                                @if (ordenFabricacion.EXIGEOA == true)
+                                                                {
+                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Transportista: </a>@(ordenFabricacionEncabezado.CG_TRANS + " - " + ordenFabricacionEncabezado.DES_TRANS)</label>
+                                                                }
+                                                            </td>
+                                                        </tr>*@
+                                                    @*@if (ordenFabricacion.EXIGEOA == true)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@(ordenFabricacionEncabezado.DIRENT + " - " + ordenFabricacionEncabezado.DIRTRANS)</label>
+                                                                </td>
+                                                            </tr>
+                                                        }*@
                                                     @*PRODUCTO*@
                                                     <tr>
                                                         <td colspan="2">
@@ -337,14 +338,22 @@ else
                                                                         <label>Plano</label>
                                                                     </td>
                                                                     <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                        <label>Chapita</label>
+                                                                        <label>Identificación</label>
                                                                     </td>
-                                                                    <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                        <label>Txt</label>
-                                                                    </td>
-                                                                    <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                        <label>Programa</label>
-                                                                    </td>
+                                                                    @{
+                                                                        if (ordenFabricacion.CG_CELDA == "BE3")
+                                                                        {
+                                                                            <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                <label>Ensayo</label>
+                                                                            </td>
+                                                                        }
+                                                                        if (ordenFabricacion.CG_CELDA != "BE3")
+                                                                        {
+                                                                            <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                <label>Programa</label>
+                                                                            </td>
+                                                                        }
+                                                                    }
                                                                     <td width="10%" style="margin-left:10px;text-align:right;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                         <label>Cantidad</label>
                                                                     </td>
@@ -363,14 +372,22 @@ else
                                                                         <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTAOF" target="_blank">Ver Plano</a></label>
                                                                     </td>
                                                                     <td>
-                                                                        <button @onclick="@exportdata">Pdf Para chapa</button>
+                                                                        <button @onclick="@exportdata">Ver Etiqueta</button>
                                                                     </td>
-                                                                    <td>
-                                                                        <button @onclick="@exportdataTXT">Pdf Para chapa</button>
-                                                                    </td>
-                                                                    <td>
-                                                                        <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
-                                                                    </td>
+                                                                    @{
+                                                                        if (ordenFabricacion.CG_CELDA == "BE3")
+                                                                        {
+                                                                            <td>
+                                                                                <button @onclick="@DownloadText">Descargar Datos</button>
+                                                                            </td>
+                                                                        }
+                                                                        if (ordenFabricacion.CG_CELDA != "BE3")
+                                                                        {
+                                                                            <td>
+                                                                                <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
+                                                                            </td>
+                                                                        }
+                                                                    }
                                                                     <td style="text-align:right">
                                                                         <label>@ordenFabricacion.CANT</label>
                                                                     </td>
@@ -690,7 +707,7 @@ else
         </div>
     }
 }
-
+<label>@responseString</label>
 @code
 {
     protected List<ModeloCarga> dbCarga;
@@ -715,6 +732,7 @@ else
     protected List<ModeloGenericoStringString> dbCeldas;
     protected List<ModeloGenericoStringString> dbProcesos;
     protected string Usuario = "USER";
+    protected string responseString;
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
     public async void exportdata()
@@ -752,42 +770,14 @@ else
         row1.Cells[1].Value = $"FECHA: {ordenFabricacion.FECHA_INICIO_REAL_FABRICACION}";
         */
     }
-    public async void exportdataTXT()
+    async Task DownloadText()
     {
-        PdfDocument document1 = new PdfDocument();
-        ////Create a PdfGrid
-        //PdfGrid pdfGrid1 = new PdfGrid();
-        ////Create the page
-        PdfPage page = document1.Pages.Add();
-        ////Create PDF graphics for the page.
-        PdfGraphics graphics = page.Graphics;
-        ////Set the standard font.
-        //PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-        //PdfLightTable pdfTable = new PdfLightTable();
-        //page.Graphics.RotateTransform(-90);
-        //Draw the text.
-        graphics.DrawString($"        OF ALTA: {ordenFabricacion.CG_ORDF}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}");
-        //document1.PageSettings.Margins.All = 0;
-        ////PdfTemplate template = null;
-        //MemoryStream xx = new MemoryStream();
-        //document1.Save(xx);
-
-        //Set the position as '0'
-        //xx.Position = 0;
-        //Close the document
-        //document1.Close(true);
-
-        await JS.SaveAs("ETOF" + ordenFabricacion.PEDIDO + ".txt", xx.ToArray());
-
-        /*
-        row1.Cells[0].Value = $"OF ALTA: {ordenFabricacion.CG_CELDA}";
-        row1.Cells[1].Value = $"Description: {ordenFabricacion.DES_PROD}";
-        PdfGridRow row2 = pdfGrid.Rows.Add();
-        row2.Cells[0].Value = $"CANTIDAD: {ordenFabricacion.CANT}";
-        row1.Cells[1].Value = $"FECHA: {ordenFabricacion.FECHA_INICIO_REAL_FABRICACION}";
-        */
+        string presion = ordenFabricacionEncabezado.CAMPOCOM4.Trim();
+        presion = presion.Remove((presion.Length - 5));
+        // Generate a text file
+        byte[] file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
+        await JS.InvokeVoidAsync("BlazorDownloadFile", $"{ordenFabricacion.PEDIDO}.txt", "text/plain", file);
     }
-
     protected override async Task OnInitializedAsync()
     {
         dbEstadoCarga = new List<ModeloGenericoIntString>();
@@ -897,8 +887,9 @@ else
                 // FALTA SCRAP
 
                 string sqlCommandString = "EXEC NET_PCP_Cerrar_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "', 0";
-                await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
-
+                var respuesta = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+                responseString = await respuesta.Content.ReadAsStringAsync();
+                Console.WriteLine(responseString);
                 if (ordenFabricacion.CG_ORDF == ordenFabricacion.ULTIMAORDENASOCIADA)
                 {
                     await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Se dió de alta el producto terminado.", CssClass = "e-toast-success", Icon = "e-success toast-icons" });

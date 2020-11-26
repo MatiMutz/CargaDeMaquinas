@@ -49,7 +49,39 @@ else
         {
             if (ruta.CAMPO == "RUTACNC")
             {
-                codigo = ruta.VALORC + codigo.Substring(0, 7) + ".txt";
+                // Only get files that begin with the letter "c".
+                string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
+                for (int i = 0; i < dirs.Length; i++)
+                {
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header" id="@i">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                        @(dirs.GetValue(i).ToString().Substring(ruta.VALORC.Length))
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    @{
+                                        userData1 = File.ReadAllLines(dirs.GetValue(i).ToString());
+                                        @foreach (string dataLine in userData1)
+                                        {
+                                            @foreach (string dataItem in dataLine.Split(delimiterChar))
+                                            {
+                                                <label>@dataItem</label>
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @*codigo = ruta.VALORC + codigo.Substring(0, 7) + ".txt";
                 if (File.Exists(codigo))
                 {
                     <embed src="@codigo" width="100%" height="600px" />
@@ -57,7 +89,7 @@ else
                 else
                 {
                     <label>No hay un archivo de programa asociado.</label>
-                }
+                }*@
             }
         }
     }
@@ -68,7 +100,13 @@ else
 
     [Inject] protected CustomHttpClient Http { get; set; }
 
+    [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+
     protected List<Solution> rutas;
+
+    Array userData1 = null;
+
+    char[] delimiterChar = { ',' };
 
     string docPath;
 
@@ -83,5 +121,10 @@ else
         rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
         await base.OnInitializedAsync();
+    }
+    private void DownloadText(string Nombre)
+    {
+        File.OpenRead(Nombre);
+        //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
     }
 }
