@@ -1,0 +1,648 @@
+﻿ @page "/servicio/list"
+@using Syncfusion.Blazor.FileManager;
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using System.Text.Json
+@using System.Linq
+@inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
+@inject CustomHttpClient Http
+@inject NavigationManager NavManager
+@inherits SupplyChain.Pages.Servicios.ServicioPageBase
+@using System.IO
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                    @ref="Grid" DataSource="@servicios" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
+                    AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Service"></GridEvents>
+                <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
+                    <Template>
+                        @{
+                            var servicio = (context as Service);
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Generalidades</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-DatosPlaca" role="tab" aria-controls="pills-profile" aria-selected="false">Datos de Placa</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-EnsRecepcion" role="tab" aria-controls="pills-contact" aria-selected="false">Ensayos a la Recepcion</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-TrEfec" role="tab" aria-controls="pills-contact" aria-selected="false">Trabajos Efectuados</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-file" role="tab" aria-controls="pills-contact" aria-selected="false">Documentación</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-Generalidades" role="tabpanel" aria-labelledby="pills-home-tab">
+                                    <div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Pedido:</label>
+                                                <SfTextBox ID="PEDIDO" @bind-Value="@(servicio.PEDIDO)" Enabled="@Disabled" Placeholder="Pedido"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Fecha:</label>
+                                                <SfDatePicker ID="FECHA" @bind-Value="@(servicio.FECHA)" Enabled="@Disabled" Placeholder="Fecha"></SfDatePicker>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Cliente:</label>
+                                                <SfTextBox ID="CLIENTE" @bind-Value="@(servicio.CLIENTE)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Planta:</label>
+                                                <SfTextBox ID="PLANTA" @bind-Value="@(servicio.PLANTA)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Orden de Compra:</label>
+                                                <SfTextBox ID="OCOMPRA" @bind-Value="@(servicio.OCOMPRA)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Remito Recepcion:</label>
+                                                <SfTextBox ID="REMITOREC" @bind-Value="@(servicio.REMITOREC)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Observaciones:</label>
+                                                <SfTextBox ID="OBSERV" @bind-Value="@(servicio.OBSERV)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Descripción artículo:</label>
+                                                <SfTextBox ID="DESCARTICULO" @bind-Value="@(servicio.DESCARTICULO)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Pedido anterior:</label>
+                                                <SfTextBox ID="PEDIDOANT" @bind-Value="@(servicio.PEDIDOANT)"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Fecha de mantenimiento anterior:</label>
+                                                <SfTextBox ID="FECMANTANT" @bind-Value="@(servicio.FECMANTANT)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Remito:</label>
+                                                <SfTextBox ID="REMITO" @bind-Value="@(servicio.REMITO)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="pills-DatosPlaca" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    <div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>TAG:</label>
+                                                <SfTextBox ID="IDENTIFICACION" @bind-Value="@(servicio.IDENTIFICACION)"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <a href="/marca/list" target="_blank">Marca:</a>
+                                                <SfDropDownList CssClass="customClass" ID="MARCA" TItem="Marca" @bind-Value="@(servicio.MARCA)" TValue="string" Placeholder="Seleccione la Marca" DataSource="@marcas">
+                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Numero de Serie:</label>
+                                                <SfTextBox ID="NSERIE" @bind-Value="@(servicio.NSERIE)"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <a href="/modelo/list" target="_blank">Modelo:</a>
+                                                <SfDropDownList CssClass="customClass" ID="MODELO" TItem="Modelo" @bind-Value="@(servicio.MODELO)" TValue="string" Placeholder="Seleccione el Modelo" DataSource="@modelos">
+                                                    <DropDownListFieldSettings Value="Modelo" Text="Modelo"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <a href="/medida/list" target="_blank">Medida:</a>
+                                                <SfDropDownList CssClass="customClass" ID="MEDIDA" TItem="Medida" @bind-Value="@(servicio.MEDIDA)" TValue="string" Placeholder="Seleccione la Medida" DataSource="@medidas">
+                                                    <DropDownListFieldSettings Value="Codigo" Text="Medida"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <a href="/serie/list" target="_blank">Serie:</a>
+                                                <SfDropDownList CssClass="customClass" ID="SERIE" TItem="Serie" @bind-Value="@(servicio.SERIE)" TValue="string" Placeholder="Seleccione la Serie" DataSource="@series">
+                                                    <DropDownListFieldSettings Value="Codigo" Text="Medida"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <a href="/orificio/list" target="_blank">Orificio:</a>
+                                                <SfDropDownList CssClass="customClass" ID="ORIFICIO" TItem="Orificio" @bind-Value="@(servicio.ORIFICIO)" TValue="string" Placeholder="Seleccione el Orificio" DataSource="@orificios">
+                                                    <DropDownListFieldSettings Value="Orificio" Text="Area"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Año:</label>
+                                                <SfTextBox ID="AÑO" @bind-Value="@(servicio.AÑO)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Area:</label>
+                                                <SfTextBox ID="AREA" @bind-Value="@(servicio.AREA)"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Fluido:</label>
+                                                <SfTextBox ID="FLUIDO" @bind-Value="@(servicio.FLUIDO)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Sobrepresión:</label>
+                                                <SfDropDownList CssClass="customClass" ID="SOBREPRESION" TItem="Sobrepresion" @bind-Value="@(servicio.SOBREPRESION)" TValue="string" Placeholder="Sobrepresion" DataSource="@sobrepresiones">
+                                                    <DropDownListFieldSettings Value="Sobrepresion" Text="Sobrepresion"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Presión:</label>
+                                                <SfTextBox ID="PRESION" @bind-Value="@(servicio.PRESION)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Contrapresión:</label>
+                                                <SfTextBox ID="CONTRAPRESION" @bind-Value="@(servicio.CONTRAPRESION)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Tipo:</label>
+                                                <SfDropDownList CssClass="customClass" ID="TIPO" TItem="Tipo" @bind-Value="@(servicio.TIPO)" TValue="string" Placeholder="Tipo" DataSource="@tipos">
+                                                    <DropDownListFieldSettings Value="Tipo" Text="Tipo"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Temperatura:</label>
+                                                <SfTextBox ID="TEMP" @bind-Value="@(servicio.TEMP)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Resorte:</label>
+                                                <SfTextBox ID="RESORTE" @bind-Value="@(servicio.RESORTE)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Presión en Banco:</label>
+                                                <SfTextBox ID="PRESIONBANCO" @bind-Value="@(servicio.PRESIONBANCO)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Servicio:</label>
+                                                <SfTextBox ID="SERVICIO" @bind-Value="@(servicio.SERVICIO)"></SfTextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="pills-EnsRecepcion" role="tabpanel" aria-labelledby="pills-contact-tab">
+                                    <div>
+
+                                        <div class="form-row">
+                                            @*<div class="form-group col-md-6">
+                                                    <label>Ensayo a la Recepcion:</label>
+                                                    <SfTextBox ID="ENSRECEP" @bind-Value="@(servicio.ENSRECEP)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>Ensayo a la Recepcion:</label>
+                                                <SfDropDownList CssClass="customClass" ID="ENSRECEP" TItem="SIoNO" @bind-Value="@(servicio.ENSRECEP)" TValue="string" Placeholder="Hubo Ensayo a la Recepcion?" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <a href="/estado/list" target="_blank">Estado:</a>
+                                                <SfDropDownList CssClass="customClass" ID="ESTADO" TItem="Estado" @bind-Value="@(servicio.ESTADO)" TValue="string" Placeholder="Estado" DataSource="@estados">
+                                                    <DropDownListFieldSettings Value="Estado" Text="Estado"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Presión Ensayo Recepción:</label>
+                                                <SfTextBox ID="PRESIONRECEP" @bind-Value="@(servicio.PRESIONRECEP)"></SfTextBox>
+                                            </div>
+
+                                            @*<div class="form-group col-md-6">
+                                                    <label>Fugas:</label>
+                                                    <SfTextBox ID="FUGAS" @bind-Value="@(servicio.FUGAS)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>Fugas:</label>
+                                                <SfDropDownList CssClass="customClass" ID="FUGAS" TItem="SIoNO" @bind-Value="@(servicio.FUGAS)" TValue="string" Placeholder="Hubo fugas?" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Presión de Fuga:</label>
+                                                <SfTextBox ID="PRESIONFUGA" @bind-Value="@(servicio.PRESIONFUGA)"></SfTextBox>
+                                            </div>
+
+                                            @*<div class="form-group col-md-6">
+                                                    <label>Cambio de Presión:</label>
+                                                    <SfTextBox ID="CAMBIOPRESION" @bind-Value="@(servicio.CAMBIOPRESION)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>Cambio de Presión:</label>
+                                                <SfDropDownList CssClass="customClass" ID="CAMBIOPRESION" TItem="SIoNO" @bind-Value="@(servicio.CAMBIOPRESION)" TValue="string" Placeholder="Hubo Cambio de Presión?" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Presión solicitada:</label>
+                                                <SfTextBox ID="PRESIONSOLIC" @bind-Value="@(servicio.PRESIONSOLIC)"></SfTextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="pills-TrEfec" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    <div>
+                                        <div class="form-row">
+                                            @*<div class="form-group col-md-6">
+                                                    <label>Cambio de Repuesto:</label>
+                                                    <SfTextBox ID="CAMBIOREPUESTO" @bind-Value="@(servicio.CAMBIOREPUESTO)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>Cambio de Repuesto:</label>
+                                                <SfDropDownList CssClass="customClass" ID="CAMBIOREPUESTO" TItem="SIoNO" @bind-Value="@(servicio.CAMBIOREPUESTO)" TValue="string" Placeholder="Hubo Cambio de Repuesto?" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Repuestos:</label>
+                                                <SfTextBox ID="REPUESTOS" @bind-Value="@(servicio.REPUESTOS)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Codigo de nuevo Resorte:</label>
+                                                <SfTextBox ID="CODRESORTE" @bind-Value="@(servicio.CODRESORTE)"></SfTextBox>
+                                            </div>
+
+                                            @*<div class="form-group col-md-6">
+                                                    <label>Ensayo Contrapresion:</label>
+                                                    <SfTextBox ID="ENSAYOCONTRAP" @bind-Value="@(servicio.ENSAYOCONTRAP)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>Ensayo Contrapresion:</label>
+                                                <SfDropDownList CssClass="customClass" ID="ENSAYOCONTRAP" TItem="SIoNO" @bind-Value="@(servicio.ENSAYOCONTRAP)" TValue="string" Placeholder="Hubo Ensayo de Contrapresión?" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Trabajos efectuados:</label>
+                                                <SfDropDownList CssClass="customClass" ID="TRABAJOSEFEC" TItem="Trabajosefec" @bind-Value="@(servicio.TRABAJOSEFEC)" TValue="string" Placeholder="Trabajos efectuados" DataSource="@trabajosEfectuados">
+                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Trabajos Accesorios:</label>
+                                                <SfTextBox ID="TRABAJOSACCES" @bind-Value="@(servicio.TRABAJOSACCES)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <a href="/operario/list" target="_blank">Responsable:</a>
+                                                <SfDropDownList CssClass="customClass" ID="RESP" TItem="Operario" @bind-Value="@(servicio.RESP)" TValue="string" Placeholder="Responsable" DataSource="@operarios">
+                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <a href="/operario/list" target="_blank">Responsable:</a>
+                                                <SfDropDownList CssClass="customClass" ID="CONTROLO" TItem="Operario" @bind-Value="@(servicio.CONTROLO)" TValue="string" Placeholder="Controló" DataSource="@operarios">
+                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            @*<div class="form-group col-md-6">
+                                                    <label>POP:</label>
+                                                    <SfTextBox ID="POP" @bind-Value="@(servicio.POP)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>POP:</label>
+                                                <SfDropDownList CssClass="customClass" ID="POP" TItem="SIoNO" @bind-Value="@(servicio.POP)" TValue="string" Placeholder="POP" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Responsable Técnico:</label>
+                                                <SfDropDownList CssClass="customClass" ID="RESPTECNICO" TItem="Operario" @bind-Value="@(servicio.RESPTECNICO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@operarios">
+                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            @*<div class="form-group col-md-6">
+                                                    <label>OPDS:</label>
+                                                    <SfTextBox ID="OPDS" @bind-Value="@(servicio.OPDS)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>OPDS:</label>
+                                                <SfDropDownList CssClass="customClass" ID="OPDS" TItem="SIoNO" @bind-Value="@(servicio.OPDS)" TValue="string" Placeholder="OPDS" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Acta:</label>
+                                                <SfTextBox ID="ACTA" @bind-Value="@(servicio.ACTA)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            @*<div class="form-group col-md-6">
+                                                    <label>Presencia inspector:</label>
+                                                    <SfTextBox ID="PRESENCIAINSPEC" @bind-Value="@(servicio.PRESENCIAINSPEC)"></SfTextBox>
+                                                </div>*@
+
+                                            <div class="form-group col-md-6">
+                                                <label>Presencia Inspector:</label>
+                                                <SfDropDownList CssClass="customClass" ID="PRESENCIAINSPEC" TItem="SIoNO" @bind-Value="@(servicio.PRESENCIAINSPEC)" TValue="string" Placeholder="Hubo Presencia de Inspector?" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Responsable Técnico:</label>
+                                                <SfDropDownList CssClass="customClass" ID="MANOMETRO" TItem="Operario" @bind-Value="@(servicio.MANOMETRO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@operarios">
+                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    @{
+                                        if (File.Exists($"E:\\pdf\\Ensayos\\ENS{servicio.PEDIDO}_1.pdf"))
+                                        {
+                                            <div class="accordion" id="accordionExample">
+                                                @{
+                                                    for (int i = 1; i < 4; i++)
+                                                    {
+                                                        string ruta = "E:\\pdf\\Ensayos\\ENS" + servicio.PEDIDO + "_" + i + ".pdf";
+                                                        if (File.Exists(ruta))
+                                                        {
+                                                            <div class="card">
+                                                                <div class="card-header" id="@i">
+                                                                    <h2 class="mb-0">
+                                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                                                            Ensayo @(i)
+                                                                        </button>
+                                                                    </h2>
+                                                                </div>
+
+                                                                <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
+                                                                    <div class="card-body">
+                                                                        <embed src="Ensayos\pdf\..\..\..\ENS@(servicio.PEDIDO)_@(i).pdf" type="application/pdf" width="100%" height="600px" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <label>No existen registros de ensayos para el pedido numero @(servicio.PEDIDO)</label>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </Template>
+                </GridEditSettings>
+
+                <GridColumns>
+                    <GridColumn Field=@nameof(Service.PEDIDO) HeaderText="Pedido" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.FECHA) HeaderText="Fecha" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CLIENTE) HeaderText="Cliente" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PLANTA) HeaderText="Planta" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.OCOMPRA) HeaderText="Orden de Compra" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.REMITOREC) HeaderText="Remito Recepcion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.REMITO) HeaderText="Remito" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.IDENTIFICACION) HeaderText="Identificacion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.NSERIE) HeaderText="Numero de Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MARCA) HeaderText="Marca" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MODELO) HeaderText="Modelo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MEDIDA) HeaderText="Medida" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.SERIE) HeaderText="Serie" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.ORIFICIO) HeaderText="Orificio" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.AREA) HeaderText="Area" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.FLUIDO) HeaderText="Fluido" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.AÑO) HeaderText="Año" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESION) HeaderText="Presion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.TEMP) HeaderText="Tempertatura" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESIONBANCO) HeaderText="Presion de Banco" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.SOBREPRESION) HeaderText="SobrePresion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CONTRAPRESION) HeaderText="ContraPresion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.TIPO) HeaderText="Tipo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.RESORTE) HeaderText="Resorte" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.SERVICIO) HeaderText="Servicio" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.ENSRECEP) HeaderText="Ensayo recepcion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.ESTADO) HeaderText="Estado" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESIONRECEP) HeaderText="Presion Recepcion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.FUGAS) HeaderText="Fugas" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESIONFUGA) HeaderText="Presion de Fuga" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CAMBIOPRESION) HeaderText="Cambio de Presion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESIONSOLIC) HeaderText="Presion Solicitada" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CAMBIOREPUESTO) HeaderText="Cambio Repuesto" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CODRESORTE) HeaderText="Codigo de Resorte" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.REPUESTOS) HeaderText="Repuestos" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.TRABAJOSEFEC) HeaderText="Trabajos Efectuados" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.TRABAJOSACCES) HeaderText="Trabajos Accesorios" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.MANOMETRO) HeaderText="Manometro" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.FECMANTANT) HeaderText="Fecha Mantenimiento Anterior" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PEDIDOANT) HeaderText="Pedido Anterior" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.ENSAYOCONTRAP) HeaderText="Ensayo Contrapresion" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.RESP) HeaderText="Responsable" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CONTROLO) HeaderText="Controlo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.POP) HeaderText="POP" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.RESPTECNICO) HeaderText="Responsable Tecnico" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.OPDS) HeaderText="OPDS" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.ACTA) HeaderText="Acta" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.PRESENCIAINSPEC) HeaderText="Presencia Inspector" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.DESCARTICULO) HeaderText="Descripcion Articulo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.OBSERV) HeaderText="Observaciones" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Service.CATALOGO) HeaderText="Ver Catalogo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
+
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+
+    #DropArea {
+        padding: 50px 25px;
+        margin: 30px auto;
+        border: 1px solid #c3c3c3;
+        text-align: center;
+        width: 20%;
+        display: inline-flex;
+    }
+
+    .e-file-select,
+    .e-file-drop {
+        display: none;
+    }
+
+    body .e-upload-drag-hover {
+        outline: 2px dashed brown;
+    }
+
+    #uploadfile {
+        width: 60%;
+        display: inline-flex;
+        margin-left: 5%;
+    }
+
+    #target {
+        height: 500px;
+    }
+
+    .head, .item {
+        display: table;
+        width: 100%;
+        margin: auto;
+    }
+
+    .head {
+        height: 40px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .name, .city {
+        display: table-cell;
+        vertical-align: middle;
+        width: 50%;
+    }
+
+    .head .name {
+        text-indent: 16px;
+    }
+</style>
+@code {
+    public class EmployeeData
+    {
+        public string FirstName { get; set; }
+        public string Country { get; set; }
+    }
+    List<EmployeeData> Data = new List<EmployeeData>
+{
+        new EmployeeData() { FirstName = "Andrew Fuller",  Country = "England" },
+        new EmployeeData() { FirstName = "Anne Dodsworth", Country = "USA" },
+        new EmployeeData() { FirstName = "Janet Leverling", Country = "USA" },
+        new EmployeeData() { FirstName = "Laura Callahan", Country = "USA"},
+        new EmployeeData() { FirstName = "Margaret Peacock", Country = "USA"},
+        new EmployeeData() { FirstName = "Michael Suyama", Country = "USA", },
+        new EmployeeData() { FirstName = "Nancy Davolio", Country = "USA"},
+        new EmployeeData() { FirstName = "Robert King", Country = "England"},
+        new EmployeeData() { FirstName = "Steven Buchanan", Country = "England"},
+    };
+}

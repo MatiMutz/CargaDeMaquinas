@@ -1,5 +1,4 @@
 ﻿@page "/PageCargaMaquina"
-@page "/"
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
 @using Syncfusion.Pdf;
@@ -18,7 +17,11 @@
 </head>
 <h3 class="titulo">
     Carga de máquina
+    <button class="btn btn-outline-primary btn-sm oi oi-reload" @onclick="@Refrescar">
+        Actualizar
+    </button>
 </h3>
+<hr />
 @*CODIGO HTML*@
 @if (dbCarga == null)
 {
@@ -26,12 +29,10 @@
 }
 else
 {
-
     <SfToast ID="toast_default" @ref="ToastObj">
         <ToastPosition X="80%" Y="10%"></ToastPosition>
     </SfToast>
-
-    <table>
+    <table class="table table-bordered table-hover">
         <thead>
             @*Fechas del calendario*@
             <tr class="CargaRowClass" style="height:30px">
@@ -46,7 +47,7 @@ else
                                        border-left-color:lightgray;">
                         @x
                     </td>
-                } 
+                }
             </tr>
             @*Horas del calendario*@
             <tr class="CargaRowClass" style="height:30px">
@@ -146,13 +147,47 @@ else
                                 int xPedido = dbCarga.ElementAt(i).PEDIDO;
                                 string xCgProd = dbCarga.ElementAt(i).CG_PROD;
                                 decimal xCantidad = dbCarga.ElementAt(i).CANT;
+
+                                int Mayor = dbCarga.Where(t => t.CG_ORDFASOC == dbCarga.ElementAt(i).CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
                             }
-                            <input type="button"
-                                   class="CargaButtonClass"
-                                   @onclick=@(() => OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
-                                   style="width: 100%;background-image: linear-gradient( @dbCarga[i].BACKGROUND.ToLower(), whitesmoke)"
-                                   value="@dbCarga[i].CG_ORDF"
-                                   id="of + @dbCarga[i].CG_ORDF" />
+                            <div class="CargaButtonClass">
+                                <input type="button"
+                                       @onclick=@(() => OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
+                                       value="@dbCarga[i].CG_ORDF" style="  width: 100%; font-size: 18px; border: 3px solid @dbCarga[i].BACKGROUND;"
+                                       id="of + @dbCarga[i].CG_ORDF" />
+                                @{
+                                        
+                                    if (@dbCarga.ElementAt(i).DES_CLI == "")
+                                    {
+                                        <span class="tooltiptext">@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD<br />CANTIDAD: @dbCarga.ElementAt(i).CANT.ToString().Substring(0, 1)<br />OF INICIAL:@dbCarga.ElementAt(i).CG_ORDFASOC<br />OF ALTA: @Mayor</span>
+                                    }
+                                    else
+                                    {
+                            <span class="tooltiptext">@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
+                                    }
+                                }
+                            </div>
+                            <style>
+                                .CargaButtonClass {
+                                }
+
+                                .tooltiptext {
+                                    visibility: hidden;
+                                    width: 200px;
+                                    background-color: black;
+                                    color: #fff;
+                                    text-align: center;
+                                    padding: 5px 0;
+                                    border-radius: 6px;
+                                    /* Position the tooltip text - see examples below! */
+                                    position: absolute;
+                                    z-index: 1;
+                                }
+
+                                .CargaButtonClass:hover .tooltiptext {
+                                    visibility: visible;
+                                }
+                            </style>
                         </td>
                         xColumna = xColumna + dbCarga[i].COLUMNSPAN;
                         xHora = xHora + dbCarga[i].COLUMNSPAN;
@@ -167,7 +202,6 @@ else
             }
         </tbody>
     </table>
-
     // dialog de Orden de fabricacion
     if (isOrdenDialogVisible && ordenFabricacion != null)
     {
@@ -188,17 +222,23 @@ else
                                                 <table width="100%">
                                                     @*PARAMETROS MODIFICABLES*@
                                                     <tr style="margin-top:20px">
+                                                        @*<td>
+                                                                <div>
+                                                                    <span style="color:blue">Fecha y hora teórica de fabricación:</span>
+                                                                </div>
+                                                                <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
+                                                            </td>*@
                                                         <td>
-                                                            <div>
-                                                                <span style="color:blue">Fecha y hora teórica de fabricación:</span>
-                                                            </div>
-                                                            <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
-                                                        </td>
-                                                        <td style="padding-left:20px">
                                                             <div>
                                                                 <span style="color:blue">Fecha y hora de Inicio real:</span>
                                                             </div>
                                                             <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
+                                                        </td>
+                                                        <td style="padding-left:20px;">
+                                                            <div>
+                                                                <span style="color:blue">Fecha y hora de finalización real:</span>
+                                                            </div>
+                                                            <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -210,9 +250,11 @@ else
                                                         </td>
                                                         <td style="padding-left:20px;padding-top:20px">
                                                             <div>
-                                                                <span style="color:blue">Fecha y hora de finalización real:</span>
+                                                                <span style="color:blue">Dependencia:</span>
                                                             </div>
-                                                            <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
+                                                            <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ORDFORIG" DataSource="@dbOrdenesDependientes">
+                                                                <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
+                                                            </SfDropDownList>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -224,17 +266,7 @@ else
                                                                 <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
                                                             </SfDropDownList>
                                                         </td>
-                                                        <td style="padding-left:20px;padding-top:20px">
-                                                            <div>
-                                                                <span style="color:blue">Dependencia:</span>
-                                                            </div>
-                                                            <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ORDFORIG" DataSource="@dbOrdenesDependientes">
-                                                                <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
-                                                            </SfDropDownList>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding-top:20px;padding-bottom:20px">
+                                                        <td style="padding-left: 20px; padding-top: 20px">
                                                             <div>
                                                                 <span style="color:blue">Celda:</span>
                                                             </div>
@@ -251,6 +283,8 @@ else
                                                                 </ComboBoxTemplates>
                                                             </SfComboBox>
                                                         </td>
+                                                    </tr>
+                                                    <tr>
                                                         <td style="padding-left:20px;padding-top:20px;padding-bottom:20px">
                                                             @if (ordenFabricacion.EXIGEOA == false)
                                                             {
@@ -277,28 +311,29 @@ else
                                                             <td style="padding-top:20px">
                                                                 <label class="font-weight-normal"><a class="font-weight-bold">Fecha prevista de Fabricación: </a>@(ordenFabricacion.FECHA_PREVISTA_FABRICACION)</label>
                                                             </td>
-                                                            <td style="text-align:right">
-                                                                @if (ordenFabricacion.EXIGEOA == true)
-                                                                {
-                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacion.FE_ENTREGA</label>
-                                                                }
-                                                            </td>
+
                                                         </tr>*@
-                                                    @*<tr>
-                                                            <td>
-                                                                <label class="font-weight-normal"><a class="font-weight-bold">Días de fabricación: </a>@ordenFabricacion.DIASFAB</label>
+                                                    @if (ordenFabricacion.EXIGEOA == true)
+                                                    {
+                                                        <tr>
+                                                            <td style="text-align:left">
+                                                                <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
                                                             </td>
-                                                            <td style="text-align:right">
-                                                                @if (ordenFabricacion.EXIGEOA == true)
-                                                                {
-                                                                    <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
-                                                                }
+                                                            <td style="text-align:center">
+                                                                <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
                                                             </td>
-                                                        </tr>*@
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="text-align:left">
+                                                                <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@ordenFabricacionEncabezado.DIRENT</label>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="text-align:left">
+                                                                <label class="font-weight-normal"><a class="font-weight-bold">Transporte: </a>@ordenFabricacionEncabezado.DIRTRANS</label>
+                                                            </td>
+                                                        </tr>
+                                                    }
                                                     @*<tr>
                                                             <td>
                                                                 <label class="font-weight-normal"><a class="font-weight-bold">Horas de fabricación: </a>@ordenFabricacion.HORASFAB</label>
@@ -703,11 +738,12 @@ else
                     <DialogButton Content="OK" IsPrimary="true" OnClick="@OrdenFabricacionOk" />
                     <DialogButton Content="Cancel" OnClick="@OrdenFabricacionClose" />
                 </DialogButtons>
+                <DialogPositionData X="14" Y="14" />
             </SfDialog>
         </div>
     }
 }
-<label>@responseString</label>
+
 @code
 {
     protected List<ModeloCarga> dbCarga;
@@ -941,20 +977,6 @@ else
         margin-top: 20px;
     }
 
-    .CargaButtonClass {
-        cursor: pointer;
-        padding: 0px;
-        padding-left: 0px;
-        padding-right: 0px;
-        width: 100%;
-        height: 20px;
-        border-width: 0px;
-        border-right-width: thin;
-        border-right-style: solid;
-        border-right-color: whitesmoke;
-        font-size: 8px;
-    }
-
     .CargaRowClass {
         padding: 0px;
         padding-left: 0px;
@@ -980,7 +1002,7 @@ else
     }
 
     .cssOrdenFabricacionDialog {
-        position: fixed;
+        position: inherit;
         top: 5%;
         left: 5%;
         width: 90%;

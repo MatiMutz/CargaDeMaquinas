@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using SupplyChain;
+using SupplyChain.Shared.Models;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using System;
@@ -13,19 +13,23 @@ using System.Threading.Tasks;
 
 namespace SupplyChain.Pages.Modelos
 {
-    public class ModeloPageBase : ComponentBase
+    public class EstadoPageBase : ComponentBase
     {
         [Inject] protected CustomHttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
-        protected SfGrid<Solution> Grid;
+        protected SfGrid<PedCli> Grid;
         public bool Enabled = true;
         public bool Disabled = false;
 
-        protected List<Solution> Pedclis = new List<Solution>();
+        protected List<PedCli> Pedclis = new List<PedCli>();
+        protected List<Pedidos> Pedidoss = new List<Pedidos>();
+        protected List<Programa> Programas = new List<Programa>();
         protected override async Task OnInitializedAsync()
         {
             
-            Pedclis = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
+            Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli");
+            Pedidoss = await Http.GetFromJsonAsync<List<Pedidos>>("api/Pedidos");
+            Programas = await Http.GetFromJsonAsync<List<Programa>>("api/Programa");
 
             await base.OnInitializedAsync();
         }
