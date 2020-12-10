@@ -1,4 +1,4 @@
-﻿@page "/sc/medida/list"
+﻿@page "/sc/celdas/list"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
@@ -16,27 +16,26 @@
 @using SupplyChain
 @using System.Net.Http.Json
 @inject CustomHttpClient Http
-@using Servicio
 @inject NavigationManager NavManager
-@inherits SupplyChain.Pages.Medidas.MedidaPageBase
+@inherits SupplyChain.Pages.Celda.CeldaPageBase
 
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">
         <div class="row">
             <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                    @ref="Grid" DataSource="@medidas" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
+                    @ref="Grid" DataSource="@celdas" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Medida"></GridEvents>
+                <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Celdas"></GridEvents>
                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                 <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
                     <Template>
                         @{
-                            var medida = (context as Medida);
+                            var celda = (context as Celdas);
                             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Marcas</a>
+                                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-Generalidades" role="tab" aria-controls="pills-home" aria-selected="true">Modelos</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="pills-tabContent">
@@ -44,33 +43,32 @@
                                     <div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label >Id:</label>
-                                                <SfNumericTextBox ID="Id" @bind-Value="@(medida.Id)" Enabled="@Disabled"></SfNumericTextBox>
+                                                <label class="e-float-text e-label-top">Codigo:</label>
+                                                <SfTextBox ID="Codigo" @bind-Value="@(celda.CG_CELDA)" Enabled="@Disabled"></SfTextBox>
                                             </div>
+
                                             <div class="form-group col-md-6">
-                                                <label >Codigo de Medida:</label>
-                                                <SfTextBox ID="Codigo" @bind-Value="@(medida.Codigo)"></SfTextBox>
+                                                <label class="e-float-text e-label-top">Descripcion:</label>
+                                                <SfTextBox ID="Descripcion" @bind-Value="@(celda.DES_CELDA)"></SfTextBox>
                                             </div>
                                         </div>
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label >Medida:</label>
-                                                <SfTextBox ID="Descripcion" @bind-Value="@(medida.Descripcion)"></SfTextBox>
+                                                <label class="e-float-text e-label-top">Area:</label>
+                                                <SfNumericTextBox ID="Area" @bind-Value="@(celda.CG_AREA)"></SfNumericTextBox>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         }
-
                     </Template>
                 </GridEditSettings>
-
                 <GridColumns>
-                    <GridColumn Field=@nameof(Medida.Id) HeaderText="ID" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Medida.Codigo) HeaderText="Codigo de Medida" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Medida.Descripcion) HeaderText="Medida" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Celdas.CG_CELDA) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Celdas.DES_CELDA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Celdas.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                 </GridColumns>
             </SfGrid>
         </div>
@@ -116,78 +114,12 @@
         display: inline-flex;
         margin-left: 5%;
     }
-
-
-
-    .e-input-picture::before {
-        content: '\e335';
-        font-family: e-icons;
-    }
-
-    .e-input-calendar::before {
-        content: '\e901';
-        font-family: e-icons;
-        font-size: 13px;
-    }
-
-    .content-wrapper {
-        width: 90%;
-        margin: 0 auto;
-        min-width: 85px;
-    }
-
-        .content-wrapper div.row {
-            padding: 15px 0px;
-        }
-
-    .custom-padding-05 {
-        padding-top: 5px;
-    }
-
-    @@media only screen and (max-width: 480px) {
-        .content-wrapper {
-            width: 92%;
-        }
-
-        .col-xs-6,
-        .col-xs-4,
-        .col-xs-12 {
-            padding: 10px 5px;
-            width: 100%;
-        }
-
-        .content-wrapper div.row {
-            padding: 0px;
-        }
-    }
-
-    #description td {
-        vertical-align: top;
-    }
-
-    .e-outline.e-float-input,
-    .e-outline.e-float-input.e-control-wrapper {
-        margin-top: 0;
-    }
-
-    .fabric .row.material2,
-    .bootstrap .row.material2,
-    .bootstrap4 .row.material2,
-    .highcontrast .row.material2 {
-        display: none;
-    }
-
-    .e-upload-picture::before {
-        content: '\e335';
-        font-family: e-icons;
-    }
-
-    .bootstrap4 .e-upload-picture::before {
-        content: '\e769';
-        font-family: e-icons;
-    }
 </style>
 
+
+@*<SfQRCodeGenerator Width="200px" Height="150px" Value="http://www.aerre.com.ar/">
+        <QRCodeGeneratorDisplayText text=" "></QRCodeGeneratorDisplayText>
+    </SfQRCodeGenerator>*@
 <style>
     #target {
         height: 500px;

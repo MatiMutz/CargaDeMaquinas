@@ -1,4 +1,4 @@
-﻿ @page "/servicio/list"
+﻿ @page "/sc/servicio/list"
 @using Syncfusion.Blazor.FileManager;
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
@@ -141,7 +141,7 @@
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <a href="/marca/list" target="_blank">Marca:</a>
+                                                <a href="/sc/marca/list" target="_blank">Marca:</a>
                                                 <SfDropDownList CssClass="customClass" ID="MARCA" TItem="Marca" @bind-Value="@(servicio.MARCA)" TValue="string" Placeholder="Seleccione la Marca" DataSource="@marcas">
                                                     <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
                                                 </SfDropDownList>
@@ -155,7 +155,7 @@
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <a href="/modelo/list" target="_blank">Modelo:</a>
+                                                <a href="/sc/modelo/list" target="_blank">Modelo:</a>
                                                 <SfDropDownList CssClass="customClass" ID="MODELO" TItem="Modelo" @bind-Value="@(servicio.MODELO)" TValue="string" Placeholder="Seleccione el Modelo" DataSource="@modelos">
                                                     <DropDownListFieldSettings Value="Modelo" Text="Modelo"></DropDownListFieldSettings>
                                                 </SfDropDownList>
@@ -164,14 +164,14 @@
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <a href="/medida/list" target="_blank">Medida:</a>
+                                                <a href="/sc/medida/list" target="_blank">Medida:</a>
                                                 <SfDropDownList CssClass="customClass" ID="MEDIDA" TItem="Medida" @bind-Value="@(servicio.MEDIDA)" TValue="string" Placeholder="Seleccione la Medida" DataSource="@medidas">
                                                     <DropDownListFieldSettings Value="Codigo" Text="Medida"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <a href="/serie/list" target="_blank">Serie:</a>
+                                                <a href="/sc/serie/list" target="_blank">Serie:</a>
                                                 <SfDropDownList CssClass="customClass" ID="SERIE" TItem="Serie" @bind-Value="@(servicio.SERIE)" TValue="string" Placeholder="Seleccione la Serie" DataSource="@series">
                                                     <DropDownListFieldSettings Value="Codigo" Text="Medida"></DropDownListFieldSettings>
                                                 </SfDropDownList>
@@ -180,7 +180,7 @@
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <a href="/orificio/list" target="_blank">Orificio:</a>
+                                                <a href="/sc/orificio/list" target="_blank">Orificio:</a>
                                                 <SfDropDownList CssClass="customClass" ID="ORIFICIO" TItem="Orificio" @bind-Value="@(servicio.ORIFICIO)" TValue="string" Placeholder="Seleccione el Orificio" DataSource="@orificios">
                                                     <DropDownListFieldSettings Value="Orificio" Text="Area"></DropDownListFieldSettings>
                                                 </SfDropDownList>
