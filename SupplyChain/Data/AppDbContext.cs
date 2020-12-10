@@ -19,7 +19,11 @@ namespace SupplyChain
         public DbSet<PedCli> PedCli { get; set; }
         public DbSet<Pedidos> Pedidos { get; set; }
         public DbSet<Programa> Programa { get; set; }
+        //willy
+        public DbSet<Areas> Areas { get; set; }
+
         //MODULO SERVICIOS
+
         public DbSet<Celdas> Celdas { get; set; }
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Marca> Marca { get; set; }

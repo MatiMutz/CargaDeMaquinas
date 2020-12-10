@@ -7,7 +7,7 @@ using System.Text;
 namespace SupplyChain
 {
     [Table("Areas")]
-    public class Area
+    public class Areas
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CG_AREA { get; set; } = 0;
