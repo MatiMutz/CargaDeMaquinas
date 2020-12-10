@@ -4,22 +4,23 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace SupplyChain.Shared.Models
+namespace SupplyChain
 {
     [Table("Areas")]
     public class Area
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ColumnaGridViewAtributo (Name = "Codigo Área")]
         public int CG_AREA { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Descripcion Area")]
         public string DES_AREA { get; set; } = "";
-        [ColumnaGridViewAtributo(Name = "Código de tipo de área")]
+        public string RESP { get; set; } = "";
+        public string CONTROLES { get; set; } = "";
+        public decimal TARA { get; set; } = 0;
         public int CG_TIPOAREA { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Código de proveedor")]
         public int CG_PROVE { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Código de compañía")]
         public int CG_CIA { get; set; } = 0;
+        public int CG_DEP { get; set; } = 0;
+        public int CG_COS { get; set; } = 0;
+
     }
 }
 
