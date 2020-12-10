@@ -2,17 +2,21 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SupplyChain.Shared.Models
+namespace SupplyChain
 {
     [Table("TiposNoConf")]
     public class TiposNoConf
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ColumnaGridViewAtributo(Name = "Codigo tipo no Conforme")]
         public int Cg_TipoNc { get; set; } = 0;
-        [ColumnaGridViewAtributo(Name = "Descripcion tipo no conforme")]
         public string Des_TipoNc { get; set; } = "";
-        [ColumnaGridViewAtributo(Name = "Codigo de compañia")]
-        public int Cg_cia { get; set; } = 0;
+        public bool TipoNoconf { get; set; } = false;
+        public string Origen { get; set; } = "";
+        public string? Datos { get; set; } = "";
+        public string Observaciones { get; set; } = "";
+        public string Nombre_Reporte { get; set; } = "";
+        public bool Calipro { get; set; } = false;
+        public decimal Puntos { get; set; } = 0;
+        public string TipoDemerito { get; set; } = "";
     }
 }
