@@ -58,6 +58,117 @@
                                                 <label class="e-float-text e-label-top">Area:</label>
                                                 <SfNumericTextBox ID="Area" @bind-Value="@(celda.CG_AREA)"></SfNumericTextBox>
                                             </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Serie:</label>
+                                                <SfNumericTextBox ID="Serie" @bind-Value="@(celda.CG_SERIE)"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <!--<div class="form-group col-md-6">
+            <label class="e-float-text e-label-top">Ilimitada:</label>
+            <SfCheckBox ID="Ilimitada" @bind-Value="@(celda.ILIMITADA)"></SfCheckBox>
+        </div>-->
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Responsable:</label>
+                                                <SfTextBox ID="Responsable" @bind-Value="@(celda.RESP)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Controles:</label>
+                                                <SfTextBox ID="Controles" @bind-Value="@(celda.CONTROLES)"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">TS1:</label>
+                                                <SfNumericTextBox ID="TS1" @bind-Value="@(celda.TS1)"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">TS2:</label>
+                                                <SfNumericTextBox ID="TS2" @bind-Value="@(celda.TS2)"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Coeficiente:</label>
+                                                <SfNumericTextBox ID="Coeficiente" @bind-Value="@(celda.COEFI)"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Codigo Producto:</label>
+                                                <SfTextBox ID="Codigo Producto" @bind-Value="@(celda.CG_PROD)"></SfTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Cantidad:</label>
+                                                <SfNumericTextBox ID="Cantidad" @bind-Value="@(celda.CANT)"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Tiempo de Fabricacion:</label>
+                                                <SfNumericTextBox ID="Tiempo de Fabricacion" @bind-Value="@(celda.TIEMPOFAB)"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Fecha Inicial:</label>
+                                                <SfDateTimePicker ID="Fecha Inicial" @bind-Value="@(celda.FE_INICIAL)"></SfDateTimePicker>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Hora de Inicio:</label>
+                                                <SfNumericTextBox ID="Hora de Inicio" @bind-Value="@(celda.HS_INICIAL)"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Fecha Final:</label>
+                                                <SfDateTimePicker ID="Fecha Final" @bind-Value="@(celda.FE_FINAL)"></SfDateTimePicker>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Hora Final:</label>
+                                                <SfNumericTextBox ID="Hora Final" @bind-Value="@(celda.HS_FINAL)"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Fecha Final:</label>
+                                                <SfTextBox ID="Fecha Final" @bind-Value="@(celda.OBSERVAC)"></SfTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Codigo Operario:</label>
+                                                <SfNumericTextBox ID="Codigo Operario" @bind-Value="@(celda.CG_OPER)"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Codigo cliente:</label>
+                                                <SfNumericTextBox ID="Codigo cliente" @bind-Value="@(celda.CG_CLI)"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Codigo Proveedor:</label>
+                                                <SfNumericTextBox ID="Codigo Proveedor" @bind-Value="@(celda.CG_PROVE)"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">CG_COS:</label>
+                                                <SfNumericTextBox ID="CG_COS" @bind-Value="@(celda.CG_COS)"></SfNumericTextBox>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

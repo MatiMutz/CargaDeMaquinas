@@ -809,7 +809,12 @@ else
     async Task DownloadText()
     {
         string presion = ordenFabricacionEncabezado.CAMPOCOM4.Trim();
+        if (String.IsNullOrEmpty(presion))
+        {
+            presion = ordenFabricacionEncabezado.CAMPOCOM1.Trim();
+        }
         presion = presion.Remove((presion.Length - 5));
+        presion = presion.Replace(',','.');
         // Generate a text file
         byte[] file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
         await JS.InvokeVoidAsync("BlazorDownloadFile", $"{ordenFabricacion.PEDIDO}.txt", "text/plain", file);
