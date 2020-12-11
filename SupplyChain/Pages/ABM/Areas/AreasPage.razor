@@ -1,4 +1,4 @@
-﻿@page "/sc/celdas/list"
+﻿@page "/sc/areas/list"
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
 @using Syncfusion.Blazor.Calendars
@@ -54,12 +54,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Area:</label>
-                                                <SfNumericTextBox ID="Area" @bind-Value="@(Area.CG_AREA)"></SfNumericTextBox>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -67,9 +61,9 @@
                     </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field=@nameof(Celdas.CG_CELDA) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.DES_CELDA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Areas.CG_AREA) HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Areas.DES_AREA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+               
                 </GridColumns>
             </SfGrid>
         </div>

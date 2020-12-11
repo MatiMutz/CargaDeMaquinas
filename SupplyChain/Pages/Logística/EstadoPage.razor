@@ -3,6 +3,9 @@
 @using Syncfusion.Blazor.Kanban
 @using System.Diagnostics
 @inherits SupplyChain.Pages.Modelos.EstadoPageBase
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <a class="navbar-brand" href="#">Aerre</a>
+    </nav>
 <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true">
     <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
     <KanbanColumns>
@@ -22,12 +25,21 @@
         font-size: 15px;
         font-weight: 500;
     }
+    .e-kanban-header {
+        position: fixed !important;
+       margin-bottom:2px;
+       margin-top: -50px;
+    }
 
-        .e-kanban .header-template-wrap .header-icon {
-            font-family: 'Kanban priority icons';
-            margin-top: 3px;
-            width: 10%;
-        }
+    .e-kanban .e-kanban-table {
+        padding: 120px;
+        
+    }
+    .e-kanban .header-template-wrap .header-icon {
+        font-family: 'Kanban priority icons';
+        margin-top: 3px;
+        width: 10%;
+    }
 
         .e-kanban .header-template-wrap .header-text {
             margin-left: 15px;
