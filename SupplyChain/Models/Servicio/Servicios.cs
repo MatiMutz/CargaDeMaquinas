@@ -60,6 +60,7 @@ namespace SupplyChain
         public string PRESENCIAINSPEC { get; set; } = "";
         public string DESCARTICULO { get; set; } = "";
         public string OBSERV { get; set; } = "";
+        public string OBSERVANT { get; set; } = "";
         public string CATALOGO { get; set; } = "";
     }
 }
