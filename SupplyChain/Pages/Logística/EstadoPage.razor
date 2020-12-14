@@ -3,8 +3,13 @@
 @using Syncfusion.Blazor.Kanban
 @using System.Diagnostics
 @inherits SupplyChain.Pages.Modelos.EstadoPageBase
+    
     <nav class="navbar fixed-top navbar-light bg-light">
-        <a class="navbar-brand" href="#">Aerre</a>
+        <a class="navbar-brand" href="#"><img src="/aerre.jpg" alt="logo" /></a>
+        <a class="navbar-brand" style=" font-weight: bold;" href="#">KANBAN</a>
+        <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
+         Volver
+        </a>
     </nav>
 <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true">
     <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>

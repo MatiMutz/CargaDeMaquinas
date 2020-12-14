@@ -15,12 +15,14 @@
 @using Syncfusion.Pdf.Tables
 <head>
 </head>
-<h3 class="titulo">
-    Carga de máquina
+<nav class="navbar fixed-top navbar-light bg-light">
+    <a class="navbar-brand" href="#"><img src="/aerre.jpg" alt="logo" /></a>
+    <a class="navbar-brand" style=" font-weight: bold;" href="#">CARGA DE MÁQUINA</a>
     <button class="btn btn-outline-primary btn-sm oi oi-reload" @onclick="@Refrescar">
         Actualizar
     </button>
-</h3>
+</nav>
+<br /> <br />
 <hr />
 @*CODIGO HTML*@
 @if (dbCarga == null)
