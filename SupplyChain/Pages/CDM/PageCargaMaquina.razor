@@ -15,12 +15,14 @@
 @using Syncfusion.Pdf.Tables
 <head>
 </head>
-<h3 class="titulo">
-    Carga de máquina
+<nav class="navbar fixed-top navbar-light bg-light">
+    <a class="navbar-brand" href="#"><img src="/aerre.jpg" alt="logo" /></a>
+    <a class="navbar-brand" style=" font-weight: bold;" href="#">CARGA DE MÁQUINA</a>
     <button class="btn btn-outline-primary btn-sm oi oi-reload" @onclick="@Refrescar">
         Actualizar
     </button>
-</h3>
+</nav>
+<br /> <br />
 <hr />
 @*CODIGO HTML*@
 @if (dbCarga == null)
@@ -156,14 +158,14 @@ else
                                        value="@dbCarga[i].CG_ORDF" style="  width: 100%; font-size: 18px; border: 3px solid @dbCarga[i].BACKGROUND;"
                                        id="of + @dbCarga[i].CG_ORDF" />
                                 @{
-                                        
+
                                     if (@dbCarga.ElementAt(i).DES_CLI == "")
                                     {
                                         <span class="tooltiptext">@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD<br />CANTIDAD: @dbCarga.ElementAt(i).CANT.ToString().Substring(0, 1)<br />OF INICIAL:@dbCarga.ElementAt(i).CG_ORDFASOC<br />OF ALTA: @Mayor</span>
                                     }
                                     else
                                     {
-                            <span class="tooltiptext">@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
+                                        <span class="tooltiptext">@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
                                     }
                                 }
                             </div>
@@ -814,7 +816,7 @@ else
             presion = ordenFabricacionEncabezado.CAMPOCOM1.Trim();
         }
         presion = presion.Remove((presion.Length - 5));
-        presion = presion.Replace(',','.');
+        presion = presion.Replace(',', '.');
         // Generate a text file
         byte[] file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
         await JS.InvokeVoidAsync("BlazorDownloadFile", $"{ordenFabricacion.PEDIDO}.txt", "text/plain", file);
