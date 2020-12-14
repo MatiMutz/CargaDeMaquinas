@@ -16,6 +16,7 @@
 @inject IJSRuntime JsRuntime
 @using SupplyChain
 @using System.Net.Http.Json
+@using Syncfusion.Blazor.PdfViewerServer
 @inject CustomHttpClient Http
 @inject NavigationManager NavManager
 @inherits SupplyChain.Pages.Servicios.ServicioPageBase
@@ -259,7 +260,7 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Servicio:</label>
-                                                <SfTextBox ID="SERVICIO" @bind-Value="@(servicio.SERVICIO)" ></SfTextBox>
+                                                <SfTextBox ID="SERVICIO" @bind-Value="@(servicio.SERVICIO)"></SfTextBox>
                                             </div>
                                         </div>
                                     </div>
@@ -392,14 +393,14 @@
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <a href="/operario/list" target="_blank">Responsable:</a>
+                                                <a href="/sc/operario/list" target="_blank">Responsable:</a>
                                                 <SfDropDownList CssClass="customClass" ID="RESP" TItem="Operario" @bind-Value="@(servicio.RESP)" TValue="string" Placeholder="Responsable" DataSource="@operarios">
                                                     <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <a href="/operario/list" target="_blank">Responsable:</a>
+                                                <a href="/sc/operario/list" target="_blank">Responsable:</a>
                                                 <SfDropDownList CssClass="customClass" ID="CONTROLO" TItem="Operario" @bind-Value="@(servicio.CONTROLO)" TValue="string" Placeholder="Controló" DataSource="@operarios">
                                                     <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
                                                 </SfDropDownList>
@@ -470,38 +471,44 @@
                                 </div>
                                 <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
                                     @{
-                                        if (File.Exists($"E:\\pdf\\Ensayos\\ENS{servicio.PEDIDO}_1.pdf"))
+                                        @foreach (Solution ruta in rutas)
                                         {
-                                            <div class="accordion" id="accordionExample">
-                                                @{
-                                                    for (int i = 1; i < 4; i++)
-                                                    {
-                                                        string ruta = "E:\\pdf\\Ensayos\\ENS" + servicio.PEDIDO + "_" + i + ".pdf";
-                                                        if (File.Exists(ruta))
-                                                        {
-                                                            <div class="card">
-                                                                <div class="card-header" id="@i">
-                                                                    <h2 class="mb-0">
-                                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
-                                                                            Ensayo @(i)
-                                                                        </button>
-                                                                    </h2>
-                                                                </div>
+                                            if (ruta.CAMPO == "RUTAENSAYO")
+                                            {
+                                                if (File.Exists(ruta.VALORC + $"ENS_{servicio.PEDIDO}_1.pdf"))
+                                                {
+                                                    <div class="accordion" id="accordionExample">
+                                                        @{
+                                                            for (int i = 1; i < 4; i++)
+                                                            {
+                                                                string rutaDocumento = ruta.VALORC + $"ENS_{servicio.PEDIDO}_{i}.pdf";
+                                                                if (File.Exists(rutaDocumento))
+                                                                {
+                                                                    <div class="card">
+                                                                        <div class="card-header" id="@i">
+                                                                            <h2 class="mb-0">
+                                                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                                                                    Ensayo @(i)
+                                                                                </button>
+                                                                            </h2>
+                                                                        </div>
 
-                                                                <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
-                                                                    <div class="card-body">
-                                                                        <embed src="Ensayos\pdf\..\..\..\ENS@(servicio.PEDIDO)_@(i).pdf" type="application/pdf" width="100%" height="600px" />
+                                                                        <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
+                                                                            <div class="card-body">
+                                                                                <SfPdfViewerServer DocumentPath="@rutaDocumento" Height="640px" Width="750%"></SfPdfViewerServer>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
+                                                                }
+                                                            }
                                                         }
-                                                    }
+                                                    </div>
                                                 }
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <label>No existen registros de ensayos para el pedido numero @(servicio.PEDIDO)</label>
+                                                else
+                                                {
+                                                    <label>No existen registros de ensayos para el pedido numero @(servicio.PEDIDO)</label>
+                                                }
+                                            }
                                         }
                                     }
                                 </div>
