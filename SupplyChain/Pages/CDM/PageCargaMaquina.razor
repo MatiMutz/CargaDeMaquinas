@@ -22,7 +22,8 @@
         Actualizar
     </button>
 </nav>
-<br /> <br />
+<br />
+<br />
 <hr />
 @*CODIGO HTML*@
 @if (dbCarga == null)
@@ -234,13 +235,13 @@ else
                                                             <div>
                                                                 <span style="color:blue">Fecha y hora de Inicio real:</span>
                                                             </div>
-                                                            <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
+                                                            <SfDateTimePicker Format="dd/MM/yyyy hh:mm:ss" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
                                                         </td>
                                                         <td style="padding-left:20px;">
                                                             <div>
                                                                 <span style="color:blue">Fecha y hora de finalización real:</span>
                                                             </div>
-                                                            <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
+                                                            <SfDateTimePicker  Format="dd/MM/yyyy hh:mm:ss" TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -288,15 +289,33 @@ else
                                                     </tr>
                                                     <tr>
                                                         <!--
-                                                        <td style="padding-top:20px">
+                                                            <td style="padding-top:20px">
                                                             <div>
                                                                 <span style="color:blue">Seleccione Operario:</span>
                                                             </div>
-                                                            <SfDropDownList TValue="string" TItem="Operario" @bind-Value="@(ordenFabricacion.DES_OPER)" DataSource="@operariosList">
+                                                            <SfDropDownList ID="DES_OPER" TValue="string" TItem="Operario" @bind-Value="@(ordenFabricacion.DES_OPER)" DataSource="@operariosList">
                                                                 <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
                                                             </SfDropDownList>
                                                         </td>
                                                         -->
+                                                        <td style="padding-top: 20px;padding-bottom: 20px">
+                                                            <div>
+                                                                <span style="color:blue">Operario:</span>
+                                                            </div>
+                                                            <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                                        @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosList">
+                                                                <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                                <ComboBoxTemplates TItem="Operario">
+                                                                    <HeaderTemplate>
+                                                                        <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
+                                                                    </HeaderTemplate>
+                                                                    <ItemTemplate>
+                                                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
+                                                                    </ItemTemplate>
+                                                                </ComboBoxTemplates>
+                                                            </SfComboBox>
+                                                        </td>
+
                                                         <td style="padding-left: 20px; padding-top: 20px; padding-bottom: 20px">
                                                             @if (ordenFabricacion.EXIGEOA == false)
                                                             {
@@ -779,7 +798,7 @@ else
     protected List<ModeloGenericoIntString> dbEstadoCarga;
     protected List<ModeloGenericoStringString> dbCeldas;
     protected List<ModeloGenericoStringString> dbProcesos;
-    //protected List<Operario> operariosList = new List<Operario>();
+    protected List<Operario> operariosList = new List<Operario>();
     protected string Usuario = "USER";
     protected string responseString;
 
@@ -788,7 +807,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         dbEstadoCarga = new List<ModeloGenericoIntString>();
-        //operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+        operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 2, TEXTO = "FIRME" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 3, TEXTO = "EN CURSO" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 4, TEXTO = "CERRADA" });
