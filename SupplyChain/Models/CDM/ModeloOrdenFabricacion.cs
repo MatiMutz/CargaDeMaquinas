@@ -31,5 +31,7 @@ namespace SupplyChain
         public DateTime FECHA_PREVISTA_FABRICACION { get; set; }
         public DateTime FECHA_INICIO_REAL_FABRICACION { get; set; }
         public DateTime FE_CIERRE { get; set; }
+        public int CG_OPER { get; set; }
+        public string DES_OPER { get; set; }
     }
 }

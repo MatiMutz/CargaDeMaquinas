@@ -22,7 +22,8 @@
         Actualizar
     </button>
 </nav>
-<br /> <br />
+<br />
+<br />
 <hr />
 @*CODIGO HTML*@
 @if (dbCarga == null)
@@ -234,13 +235,13 @@ else
                                                             <div>
                                                                 <span style="color:blue">Fecha y hora de Inicio real:</span>
                                                             </div>
-                                                            <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
+                                                            <SfDateTimePicker Format="dd/MM/yyyy hh:mm:ss" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
                                                         </td>
                                                         <td style="padding-left:20px;">
                                                             <div>
                                                                 <span style="color:blue">Fecha y hora de finalización real:</span>
                                                             </div>
-                                                            <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
+                                                            <SfDateTimePicker  Format="dd/MM/yyyy hh:mm:ss" TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -287,7 +288,35 @@ else
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="padding-left:20px;padding-top:20px;padding-bottom:20px">
+                                                        <!--
+                                                            <td style="padding-top:20px">
+                                                            <div>
+                                                                <span style="color:blue">Seleccione Operario:</span>
+                                                            </div>
+                                                            <SfDropDownList ID="DES_OPER" TValue="string" TItem="Operario" @bind-Value="@(ordenFabricacion.DES_OPER)" DataSource="@operariosList">
+                                                                <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
+                                                            </SfDropDownList>
+                                                        </td>
+                                                        -->
+                                                        <td style="padding-top: 20px;padding-bottom: 20px">
+                                                            <div>
+                                                                <span style="color:blue">Operario:</span>
+                                                            </div>
+                                                            <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                                        @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosList">
+                                                                <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                                <ComboBoxTemplates TItem="Operario">
+                                                                    <HeaderTemplate>
+                                                                        <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
+                                                                    </HeaderTemplate>
+                                                                    <ItemTemplate>
+                                                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
+                                                                    </ItemTemplate>
+                                                                </ComboBoxTemplates>
+                                                            </SfComboBox>
+                                                        </td>
+
+                                                        <td style="padding-left: 20px; padding-top: 20px; padding-bottom: 20px">
                                                             @if (ordenFabricacion.EXIGEOA == false)
                                                             {
                                                                 <div>
@@ -769,61 +798,16 @@ else
     protected List<ModeloGenericoIntString> dbEstadoCarga;
     protected List<ModeloGenericoStringString> dbCeldas;
     protected List<ModeloGenericoStringString> dbProcesos;
+    protected List<Operario> operariosList = new List<Operario>();
     protected string Usuario = "USER";
     protected string responseString;
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
-    public async void exportdata()
-    {
-        PdfDocument document1 = new PdfDocument();
-        //Create a PdfGrid
-        PdfGrid pdfGrid1 = new PdfGrid();
-        //Create the page
-        PdfPage page = document1.Pages.Add();
-        //Create PDF graphics for the page.
-        PdfGraphics graphics = page.Graphics;
-        //Set the standard font.
-        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-        PdfLightTable pdfTable = new PdfLightTable();
-        page.Graphics.RotateTransform(-90);
-        //Draw the text.
-        graphics.DrawString($"        OF ALTA: {ordenFabricacion.CG_ORDF}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
-        document1.PageSettings.Margins.All = 0;
-        //PdfTemplate template = null;
-        MemoryStream xx = new MemoryStream();
-        document1.Save(xx);
 
-        //Set the position as '0'
-        //xx.Position = 0;
-        //Close the document
-        document1.Close(true);
-
-        await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
-
-        /*
-        row1.Cells[0].Value = $"OF ALTA: {ordenFabricacion.CG_CELDA}";
-        row1.Cells[1].Value = $"Description: {ordenFabricacion.DES_PROD}";
-        PdfGridRow row2 = pdfGrid.Rows.Add();
-        row2.Cells[0].Value = $"CANTIDAD: {ordenFabricacion.CANT}";
-        row1.Cells[1].Value = $"FECHA: {ordenFabricacion.FECHA_INICIO_REAL_FABRICACION}";
-        */
-    }
-    async Task DownloadText()
-    {
-        string presion = ordenFabricacionEncabezado.CAMPOCOM4.Trim();
-        if (String.IsNullOrEmpty(presion))
-        {
-            presion = ordenFabricacionEncabezado.CAMPOCOM1.Trim();
-        }
-        presion = presion.Remove((presion.Length - 5));
-        presion = presion.Replace(',', '.');
-        // Generate a text file
-        byte[] file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
-        await JS.InvokeVoidAsync("BlazorDownloadFile", $"{ordenFabricacion.PEDIDO}.txt", "text/plain", file);
-    }
     protected override async Task OnInitializedAsync()
     {
         dbEstadoCarga = new List<ModeloGenericoIntString>();
+        operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 2, TEXTO = "FIRME" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 3, TEXTO = "EN CURSO" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 4, TEXTO = "CERRADA" });
@@ -975,6 +959,46 @@ else
         {
             throw;
         }
+    }
+    public async void exportdata()
+    {
+        PdfDocument document1 = new PdfDocument();
+        //Create a PdfGrid
+        PdfGrid pdfGrid1 = new PdfGrid();
+        //Create the page
+        PdfPage page = document1.Pages.Add();
+        //Create PDF graphics for the page.
+        PdfGraphics graphics = page.Graphics;
+        //Set the standard font.
+        PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+        PdfLightTable pdfTable = new PdfLightTable();
+        page.Graphics.RotateTransform(-90);
+        //Draw the text.
+        graphics.DrawString($"        OF ALTA: {ordenFabricacion.CG_ORDF}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+        document1.PageSettings.Margins.All = 0;
+        //PdfTemplate template = null;
+        MemoryStream xx = new MemoryStream();
+        document1.Save(xx);
+
+        //Set the position as '0'
+        //xx.Position = 0;
+        //Close the document
+        document1.Close(true);
+
+        await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
+    }
+    async Task DownloadText()
+    {
+        string presion = ordenFabricacionEncabezado.CAMPOCOM4.Trim();
+        if (String.IsNullOrEmpty(presion))
+        {
+            presion = ordenFabricacionEncabezado.CAMPOCOM1.Trim();
+        }
+        presion = presion.Remove((presion.Length - 5));
+        presion = presion.Replace(',', '.');
+        // Generate a text file
+        byte[] file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
+        await JS.InvokeVoidAsync("BlazorDownloadFile", $"{ordenFabricacion.PEDIDO}.txt", "text/plain", file);
     }
 }
 <style>

@@ -95,7 +95,10 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Activo:</label>
-                                                <SfNumericTextBox ID="ACTIVO" @bind-Value="@(operario.ACTIVO)"></SfNumericTextBox>
+                                                @{
+                                                    string ActivoString = operario.ACTIVO.ToString();
+                                                    <SfTextBox ID="ACTIVO" @bind-Value="@(ActivoString)"></SfTextBox>
+                                                }
                                             </div>
                                         </div>
                                     </div>

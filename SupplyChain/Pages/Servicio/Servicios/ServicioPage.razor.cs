@@ -75,6 +75,7 @@ namespace SupplyChain.Pages.Servicios
         protected List<Marca> marcas = new List<Marca>();
         protected List<Operario> operarios = new List<Operario>();
         protected List<Celdas> celdas = new List<Celdas>();
+        protected List<Solution> rutas;
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
@@ -100,6 +101,7 @@ namespace SupplyChain.Pages.Servicios
             marcas = await Http.GetFromJsonAsync<List<Marca>>("api/Marca");
             operarios = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
             celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
+            rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
             await base.OnInitializedAsync();
         }
