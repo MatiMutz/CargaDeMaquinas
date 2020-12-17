@@ -118,26 +118,14 @@ namespace SupplyChain.Pages.Celda
                             Nuevo.CG_CELDA = celdas.Max(s => s.CG_CELDA) + 1;
                             Nuevo.DES_CELDA = selectedRecord.DES_CELDA;
                             Nuevo.CG_AREA = selectedRecord.CG_AREA;
-                            Nuevo.CG_SERIE = selectedRecord.CG_SERIE;
+                       
                             Nuevo.ILIMITADA = selectedRecord.ILIMITADA;
-                            Nuevo.RESP = selectedRecord.RESP;
-                            Nuevo.CONTROLES = selectedRecord.CONTROLES;
-                            Nuevo.TS1 = selectedRecord.TS1;
-                            Nuevo.TS2 = selectedRecord.TS2;
+                           
+                        
                             Nuevo.COEFI = selectedRecord.COEFI;
-                            Nuevo.CG_PROD = selectedRecord.CG_PROD;
-                            Nuevo.CANT = selectedRecord.CANT;
-                            Nuevo.TIEMPOFAB = selectedRecord.TIEMPOFAB;
-                            Nuevo.FE_INICIAL = selectedRecord.FE_INICIAL;
-                            Nuevo.HS_INICIAL = selectedRecord.HS_INICIAL;
-                            Nuevo.FE_FINAL = selectedRecord.FE_FINAL;
-                            Nuevo.HS_FINAL = selectedRecord.HS_FINAL;
-                            Nuevo.OBSERVAC = selectedRecord.OBSERVAC;
-                            Nuevo.CG_OPER = selectedRecord.CG_OPER;
-                            Nuevo.CG_CLI = selectedRecord.CG_CLI;
+                      
                             Nuevo.CG_PROVE = selectedRecord.CG_PROVE;
-                            Nuevo.CG_COS = selectedRecord.CG_COS;
-                            Nuevo.CG_PREDIO = selectedRecord.CG_PREDIO;
+                      
                             Nuevo.VALOR_AMOR = selectedRecord.VALOR_AMOR;
                             Nuevo.VALOR_MERC = selectedRecord.VALOR_MERC;
                             Nuevo.MONEDA = selectedRecord.MONEDA;
@@ -148,15 +136,10 @@ namespace SupplyChain.Pages.Celda
                             Nuevo.ENERGIA = selectedRecord.ENERGIA;
                             Nuevo.COMBUST = selectedRecord.COMBUST;
                             Nuevo.AIRE_COMP = selectedRecord.AIRE_COMP;
-                            Nuevo.SETUP_OPT = selectedRecord.SETUP_OPT;
-                            Nuevo.NOMAQ = selectedRecord.NOMAQ;
-                            Nuevo.PLC = selectedRecord.PLC;
+                  
                             Nuevo.CG_TIPOCELDA = selectedRecord.CG_TIPOCELDA;
                             Nuevo.CG_DEPOSM = selectedRecord.CG_DEPOSM;
-                            Nuevo.ACT_PRODIN = selectedRecord.ACT_PRODIN;
-                            Nuevo.CG_OPER_ACTUAL = selectedRecord.CG_OPER_ACTUAL;
-                            Nuevo.CG_SUPER_ACTUAL = selectedRecord.CG_SUPER_ACTUAL;
-                            Nuevo.ULTIMO_REGISTRO_TRANSFERIDO_PLC = selectedRecord.ULTIMO_REGISTRO_TRANSFERIDO_PLC;
+                        
 
                             var response = await Http.PostAsJsonAsync("api/Celdas", Nuevo);
 

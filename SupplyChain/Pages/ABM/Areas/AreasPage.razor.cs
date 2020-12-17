@@ -117,15 +117,12 @@ namespace SupplyChain.Pages.Area
 
                             Nuevo.CG_AREA = areas.Max(s => s.CG_AREA) + 1;
                             Nuevo.DES_AREA = selectedRecord.DES_AREA;
-                            Nuevo.RESP = selectedRecord.RESP;
-                            Nuevo.CONTROLES = selectedRecord.CONTROLES;
-                            Nuevo.TARA = selectedRecord.TARA;
+                            
+                        
                             Nuevo.CG_TIPOAREA = selectedRecord.CG_TIPOAREA;
                             Nuevo.CG_PROVE = selectedRecord.CG_PROVE;
                             Nuevo.CG_CIA = selectedRecord.CG_CIA;
-                            Nuevo.CG_DEP = selectedRecord.CG_DEP;
-                            Nuevo.CG_COS = selectedRecord.CG_COS;
-                            
+                         
                
 
                             var response = await Http.PostAsJsonAsync("api/Areas", Nuevo);
