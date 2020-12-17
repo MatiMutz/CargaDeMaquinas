@@ -24,6 +24,7 @@ namespace SupplyChain
         public decimal CANT { get; set; } = 0;
         public int TIEMPOFAB { get; set; } = 0;
         public DateTime FE_INICIAL { get; set; }
+        public DateTime FE_REG { get; set; }
         public int HS_INICIAL { get; set; } = 0;
         public DateTime FE_FINAL { get; set; }
         public int HS_FINAL { get; set; } = 0;

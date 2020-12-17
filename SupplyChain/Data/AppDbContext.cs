@@ -21,6 +21,14 @@ namespace SupplyChain
         public DbSet<Programa> Programa { get; set; }
         //willy
         public DbSet<Areas> Areas { get; set; }
+        public DbSet<Unidades> Unidades { get; set; }
+        public DbSet<Lineas> Lineas { get; set; }
+        public DbSet<CatOpe> CateOperarios { get; set; }
+        public DbSet<Deposito> Depositos { get; set; }
+        public DbSet<TipoArea> TipoArea { get; set; }
+        public DbSet<TipoCelda> TipoCelda { get; set; }
+        public DbSet<TiposNoConf> TiposNoConf { get; set; }
+        
 
         //MODULO SERVICIOS
 
