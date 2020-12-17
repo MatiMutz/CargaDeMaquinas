@@ -62,7 +62,6 @@ else
                                     </button>
                                 </h2>
                             </div>
-
                             <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
                                 <div class="card-body">
                                     @{
@@ -81,15 +80,48 @@ else
                         </div>
                     </div>
                 }
-                @*codigo = ruta.VALORC + codigo.Substring(0, 7) + ".txt";
-                if (File.Exists(codigo))
+            }
+        }
+    }
+    if (accion == "ENSAYOS")
+    {
+        @foreach (Solution ruta in rutas)
+        {
+            if (ruta.CAMPO == "RUTAENSAYO")
+            {
+                if (File.Exists(ruta.VALORC + $"ENS_{codigo}_1.pdf"))
                 {
-                    <embed src="@codigo" width="100%" height="600px" />
+                    <div class="accordion" id="accordionExample">
+                        @{
+                            for (int i = 1; i < 4; i++)
+                            {
+                                string rutaDocumento = ruta.VALORC + $"ENS_{codigo}_{i}.pdf";
+                                if (File.Exists(rutaDocumento))
+                                {
+                                    <div class="card">
+                                        <div class="card-header" id="@i">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                                    Ensayo @(i)
+                                                </button>
+                                            </h2>
+                                        </div>
+
+                                        <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <SfPdfViewerServer DocumentPath="@rutaDocumento" Height="640px" Width="750%"></SfPdfViewerServer>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
                 }
                 else
                 {
-                    <label>No hay un archivo de programa asociado.</label>
-                }*@
+                    <label>No existen registros de ensayos para el pedido numero @(codigo)</label>
+                }
             }
         }
     }

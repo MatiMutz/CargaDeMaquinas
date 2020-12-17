@@ -59,7 +59,6 @@ namespace SupplyChain
 
             try
             {
-                
                 string xSQL = string.Format("set dateformat dmy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
                                             "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', DES_OPER = '{7}' WHERE Cg_ordf = {8}",
                                           xItem.FECHA_PREVISTA_FABRICACION,

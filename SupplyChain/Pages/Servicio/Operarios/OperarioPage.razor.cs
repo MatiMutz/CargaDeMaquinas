@@ -63,11 +63,11 @@ namespace SupplyChain.Pages.Operarios
                 if (!found)
                 {
                     args.Data.CG_OPER = operarios.Max(s => s.CG_OPER) + 1;
-                    response = await Http.PostAsJsonAsync("api/Operarios", args.Data);
+                    response = await Http.PostAsJsonAsync("api/Operario", args.Data);
                 }
                 else
                 {
-                    response = await Http.PutAsJsonAsync($"api/Operarios/{args.Data.CG_OPER}", args.Data);
+                    response = await Http.PutAsJsonAsync($"api/Operario/{args.Data.CG_OPER}", args.Data);
                 }
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -92,7 +92,7 @@ namespace SupplyChain.Pages.Operarios
                     if (isConfirmed)
                     {
                         //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                        await Http.DeleteAsync($"api/Operaio/{args.Data.CG_OPER}");
+                        await Http.DeleteAsync($"api/Operario/{args.Data.CG_OPER}");
                     }
                 }
             }

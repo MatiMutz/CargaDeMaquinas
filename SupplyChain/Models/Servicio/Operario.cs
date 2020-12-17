@@ -21,6 +21,6 @@ namespace SupplyChain
         public string MONEDA { get; set; } = "";
         public bool ACTIVO { get; set; } = false;
         public int CG_CIA { get; set; } = 0;
-        public string USUARIO { get; set; }
+        public string USUARIO { get; set; } = "";
     }
 }

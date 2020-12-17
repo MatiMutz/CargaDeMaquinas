@@ -3,29 +3,40 @@
 @using Syncfusion.Blazor.Kanban
 @using System.Diagnostics
 @inherits SupplyChain.Pages.Modelos.EstadoPageBase
-    
-    <nav class="navbar fixed-top navbar-light bg-light">
-        <a class="navbar-brand" href="#"><img src="/aerre.jpg" alt="logo" /></a>
-        <a class="navbar-brand" style=" font-weight: bold;" href="#">KANBAN</a>
-        <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
-         Volver
-        </a>
-    </nav>
-<SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true">
-    <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
-    <KanbanColumns>
-        @foreach (ColumnModel item in columnData)
-        {
-            <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField"></KanbanColumn>
-        }
-    </KanbanColumns>
-    <div style="z-index:0;">
-        <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))">
-        </KanbanCardSettings>
-        <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)" AllowDragAndDrop=true ShowItemCount=true SortDirection=SortDirection.Ascending ShowEmptyRow=true>
-        </KanbanSwimlaneSettings>
+
+<div>
+    <div>
+        <nav class="navbar fixed-top navbar-light bg-light">
+            <a class="navbar-brand" href="#"><img src="/aerre.jpg" alt="logo" /></a>
+            <a class="navbar-brand" style=" font-weight: bold;" href="#">KANBAN</a>
+            <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
+                Volver
+            </a>
+        </nav>
     </div>
-</SfKanban>
+    <div>
+        <br />
+        <br />
+        <br />
+        <SfKanban TValue="PedCli" KeyField="ESTADO_LOGISTICA" DataSource="@Pedclis" AllowDragAndDrop="true" Height="800px">
+            <KanbanEvents TValue="PedCli" DragStart="@onDragStart" DragStop="@onDragStop"></KanbanEvents>
+            <KanbanColumns>
+                @foreach (ColumnModel item in columnData)
+                {
+                    <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField"></KanbanColumn>
+                }
+            </KanbanColumns>
+            <div style="z-index:0;">
+                <KanbanCardSettings HeaderField="@(nameof(PedCli.PEDIDO))" ContentField="@(nameof(PedCli.DES_ART))">
+                </KanbanCardSettings>
+                <KanbanSwimlaneSettings KeyField="@nameof(PedCli.DES_CLI)" TextField="@nameof(PedCli.DES_CLI)" AllowDragAndDrop=true ShowItemCount=true SortDirection=SortDirection.Ascending ShowEmptyRow=true>
+                </KanbanSwimlaneSettings>
+            </div>
+        </SfKanban>
+
+    </div>
+</div>
+
 @code {
     private List<ColumnModel> columnData = new List<ColumnModel>() {
         new ColumnModel(){ HeaderText= "Remitir", KeyField= new List<string>() { "Remitir" } },
@@ -54,8 +65,8 @@
         response = await Http.PutAsJsonAsync($"api/Pedcli/{Nuevo.PEDIDO}", Nuevo);
     }
 }
-
-<style type="text/css">
+<!--
+    <style type="text/css">
     .e-kanban .header-template-wrap {
         display: inline-flex;
         font-size: 15px;
@@ -69,7 +80,7 @@
 
     .e-kanban .e-kanban-table {
         padding: 120px;
-        
+
     }
     .e-kanban .header-template-wrap .header-icon {
         font-family: 'Kanban priority icons';
@@ -209,3 +220,4 @@
         -moz-osx-font-smoothing: grayscale;
     }
 </style>
+-->
