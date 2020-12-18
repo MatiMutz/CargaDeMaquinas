@@ -28,13 +28,13 @@
                     @ref="Grid" DataSource="@tipoareas" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Tip"></GridEvents>
+                <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="TipoArea"></GridEvents>
                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                 <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
                     <Template>
                         @{
-                            var tiparea = (context as TipArea);
+                            var tiparea = (context as TipoArea);
                             <div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -58,8 +58,8 @@
                     </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field=@nameof(TipArea.CG_TIPOAREA) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true"></GridColumn>
-                    <GridColumn Field=@nameof(TipArea.DES_TIPOAREA) HeaderText="Tipo" TextAlign="TextAlign.Left"></GridColumn>
+                    <GridColumn Field=@nameof(TipoArea.CG_TIPOAREA) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true"></GridColumn>
+                    <GridColumn Field=@nameof(TipoArea.DES_TIPOAREA) HeaderText="Tipo" TextAlign="TextAlign.Left"></GridColumn>
                    
                    
                 </GridColumns>
