@@ -18,7 +18,6 @@
 @inject CustomHttpClient Http
 @inject NavigationManager NavManager
 @inherits SupplyChain.Pages.Celda.CeldaPageBase
-
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">
         <div class="row">
@@ -58,40 +57,13 @@
                                                 <label class="e-float-text e-label-top">Area:</label>
                                                 <SfNumericTextBox ID="Area" @bind-Value="@(celda.CG_AREA)"></SfNumericTextBox>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Serie:</label>
-                                                <SfNumericTextBox ID="Serie" @bind-Value="@(celda.CG_SERIE)"></SfNumericTextBox>
-                                            </div>
+                                            
                                         </div>
 
-                                        <div class="form-row">
-                                            <!--<div class="form-group col-md-6">
-            <label class="e-float-text e-label-top">Ilimitada:</label>
-            <SfCheckBox ID="Ilimitada" @bind-Value="@(celda.ILIMITADA)"></SfCheckBox>
-        </div>-->
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Responsable:</label>
-                                                <SfTextBox ID="Responsable" @bind-Value="@(celda.RESP)"></SfTextBox>
-                                            </div>
-                                        </div>
+                              
 
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Controles:</label>
-                                                <SfTextBox ID="Controles" @bind-Value="@(celda.CONTROLES)"></SfTextBox>
-                                            </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">TS1:</label>
-                                                <SfNumericTextBox ID="TS1" @bind-Value="@(celda.TS1)"></SfNumericTextBox>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">TS2:</label>
-                                                <SfNumericTextBox ID="TS2" @bind-Value="@(celda.TS2)"></SfNumericTextBox>
-                                            </div>
 
                                             <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Coeficiente:</label>
@@ -99,65 +71,11 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Codigo Producto:</label>
-                                                <SfTextBox ID="Codigo Producto" @bind-Value="@(celda.CG_PROD)"></SfTextBox>
-                                            </div>
+                                   
 
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Cantidad:</label>
-                                                <SfNumericTextBox ID="Cantidad" @bind-Value="@(celda.CANT)"></SfNumericTextBox>
-                                            </div>
-                                        </div>
+                             
 
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Tiempo de Fabricacion:</label>
-                                                <SfNumericTextBox ID="Tiempo de Fabricacion" @bind-Value="@(celda.TIEMPOFAB)"></SfNumericTextBox>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Fecha Inicial:</label>
-                                                <SfDateTimePicker ID="Fecha Inicial" @bind-Value="@(celda.FE_INICIAL)"></SfDateTimePicker>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Hora de Inicio:</label>
-                                                <SfNumericTextBox ID="Hora de Inicio" @bind-Value="@(celda.HS_INICIAL)"></SfNumericTextBox>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Fecha Final:</label>
-                                                <SfDateTimePicker ID="Fecha Final" @bind-Value="@(celda.FE_FINAL)"></SfDateTimePicker>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Hora Final:</label>
-                                                <SfNumericTextBox ID="Hora Final" @bind-Value="@(celda.HS_FINAL)"></SfNumericTextBox>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Fecha Final:</label>
-                                                <SfTextBox ID="Fecha Final" @bind-Value="@(celda.OBSERVAC)"></SfTextBox>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Codigo Operario:</label>
-                                                <SfNumericTextBox ID="Codigo Operario" @bind-Value="@(celda.CG_OPER)"></SfNumericTextBox>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Codigo cliente:</label>
-                                                <SfNumericTextBox ID="Codigo cliente" @bind-Value="@(celda.CG_CLI)"></SfNumericTextBox>
-                                            </div>
-                                        </div>
+                                   
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
@@ -165,10 +83,7 @@
                                                 <SfNumericTextBox ID="Codigo Proveedor" @bind-Value="@(celda.CG_PROVE)"></SfNumericTextBox>
                                             </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">CG_COS:</label>
-                                                <SfNumericTextBox ID="CG_COS" @bind-Value="@(celda.CG_COS)"></SfNumericTextBox>
-                                            </div>
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -180,26 +95,9 @@
                     <GridColumn Field=@nameof(Celdas.CG_CELDA) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.DES_CELDA) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.CG_AREA) HeaderText="Area" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_SERIE) HeaderText="Serie" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.ILIMITADA) HeaderText="Serie" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.RESP) HeaderText="Resp" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CONTROLES) HeaderText="Controles" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.TS1) HeaderText="Ts1" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.TS2) HeaderText="Ts2" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.COEFI) HeaderText="Coefi" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_PROD) HeaderText="CG_PROD" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CANT) HeaderText="CANT" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.TIEMPOFAB) HeaderText="TIEMPOFAB" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.FE_INICIAL) HeaderText="FE_INICIAL" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.HS_INICIAL) HeaderText="HS_INICIAL" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.FE_FINAL) HeaderText="FE_FINAL" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.HS_FINAL) HeaderText="HS_FINAL" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.OBSERVAC) HeaderText="OBSERVAC" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_OPER) HeaderText="CG_OPER" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_CLI) HeaderText="CG_CLI" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_PROVE) HeaderText="CG_PROVE" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_COS) HeaderText="CG_COS" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_PREDIO) HeaderText="CG_PREDIO" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                
                     <GridColumn Field=@nameof(Celdas.VALOR_AMOR) HeaderText="VALOR_AMOR" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.VALOR_MERC) HeaderText="VALOR_MERC" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.MONEDA) HeaderText="MONEDA" TextAlign="TextAlign.Left" Width="200"></GridColumn>
@@ -210,16 +108,10 @@
                     <GridColumn Field=@nameof(Celdas.ENERGIA) HeaderText="ENERGIA" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.COMBUST) HeaderText="COMBUST" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.AIRE_COMP) HeaderText="AIRE_COMP" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.SETUP_OPT) HeaderText="SETUP_OPT" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.FE_REG) HeaderText="FE_REG" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.NOMAQ) HeaderText="NOMAQ" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.PLC) HeaderText="PLC" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                   
                     <GridColumn Field=@nameof(Celdas.CG_TIPOCELDA) HeaderText="CG_TIPOCELDA" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Celdas.CG_DEPOSM) HeaderText="CG_DEPOSM" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.ACT_PRODIN) HeaderText="ACT_PRODIN" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_OPER_ACTUAL) HeaderText="CG_OPER_ACTUAL" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.CG_SUPER_ACTUAL) HeaderText="CG_SUPER_ACTUAL" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Celdas.ULTIMO_REGISTRO_TRANSFERIDO_PLC) HeaderText="ULTIMO_REGISTRO_TRANSFERIDO_PLC" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                   
 
                 </GridColumns>
             </SfGrid>
