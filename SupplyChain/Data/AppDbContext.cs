@@ -20,19 +20,24 @@ namespace SupplyChain
         public DbSet<Pedidos> Pedidos { get; set; }
         public DbSet<Programa> Programa { get; set; }
         //willy
-        public DbSet<Areas> Areas { get; set; }
-        public DbSet<Unidades> Unidades { get; set; }
-        public DbSet<Lineas> Lineas { get; set; }
-        public DbSet<CatOpe> CateOperarios { get; set; }
-        public DbSet<Deposito> Depositos { get; set; }
-        public DbSet<TipoArea> TipoArea { get; set; }
-        public DbSet<TipoCelda> TipoCelda { get; set; }
-        public DbSet<TiposNoConf> TiposNoConf { get; set; }
-        
+        public DbSet<Areas> Areas { get; set; }//
+        public DbSet<Unidades> Unidades { get; set; }//
+        public DbSet<Lineas> Lineas { get; set; }//
+        public DbSet<CatOpe> CateOperarios { get; set; }//
+        public DbSet<Deposito> Depositos { get; set; }//
+        public DbSet<TipoArea> TipoArea { get; set; }//
+        public DbSet<TipoCelda> TipoCelda { get; set; }//
+        public DbSet<TiposNoConf> TiposNoConf { get; set; }//
+        public DbSet<Indic> Indic { get; set; }//
+        public DbSet<TipoMat> TipoMat { get; set; }//
+        public DbSet<Parada> Parada { get; set; }//
+        public DbSet<ProTarea> ProTarea { get; set; }//-
+
+        public DbSet<Celdas> Celdas { get; set; }//
 
         //MODULO SERVICIOS
 
-        public DbSet<Celdas> Celdas { get; set; }
+
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Marca> Marca { get; set; }
         public DbSet<Medida> Medida { get; set; }

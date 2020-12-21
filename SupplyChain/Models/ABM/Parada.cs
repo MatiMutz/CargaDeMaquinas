@@ -6,16 +6,18 @@ using System.Text;
 
 namespace SupplyChain
 {
-    [Table("Lineas")]
-    public class Lineas
+    [Table("Paradas")]
+    public class Parada
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CG_LINEA { get; set; } = 0;
-        public string DES_LINEA { get; set; } = "";
+        public decimal CP { get; set; } = 0;//
+        public string DESCRIP { get; set; } = "";//
         public int CG_CIA { get; set; } = 0;//
-
-        //  public string RESP { get; set; } = "";
-        //   public decimal FACTOR { get; set; } = 0;
-
+     
     }
 }
+
+
+
+
+      
