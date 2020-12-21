@@ -71,6 +71,17 @@ namespace SupplyChain
                                           xItem.DES_OPER,
                                           xItem.CG_ORDF);
                 /*
+                 * string xSQL = string.Format("set dateformat dmy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
+                                            "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', DES_OPER = '{7}' WHERE Cg_ordf = {8}",
+                                          xItem.FECHA_PREVISTA_FABRICACION,
+                                          xItem.FECHA_INICIO_REAL_FABRICACION,
+                                          xItem.CANTFAB.ToString().Replace(",", "."),
+                                          xItem.FE_CIERRE,
+                                          xItem.CG_ORDFORIG,
+                                          xItem.CG_CELDA,
+                                          xItem.PROCESO,
+                                          xItem.DES_OPER,
+                                          xItem.CG_ORDF);
                 string xSQL = string.Format("set dateformat dmy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
                                             "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', DES_OPER = '{7}' WHERE Cg_ordf = {8}",
                                           DateTime.ParseExact(xItem.FECHA_PREVISTA_FABRICACION.ToString(), "MM-dd-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture),

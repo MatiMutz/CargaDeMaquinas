@@ -233,13 +233,13 @@ else
                                                             <div>
                                                                 <span style="color:blue">Fecha y hora de Inicio real:</span>
                                                             </div>
-                                                            <SfDateTimePicker Format="dd/MM/yyyy hh:mm:ss" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
+                                                            <SfDateTimePicker Format="dd/MM/yyyy HH:mm" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
                                                         </td>
                                                         <td style="padding-left:20px;">
                                                             <div>
                                                                 <span style="color:blue">Fecha y hora de finalización real:</span>
                                                             </div>
-                                                            <SfDateTimePicker Format="dd/MM/yyyy hh:mm:ss" TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
+                                                            <SfDateTimePicker Format="dd/MM/yyyy HH:mm" TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -797,9 +797,11 @@ else
     protected List<ModeloGenericoStringString> dbCeldas;
     protected List<ModeloGenericoStringString> dbProcesos;
     protected List<Operario> operariosList = new List<Operario>();
+    protected List<Prod> prod = new List<Prod>();
     protected string Usuario = "USER";
     protected string responseString;
     protected int OrdenDeFabAlta;
+    protected string MedidaProd;
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
@@ -807,6 +809,7 @@ else
     {
         dbEstadoCarga = new List<ModeloGenericoIntString>();
         operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+        prod = await Http.GetFromJsonAsync<List<Prod>>("api/Prod");
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 2, TEXTO = "FIRME" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 3, TEXTO = "EN CURSO" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 4, TEXTO = "CERRADA" });
@@ -973,11 +976,13 @@ else
             //Create PDF graphics for the page.
             PdfGraphics graphics = page.Graphics;
             //Set the standard font.
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
             PdfLightTable pdfTable = new PdfLightTable();
             page.Graphics.RotateTransform(-360);
             //Draw the text.
-            graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+            MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
+            graphics.DrawString($"\r\n {ordenFabricacion.PEDIDO} \r\n {ordenFabricacion.CG_PROD} \r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)} \r\n {MedidaProd} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+            //graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
             //PdfTemplate template = null;
             MemoryStream xx = new MemoryStream();
             document1.Save(xx);
