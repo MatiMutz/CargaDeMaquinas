@@ -23,6 +23,9 @@ namespace SupplyChain.Pages.Operarios
         public bool Disabled = false;
 
         protected List<Operario> operarios = new List<Operario>();
+        protected List<CatOpe> categorias = new List<CatOpe>();
+
+        protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "700px" };
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
@@ -33,10 +36,19 @@ namespace SupplyChain.Pages.Operarios
         new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
         "ExcelExport"
     };
+        public class SIoNO
+        {
+            public string Texto { get; set; }
+            public bool Valor { get; set; }
+        }
+        public List<SIoNO> SIoNOData = new List<SIoNO> {
+            new SIoNO() {Texto= "SI", Valor = true},
+            new SIoNO() {Texto= "NO", Valor = false}};
 
         protected override async Task OnInitializedAsync()
         {
             operarios = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+            categorias = await Http.GetFromJsonAsync<List<CatOpe>>("api/CatOpe");
 
             await base.OnInitializedAsync();
         }

@@ -37,7 +37,6 @@ namespace SupplyChain
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Marca> Marca { get; set; }
         public DbSet<Medida> Medida { get; set; }
-        public DbSet<Modelo> Modelo { get; set; }
         public DbSet<Orificio> Orificio { get; set; }
         public DbSet<Serie> Serie { get; set; }
         public DbSet<Service> Servicios { get; set; }

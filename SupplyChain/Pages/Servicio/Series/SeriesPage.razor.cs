@@ -63,6 +63,7 @@ namespace SupplyChain.Pages.Series
                 if (!found)
                 {
                     args.Data.Id = series.Max(s => s.Id) + 1;
+                    args.Data.CG_ORDEN = 1;
                     response = await Http.PostAsJsonAsync("api/Series", args.Data);
                 }
                 else
@@ -117,7 +118,8 @@ namespace SupplyChain.Pages.Series
 
                             Nuevo.Id = series.Max(s => s.Id) + 1;
                             Nuevo.Codigo = selectedRecord.Codigo;
-                            Nuevo.Medida = selectedRecord.Medida;
+                            Nuevo.Descripcion = selectedRecord.Descripcion;
+                            Nuevo.CG_ORDEN = selectedRecord.CG_ORDEN;
 
                             var response = await Http.PostAsJsonAsync("api/Codigo", Nuevo);
 

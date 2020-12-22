@@ -28,7 +28,7 @@ namespace SupplyChain
 
         // GET: api/Marca/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Marca>> GetMarca(int id)
+        public async Task<ActionResult<Marca>> GetMarca(string id)
         {
             var Marca = await _context.Marca.FindAsync(id);
 
@@ -44,9 +44,9 @@ namespace SupplyChain
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMarca(int id, Marca Marca)
+        public async Task<IActionResult> PutMarca(string id, Marca Marca)
         {
-            if (id != Marca.Id)
+            if (id != Marca.MARCA)
             {
                 return BadRequest();
             }
@@ -85,7 +85,7 @@ namespace SupplyChain
             }
             catch (DbUpdateException)
             {
-                if (MarcaExists(Marca.Id))
+                if (MarcaExists(Marca.MARCA))
                 {
                     return Conflict();
                 }
@@ -95,12 +95,12 @@ namespace SupplyChain
                 }
             }
 
-            return CreatedAtAction("GetMarca", new { id = Marca.Id }, Marca);
+            return CreatedAtAction("GetMarca", new { id = Marca.MARCA }, Marca);
         }
 
         // DELETE: api/Marca/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Marca>> DeleteMarca(int id)
+        public async Task<ActionResult<Marca>> DeleteMarca(string id)
         {
             var Marca = await _context.Marca.FindAsync(id);
             if (Marca == null)
@@ -114,9 +114,9 @@ namespace SupplyChain
             return Marca;
         }
 
-        private bool MarcaExists(int id)
+        private bool MarcaExists(string id)
         {
-            return _context.Marca.Any(e => e.Id == id);
+            return _context.Marca.Any(e => e.MARCA == id);
         }
     }
 }

@@ -53,8 +53,8 @@
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Medida:</label>
-                                                <SfTextBox ID="Medida" @bind-Value="@(serie.Medida)"></SfTextBox>
+                                                <label class="e-float-text e-label-top">Descripcion:</label>
+                                                <SfTextBox ID="Descripcion" @bind-Value="@(serie.Descripcion)"></SfTextBox>
                                             </div>
                                         </div>
                                     </div>
@@ -66,8 +66,7 @@
                 <GridColumns>
                     <GridColumn Field=@nameof(Serie.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Serie.Codigo) HeaderText="Código" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Serie.Medida) HeaderText="Medida" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-
+                    <GridColumn Field=@nameof(Serie.Descripcion) HeaderText="Medida" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                 </GridColumns>
             </SfGrid>
         </div>

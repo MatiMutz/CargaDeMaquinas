@@ -30,7 +30,7 @@
                 <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Operario"></GridEvents>
                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
                     <Template>
                         @{
                             var operario = (context as Operario);
@@ -81,7 +81,9 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Categoria Operario:</label>
-                                                <SfTextBox ID="CG_CATEOP" @bind-Value="@(operario.CG_CATEOP)"></SfTextBox>
+                                                <SfDropDownList CssClass="customClass" ID="CG_CATEOP" TValue="string" TItem="CatOpe" @bind-Value="@(operario.CG_CATEOP)" DataSource="@categorias">
+                                                    <DropDownListFieldSettings Value="CG_CATEOP" Text="DES_CATEOP"></DropDownListFieldSettings>
+                                                </SfDropDownList>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Valor por Hora:</label>
@@ -95,85 +97,84 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Activo:</label>
-                                                @{
-                                                    string ActivoString = operario.ACTIVO.ToString();
-                                                    <SfTextBox ID="ACTIVO" @bind-Value="@(ActivoString)"></SfTextBox>
-                                                }
+                                                <SfDropDownList CssClass="customClass" ID="ACTIVO" TItem="SIoNO" @bind-Value="@(operario.ACTIVO)" TValue="bool" Placeholder="Usuario Activo?" DataSource="@SIoNOData">
+                                                    <DropDownListFieldSettings Value="Valor" Text="Texto"></DropDownListFieldSettings>
+                                                </SfDropDownList>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         }
-                        </Template>
-                        </GridEditSettings>
+                    </Template>
+                </GridEditSettings>
 
-                        <GridColumns>
-                            <GridColumn Field=@nameof(Operario.CG_OPER) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.DES_OPER) HeaderText="Nombre" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.CG_TURNO) HeaderText="Turno" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.RENDIM) HeaderText="Rendimiento" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.FE_FINAL) HeaderText="Fecha Final" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.HS_FINAL) HeaderText="Horas Finales" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.CG_CATEOP) HeaderText="Categoria Operario" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.VALOR_HORA) HeaderText="Valor por hora" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                            <GridColumn Field=@nameof(Operario.ACTIVO) HeaderText="Activo" TextAlign="TextAlign.Left" Width="200"></GridColumn>
-                        </GridColumns>
-                        </SfGrid>
-                    </div>
-                    </div>
-                    </div>
-                    <style>
-                        .form-group.col-md-6 {
-                            width: 200px;
-                        }
+                <GridColumns>
+                    <GridColumn Field=@nameof(Operario.CG_OPER) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.DES_OPER) HeaderText="Nombre" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.CG_TURNO) HeaderText="Turno" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.RENDIM) HeaderText="Rendimiento" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.FE_FINAL) HeaderText="Fecha Final" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.HS_FINAL) HeaderText="Horas Finales" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.CG_CATEOP) HeaderText="Categoria Operario" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.VALOR_HORA) HeaderText="Valor por hora" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Operario.ACTIVO) HeaderText="Activo" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
 
-                        label.e-float-text {
-                            position: relative;
-                            padding-left: 0;
-                            top: 10%;
-                        }
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
 
-                        .e-input-group.e-control-wrapper.customClass {
-                            color: black;
-                            background-color: lightblue;
-                        }
-                    </style>
-                    <style>
-                        #DropArea {
-                            padding: 50px 25px;
-                            margin: 30px auto;
-                            border: 1px solid #c3c3c3;
-                            text-align: center;
-                            width: 20%;
-                            display: inline-flex;
-                        }
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+</style>
+<style>
+    #DropArea {
+        padding: 50px 25px;
+        margin: 30px auto;
+        border: 1px solid #c3c3c3;
+        text-align: center;
+        width: 20%;
+        display: inline-flex;
+    }
 
-                        .e-file-select,
-                        .e-file-drop {
-                            display: none;
-                        }
+    .e-file-select,
+    .e-file-drop {
+        display: none;
+    }
 
-                        body .e-upload-drag-hover {
-                            outline: 2px dashed brown;
-                        }
+    body .e-upload-drag-hover {
+        outline: 2px dashed brown;
+    }
 
-                        #uploadfile {
-                            width: 60%;
-                            display: inline-flex;
-                            margin-left: 5%;
-                        }
-                    </style>
+    #uploadfile {
+        width: 60%;
+        display: inline-flex;
+        margin-left: 5%;
+    }
+</style>
 
 
-                    @*<SfQRCodeGenerator Width="200px" Height="150px" Value="http://www.aerre.com.ar/">
-                            <QRCodeGeneratorDisplayText text=" "></QRCodeGeneratorDisplayText>
-                        </SfQRCodeGenerator>*@
-                    <style>
-                        #target {
-                            height: 500px;
-                        }
-                    </style>
-                    @code {
-                    }
+@*<SfQRCodeGenerator Width="200px" Height="150px" Value="http://www.aerre.com.ar/">
+        <QRCodeGeneratorDisplayText text=" "></QRCodeGeneratorDisplayText>
+    </SfQRCodeGenerator>*@
+<style>
+    #target {
+        height: 500px;
+    }
+</style>
+@code {
+}

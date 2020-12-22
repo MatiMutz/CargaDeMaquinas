@@ -64,7 +64,6 @@ namespace SupplyChain.Pages.Servicios
             new SIoNO() {Text= "NO"}};
 
         protected List<Service> servicios = new List<Service>();
-        protected List<Modelo> modelos = new List<Modelo>();
         protected List<Medida> medidas = new List<Medida>();
         protected List<Serie> series = new List<Serie>();
         protected List<Orificio> orificios = new List<Orificio>();
@@ -74,8 +73,11 @@ namespace SupplyChain.Pages.Servicios
         protected List<Trabajosefec> trabajosEfectuados = new List<Trabajosefec>();
         protected List<Marca> marcas = new List<Marca>();
         protected List<Operario> operarios = new List<Operario>();
+        protected IEnumerable<Operario> opers;
         protected List<Celdas> celdas = new List<Celdas>();
         protected List<Solution> rutas;
+
+        protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Search",
@@ -90,7 +92,6 @@ namespace SupplyChain.Pages.Servicios
         protected override async Task OnInitializedAsync()
         {
             servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
-            modelos = await Http.GetFromJsonAsync<List<Modelo>>("api/Modelo");
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
             series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
             orificios = await Http.GetFromJsonAsync<List<Orificio>>("api/Orificio");
@@ -100,6 +101,10 @@ namespace SupplyChain.Pages.Servicios
             trabajosEfectuados = await Http.GetFromJsonAsync<List<Trabajosefec>>("api/TrabajosEfec");
             marcas = await Http.GetFromJsonAsync<List<Marca>>("api/Marca");
             operarios = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+            opers = from opers in (IEnumerable<Operario>)operarios
+                    where opers.ACTIVO == true
+                    select opers;
+
             celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
 
@@ -332,7 +337,7 @@ namespace SupplyChain.Pages.Servicios
                             new ExcelCell() {Index = 3, Value = "" },
                             new ExcelCell() { Index = 4, ColSpan = 3, Value = $"Descripción Artículo: {selectedRecord.DESCARTICULO}"}};
                         List<ExcelCell> ExcelCells8 = new List<ExcelCell> {
-                            new ExcelCell() { Index = 1, ColSpan = 3, Value = $"Pedido Anterior: {selectedRecord.PEDIDOANT}"},
+                            new ExcelCell() { Index = 1, ColSpan = 3, Value = $"Mantenimiento Anterior: {selectedRecord.PEDIDOANT}"},
                             new ExcelCell() {Index = 2, Value = "" },
                             new ExcelCell() {Index = 3, Value = "" },
                             new ExcelCell() { Index = 4, ColSpan = 3, Value = $"Fecha de Mantenimiento Anterior: {selectedRecord.FECMANTANT}"}};
@@ -587,209 +592,222 @@ namespace SupplyChain.Pages.Servicios
                         gridCell9.Value = $"   Planta: {selectedRecord.PLANTA}";
                         //Add RowSpan
                         PdfGridCell gridCell10 = pdfGrid.Rows[5].Cells[0];
-                        gridCell10.ColumnSpan = 3;
+                        gridCell10.ColumnSpan = 2;
                         gridCell10.StringFormat = Izquierda;
-                        gridCell10.Value = $"   Orden de Compra: {selectedRecord.OCOMPRA}";
+                        gridCell10.Value = $"   Remito Recep: {selectedRecord.REMITOREC}";
                         //Add RowSpan
-                        PdfGridCell gridCell11 = pdfGrid.Rows[5].Cells[3];
-                        gridCell11.ColumnSpan = 3;
+                        PdfGridCell gridCell11 = pdfGrid.Rows[5].Cells[2];
+                        gridCell11.ColumnSpan = 2;
                         gridCell11.StringFormat = Izquierda;
-                        gridCell11.Value = $"   Remito recepción: {selectedRecord.REMITOREC}";
+                        gridCell11.Value = $"   Orden de Compra: {selectedRecord.OCOMPRA}";
                         //Add RowSpan
-                        PdfGridCell gridCell12 = pdfGrid.Rows[6].Cells[0];
-                        gridCell12.ColumnSpan = 3;
-                        gridCell12.StringFormat = Izquierda;
-                        gridCell12.Value = $"   Observaciones: {selectedRecord.OBSERV}";
+                        PdfGridCell gridCell16 = pdfGrid.Rows[5].Cells[4];
+                        gridCell16.ColumnSpan = 2;
+                        gridCell16.StringFormat = Izquierda;
+                        gridCell16.Value = $"   Remito: {selectedRecord.REMITO}";
                         //Add RowSpan
-                        PdfGridCell gridCell13 = pdfGrid.Rows[6].Cells[3];
-                        gridCell13.ColumnSpan = 3;
-                        gridCell13.StringFormat = Izquierda;
-                        gridCell13.Value = $"   Descripción artículo: {selectedRecord.DESCARTICULO}";
-                        //Add RowSpan
-                        PdfGridCell gridCell14 = pdfGrid.Rows[7].Cells[0];
+                        PdfGridCell gridCell14 = pdfGrid.Rows[6].Cells[0];
                         gridCell14.ColumnSpan = 3;
                         gridCell14.StringFormat = Izquierda;
-                        gridCell14.Value = $"   Pedido anterior: {selectedRecord.PEDIDOANT}";
+                        gridCell14.Value = $"   Mantenimiento anterior: {selectedRecord.PEDIDOANT}";
                         //Add RowSpan
-                        PdfGridCell gridCell15 = pdfGrid.Rows[7].Cells[3];
+                        PdfGridCell gridCell15 = pdfGrid.Rows[6].Cells[3];
                         gridCell15.ColumnSpan = 3;
                         gridCell15.StringFormat = Izquierda;
                         gridCell15.Value = $"   Fecha de mantenimiento anterior: {selectedRecord.FECMANTANT}";
                         //Add RowSpan
-                        PdfGridCell gridCell16 = pdfGrid.Rows[8].Cells[0];
-                        gridCell16.ColumnSpan = 6;
-                        gridCell16.StringFormat = Izquierda;
-                        gridCell16.Value = $"   Remito: {selectedRecord.REMITO}";
-                        //Add RowSpan
-                        PdfGridCell gridCell17 = pdfGrid.Rows[9].Cells[0];
+                        PdfGridCell gridCell17 = pdfGrid.Rows[7].Cells[0];
                         gridCell17.ColumnSpan = 6;
                         gridCell17.StringFormat = Centrado;
                         gridCell17.Value = "DATOS DE PLACA";
                         //Add RowSpan
-                        PdfGridCell gridCell18 = pdfGrid.Rows[10].Cells[0];
+                        PdfGridCell gridCell18 = pdfGrid.Rows[8].Cells[0];
                         gridCell18.ColumnSpan = 3;
                         gridCell18.StringFormat = Izquierda;
                         gridCell18.Value = $"   TAG: {selectedRecord.IDENTIFICACION}";
                         //Add RowSpan
-                        PdfGridCell gridCell19 = pdfGrid.Rows[10].Cells[3];
+                        PdfGridCell gridCell19 = pdfGrid.Rows[8].Cells[3];
                         gridCell19.ColumnSpan = 3;
                         gridCell19.StringFormat = Izquierda;
                         gridCell19.Value = $"   Marca: {selectedRecord.MARCA}";
                         //Add RowSpan
-                        PdfGridCell gridCell20 = pdfGrid.Rows[11].Cells[0];
+                        PdfGridCell gridCell20 = pdfGrid.Rows[9].Cells[0];
                         gridCell20.ColumnSpan = 3;
                         gridCell20.StringFormat = Izquierda;
                         gridCell20.Value = $"   Número de serie: {selectedRecord.NSERIE}";
                         //Add RowSpan
-                        PdfGridCell gridCell21 = pdfGrid.Rows[11].Cells[3];
+                        PdfGridCell gridCell21 = pdfGrid.Rows[9].Cells[3];
                         gridCell21.ColumnSpan = 3;
                         gridCell21.StringFormat = Izquierda;
-                        gridCell21.Value = $"   Marca: {selectedRecord.MODELO}";
+                        gridCell21.Value = $"   Modelo: {selectedRecord.MODELO}";
                         //Add RowSpan
-                        PdfGridCell gridCell22 = pdfGrid.Rows[12].Cells[0];
+                        PdfGridCell gridCell22 = pdfGrid.Rows[10].Cells[0];
                         gridCell22.ColumnSpan = 3;
                         gridCell22.StringFormat = Izquierda;
-                        gridCell22.Value = $"   Número de serie: {selectedRecord.MEDIDA}";
+                        gridCell22.Value = $"   Medida: {selectedRecord.MEDIDA}";
                         //Add RowSpan
-                        PdfGridCell gridCell23 = pdfGrid.Rows[12].Cells[3];
+                        PdfGridCell gridCell23 = pdfGrid.Rows[10].Cells[3];
                         gridCell23.ColumnSpan = 3;
                         gridCell23.StringFormat = Izquierda;
-                        gridCell23.Value = $"   Marca: {selectedRecord.SERIE}";
+                        gridCell23.Value = $"   Serie: {selectedRecord.SERIE}";
                         //Add RowSpan
-                        PdfGridCell gridCell24 = pdfGrid.Rows[13].Cells[0];
+                        PdfGridCell gridCell24 = pdfGrid.Rows[11].Cells[0];
                         gridCell24.ColumnSpan = 3;
                         gridCell24.StringFormat = Izquierda;
                         gridCell24.Value = $"   Orificio: {selectedRecord.ORIFICIO}";
                         //Add RowSpan
-                        PdfGridCell gridCell25 = pdfGrid.Rows[13].Cells[3];
+                        PdfGridCell gridCell25 = pdfGrid.Rows[11].Cells[3];
                         gridCell25.ColumnSpan = 3;
                         gridCell25.StringFormat = Izquierda;
                         gridCell25.Value = $"   Año: {selectedRecord.AÑO}";
                         //Add RowSpan
-                        PdfGridCell gridCell26 = pdfGrid.Rows[14].Cells[0];
+                        PdfGridCell gridCell26 = pdfGrid.Rows[12].Cells[0];
                         gridCell26.ColumnSpan = 3;
                         gridCell26.StringFormat = Izquierda;
                         gridCell26.Value = $"   Area: {selectedRecord.AREA}";
                         //Add RowSpan
-                        PdfGridCell gridCell27 = pdfGrid.Rows[14].Cells[3];
+                        PdfGridCell gridCell27 = pdfGrid.Rows[12].Cells[3];
                         gridCell27.ColumnSpan = 3;
                         gridCell27.StringFormat = Izquierda;
                         gridCell27.Value = $"   Fluido: {selectedRecord.FLUIDO}";
                         //Add RowSpan
-                        PdfGridCell gridCell28 = pdfGrid.Rows[15].Cells[0];
+                        PdfGridCell gridCell28 = pdfGrid.Rows[13].Cells[0];
                         gridCell28.ColumnSpan = 3;
                         gridCell28.StringFormat = Izquierda;
-                        gridCell28.Value = $"   Sobrepresión: {selectedRecord.SOBREPRESION}";
+                        gridCell28.Value = $"   Sobrepresión: {selectedRecord.SOBREPRESION}%";
                         //Add RowSpan
-                        PdfGridCell gridCell29 = pdfGrid.Rows[15].Cells[3];
+                        PdfGridCell gridCell29 = pdfGrid.Rows[13].Cells[3];
                         gridCell29.ColumnSpan = 3;
                         gridCell29.StringFormat = Izquierda;
-                        gridCell29.Value = $"   Presión: {selectedRecord.PRESION}";
+                        gridCell29.Value = $"   Presión: {selectedRecord.PRESION} Bar";
                         //Add RowSpan
-                        PdfGridCell gridCell30 = pdfGrid.Rows[16].Cells[0];
+                        PdfGridCell gridCell30 = pdfGrid.Rows[14].Cells[0];
                         gridCell30.ColumnSpan = 3;
                         gridCell30.StringFormat = Izquierda;
-                        gridCell30.Value = $"   Contrapresión: {selectedRecord.CONTRAPRESION}";
+                        if (selectedRecord.CONTRAPRESION == "Atm.")
+                        {
+                            gridCell30.Value = $"   Contrapresión: {selectedRecord.CONTRAPRESION}";
+                        }
+                        else
+                        {
+                            gridCell30.Value = $"   Contrapresión: {selectedRecord.CONTRAPRESION} Bar";
+                        }
                         //Add RowSpan
-                        PdfGridCell gridCell31 = pdfGrid.Rows[16].Cells[3];
+                        PdfGridCell gridCell31 = pdfGrid.Rows[14].Cells[3];
                         gridCell31.ColumnSpan = 3;
                         gridCell31.StringFormat = Izquierda;
                         gridCell31.Value = $"   Tipo: {selectedRecord.TIPO}";
                         //Add RowSpan
-                        PdfGridCell gridCell32 = pdfGrid.Rows[17].Cells[0];
+                        PdfGridCell gridCell32 = pdfGrid.Rows[15].Cells[0];
                         gridCell32.ColumnSpan = 3;
                         gridCell32.StringFormat = Izquierda;
                         gridCell32.Value = $"   Temperatura: {selectedRecord.TEMP}";
                         //Add RowSpan
-                        PdfGridCell gridCell33 = pdfGrid.Rows[17].Cells[3];
+                        PdfGridCell gridCell33 = pdfGrid.Rows[15].Cells[3];
                         gridCell33.ColumnSpan = 3;
                         gridCell33.StringFormat = Izquierda;
                         gridCell33.Value = $"   Resorte: {selectedRecord.RESORTE}";
                         //Add RowSpan
-                        PdfGridCell gridCell34 = pdfGrid.Rows[18].Cells[0];
+                        PdfGridCell gridCell34 = pdfGrid.Rows[16].Cells[0];
                         gridCell34.ColumnSpan = 3;
                         gridCell34.StringFormat = Izquierda;
-                        gridCell34.Value = $"   Presión en Banco: {selectedRecord.PRESIONBANCO}";
+                        gridCell34.Value = $"   Presión en Banco: {selectedRecord.PRESIONBANCO} Bar";
                         //Add RowSpan
-                        PdfGridCell gridCell35 = pdfGrid.Rows[18].Cells[3];
+                        PdfGridCell gridCell35 = pdfGrid.Rows[16].Cells[3];
                         gridCell35.ColumnSpan = 3;
                         gridCell35.StringFormat = Izquierda;
                         gridCell35.Value = $"   Servicio: {selectedRecord.SERVICIO}";
                         //Add RowSpan
-                        PdfGridCell gridCell36 = pdfGrid.Rows[19].Cells[0];
+                        PdfGridCell gridCell36 = pdfGrid.Rows[17].Cells[0];
                         gridCell36.ColumnSpan = 6;
                         gridCell36.StringFormat = Centrado;
                         gridCell36.Value = "ENSAYOS A LA RECEPCIÓN";
                         //Add RowSpan
-                        PdfGridCell gridCell37 = pdfGrid.Rows[20].Cells[0];
+                        PdfGridCell gridCell37 = pdfGrid.Rows[18].Cells[0];
                         gridCell37.ColumnSpan = 3;
                         gridCell37.StringFormat = Izquierda;
                         gridCell37.Value = $"   Ensayo a la Recepción: {selectedRecord.ENSRECEP}";
                         //Add RowSpan
-                        PdfGridCell gridCell38 = pdfGrid.Rows[20].Cells[3];
+                        PdfGridCell gridCell38 = pdfGrid.Rows[18].Cells[3];
                         gridCell38.ColumnSpan = 3;
                         gridCell38.StringFormat = Izquierda;
                         gridCell38.Value = $"   Estado: {selectedRecord.ESTADO}";
                         //Add RowSpan
-                        PdfGridCell gridCell39 = pdfGrid.Rows[21].Cells[0];
+                        PdfGridCell gridCell39 = pdfGrid.Rows[19].Cells[0];
                         gridCell39.ColumnSpan = 3;
                         gridCell39.StringFormat = Izquierda;
-                        gridCell39.Value = $"   Presión ensayo recepción: {selectedRecord.PRESIONRECEP}";
+                        gridCell39.Value = $"   Presión ensayo recepción: {selectedRecord.PRESIONRECEP} Bar";
                         //Add RowSpan
-                        PdfGridCell gridCell40 = pdfGrid.Rows[21].Cells[3];
+                        PdfGridCell gridCell40 = pdfGrid.Rows[19].Cells[3];
                         gridCell40.ColumnSpan = 3;
                         gridCell40.StringFormat = Izquierda;
                         gridCell40.Value = $"   Fugas: {selectedRecord.FUGAS}";
                         //Add RowSpan
-                        PdfGridCell gridCell41 = pdfGrid.Rows[22].Cells[0];
+                        PdfGridCell gridCell41 = pdfGrid.Rows[20].Cells[0];
                         gridCell41.ColumnSpan = 3;
                         gridCell41.StringFormat = Izquierda;
-                        gridCell41.Value = $"   Presión de fuga: {selectedRecord.PRESIONFUGA}";
+                        gridCell41.Value = $"   Presión de fuga: {selectedRecord.PRESIONFUGA} Bar";
                         //Add RowSpan
-                        PdfGridCell gridCell42 = pdfGrid.Rows[22].Cells[3];
+                        PdfGridCell gridCell42 = pdfGrid.Rows[20].Cells[3];
                         gridCell42.ColumnSpan = 3;
                         gridCell42.StringFormat = Izquierda;
                         gridCell42.Value = $"   Cambio de presión: {selectedRecord.CAMBIOPRESION}";
                         //Add RowSpan
-                        PdfGridCell gridCell43 = pdfGrid.Rows[23].Cells[0];
+                        PdfGridCell gridCell43 = pdfGrid.Rows[21].Cells[0];
                         gridCell43.ColumnSpan = 6;
                         gridCell43.StringFormat = Centrado;
                         gridCell43.Value = "TRABAJOS EFECTUADOS";
                         //Add RowSpan
-                        PdfGridCell gridCell44 = pdfGrid.Rows[24].Cells[0];
+                        PdfGridCell gridCell44 = pdfGrid.Rows[22].Cells[0];
                         gridCell44.ColumnSpan = 3;
                         gridCell44.StringFormat = Izquierda;
                         gridCell44.Value = $"   Cambio de repuestos: {selectedRecord.CAMBIOREPUESTO}";
                         //Add RowSpan
-                        PdfGridCell gridCell45 = pdfGrid.Rows[24].Cells[3];
+                        PdfGridCell gridCell45 = pdfGrid.Rows[22].Cells[3];
                         gridCell45.ColumnSpan = 3;
                         gridCell45.StringFormat = Izquierda;
                         gridCell45.Value = $"   Repuestos: {selectedRecord.REPUESTOS}";
                         //Add RowSpan
-                        PdfGridCell gridCell46 = pdfGrid.Rows[25].Cells[0];
+                        PdfGridCell gridCell46 = pdfGrid.Rows[23].Cells[0];
                         gridCell46.ColumnSpan = 3;
                         gridCell46.StringFormat = Izquierda;
                         gridCell46.Value = $"   Código de resorte: {selectedRecord.CODRESORTE}";
                         //Add RowSpan
-                        PdfGridCell gridCell47 = pdfGrid.Rows[25].Cells[3];
+                        PdfGridCell gridCell47 = pdfGrid.Rows[23].Cells[3];
                         gridCell47.ColumnSpan = 3;
                         gridCell47.StringFormat = Izquierda;
                         gridCell47.Value = $"   Ensayo contrapresión: {selectedRecord.ENSAYOCONTRAP}";
                         //Add RowSpan
-                        PdfGridCell gridCell48 = pdfGrid.Rows[26].Cells[0];
-                        gridCell48.ColumnSpan = 3;
+                        PdfGridCell gridCell48 = pdfGrid.Rows[24].Cells[0];
+                        gridCell48.ColumnSpan = 6;
                         gridCell48.StringFormat = Izquierda;
-                        gridCell48.Value = $"   Trabajos efectuados: {selectedRecord.TRABAJOSEFEC}";
+                        if (selectedRecord.TRABAJOSEFEC == "D")
+                        {
+                            gridCell48.Value = $"   Trabajos efectuados: Desarme, limpieza, revisión de sus componentes, reacondicionamiento de asientos, rearmado, prueba, calibración.";
+                        }
+                        else if (selectedRecord.TRABAJOSEFEC == "V")
+                        {
+                            gridCell48.Value = $"   Trabajos efectuados: Unicamente verificación de funcionamiento y calibración.";
+                        }
+                        else
+                        {
+                            gridCell48.Value = $"   Trabajos efectuados: {selectedRecord.TRABAJOSEFEC}";
+                        }
                         //Add RowSpan
-                        PdfGridCell gridCell49 = pdfGrid.Rows[26].Cells[3];
-                        gridCell49.ColumnSpan = 3;
+                        PdfGridCell gridCell49 = pdfGrid.Rows[25].Cells[0];
+                        gridCell49.ColumnSpan = 6;
                         gridCell49.StringFormat = Izquierda;
                         gridCell49.Value = $"   Trabajos accesorios: {selectedRecord.TRABAJOSACCES}";
+                        //Add RowSpan
+                        PdfGridCell gridCell12 = pdfGrid.Rows[26].Cells[0];
+                        gridCell12.ColumnSpan = 6;
+                        gridCell12.StringFormat = Izquierda;
+                        gridCell12.Value = $"   Observaciones: {selectedRecord.OBSERVMANT}";
                         //Add RowSpan
                         PdfGridCell gridCell50 = pdfGrid.Rows[27].Cells[0];
                         gridCell50.ColumnSpan = 3;
                         gridCell50.StringFormat = Izquierda;
-                        gridCell50.Value = $"   Presión solicitada: {selectedRecord.PRESIONSOLIC}";
+                        gridCell50.Value = $"   Presión solicitada: {selectedRecord.PRESIONSOLIC} Bar";
                         //Add RowSpan
                         PdfGridCell gridCell51 = pdfGrid.Rows[27].Cells[3];
                         gridCell51.ColumnSpan = 3;

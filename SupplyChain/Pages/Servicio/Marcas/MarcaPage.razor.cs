@@ -57,17 +57,16 @@ namespace SupplyChain.Pages.Marcas
             if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
             {
                 HttpResponseMessage response;
-                bool found = marcas.Any(o => o.Id == args.Data.Id);
+                bool found = marcas.Any(o => o.MARCA == args.Data.MARCA);
                 Marca ur = new Marca();
 
                 if (!found)
                 {
-                    args.Data.Id = marcas.Max(s => s.Id) + 1;
                     response = await Http.PostAsJsonAsync("api/Marca", args.Data);
                 }
                 else
                 {
-                    response = await Http.PutAsJsonAsync($"api/Marca/{args.Data.Id}", args.Data);
+                    response = await Http.PutAsJsonAsync($"api/Marca/{args.Data.MARCA}", args.Data);
                 }
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -92,7 +91,7 @@ namespace SupplyChain.Pages.Marcas
                     if (isConfirmed)
                     {
                         //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
-                        await Http.DeleteAsync($"api/Marca/{args.Data.Id}");
+                        await Http.DeleteAsync($"api/Marca/{args.Data.MARCA}");
                     }
                 }
             }
@@ -114,9 +113,7 @@ namespace SupplyChain.Pages.Marcas
                         if (isConfirmed)
                         {
                             Marca Nuevo = new Marca();
-
-                            Nuevo.Id = marcas.Max(s => s.Id) + 1;
-                            Nuevo.Descripcion = selectedRecord.Descripcion;
+                            Nuevo.MARCA = selectedRecord.MARCA;
 
                             var response = await Http.PostAsJsonAsync("api/Marca", Nuevo);
                             if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -124,12 +121,11 @@ namespace SupplyChain.Pages.Marcas
                                 Grid.Refresh();
                                 var marca = await response.Content.ReadFromJsonAsync<Marca>();
                                 await InvokeAsync(StateHasChanged);
-                                Nuevo.Id = marca.Id;
+                                Nuevo.MARCA = marca.MARCA;
                                 marcas.Add(Nuevo);
                                 var itemsJson = JsonSerializer.Serialize(marca);
                                 Console.WriteLine(itemsJson);
                                 //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
-                                marcas.OrderByDescending(o => o.Id);
                             }
 
                         }

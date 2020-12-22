@@ -411,11 +411,15 @@ else
                                                                                 <label>Ensayo</label>
                                                                             </td>
                                                                             <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                                                <label>Programa</label>
-                                                                            </td>
-                                                                            <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                                 <label>Ensayos</label>
                                                                             </td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                <label>Programa</label>
+                                                                            </td>
+
                                                                         }
                                                                     }
                                                                     <td width="10%" style="margin-left:10px;text-align:right;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
@@ -445,10 +449,13 @@ else
                                                                                 <button @onclick="@DownloadText">Descargar Datos</button>
                                                                             </td>
                                                                             <td>
-                                                                                <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
-                                                                            </td>
-                                                                            <td>
                                                                                 <label><a href="Pdf/@(ordenFabricacion.PEDIDO.ToString())/ENSAYOS" target="_blank">Ver Ensayo</a></label>
+                                                                            </td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td>
+                                                                                <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
                                                                             </td>
                                                                         }
                                                                     }

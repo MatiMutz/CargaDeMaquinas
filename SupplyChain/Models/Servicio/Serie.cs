@@ -4,12 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupplyChain
 {
-    [Table("Serie")]
+    [Table("CAMPOCOM5")]
 	public class Serie
 	{
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; } = 0;
 		public string Codigo { get; set; } = "";
-		public string Medida { get; set; } = "";
+		public string Descripcion { get; set; } = "";
+		public int CG_ORDEN { get; set; } = 0;
 	}
 }

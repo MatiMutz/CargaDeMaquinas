@@ -44,13 +44,8 @@
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label class="e-float-text e-label-top">Id:</label>
-                                                <SfNumericTextBox ID="Id" @bind-Value="@(marca.Id)" Enabled="@Disabled"></SfNumericTextBox>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
                                                 <label class="e-float-text e-label-top">Marca:</label>
-                                                <SfTextBox ID="Descripcion" @bind-Value="@(marca.Descripcion)"></SfTextBox>
+                                                <SfTextBox ID="MARCA" @bind-Value="@(marca.MARCA)"></SfTextBox>
                                             </div>
                                         </div>
                                     </div>
@@ -62,8 +57,7 @@
                 </GridEditSettings>
 
                 <GridColumns>
-                    <GridColumn Field=@nameof(Marca.Id) HeaderText="Id" TextAlign="TextAlign.Left" IsPrimaryKey="true" Width="200"></GridColumn>
-                    <GridColumn Field=@nameof(Marca.Descripcion) HeaderText="Marca" TextAlign="TextAlign.Left" Width="200"></GridColumn>
+                    <GridColumn Field=@nameof(Marca.MARCA) HeaderText="Marca" TextAlign="TextAlign.Left" Width="200"></GridColumn>
                 </GridColumns>
             </SfGrid>
         </div>

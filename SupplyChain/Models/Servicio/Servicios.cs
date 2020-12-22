@@ -13,6 +13,7 @@ namespace SupplyChain
         public string PEDIDO { get; set; } = "";
         public DateTime? FECHA { get; set; }
         public string CLIENTE { get; set; } = "";
+        public int CG_CLI { get; set; } = 0;
         public string PLANTA { get; set; } = "";
         public string OCOMPRA { get; set; } = "";
         public string REMITOREC { get; set; } = "";
@@ -60,7 +61,7 @@ namespace SupplyChain
         public string PRESENCIAINSPEC { get; set; } = "";
         public string DESCARTICULO { get; set; } = "";
         public string OBSERV { get; set; } = "";
-        public string OBSERVANT { get; set; } = "";
+        public string OBSERVMANT { get; set; } = "";
         public string CATALOGO { get; set; } = "";
     }
 }

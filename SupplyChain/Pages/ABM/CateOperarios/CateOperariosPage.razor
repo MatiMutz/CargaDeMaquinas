@@ -35,45 +35,39 @@
                     <Template>
                         @{
                             var catOpe = (context as CatOpe);
-                                                <div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                                                    <label class="e-float-text e-label-top">CG_CATEOP:</label>
-                                                            <SfNumericTextBox ID="CG_SCRAP" @bind-Value="@(catOpe.CG_CATEOP)" Enabled="@Disabled"></SfNumericTextBox>
-                                                        </div>
+                            <div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="e-float-text e-label-top">CG_CATEOP:</label>
+                                        <SfTextBox ID="CG_CATEOP" @bind-Value="@(catOpe.CG_CATEOP)"></SfTextBox>
+                                    </div>
 
-                                                        <div class="form-group col-md-6">
-                                                            <label class="e-float-text e-label-top">DES_CATEOP:</label>
-                                                            <SfTextBox CssClass="customClass" ID="DES_SCRAP" @bind-Value="@(catOpe.DES_CATEOP)"></SfTextBox>
-                                                        </div>
-                                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="e-float-text e-label-top">DES_CATEOP:</label>
+                                        <SfTextBox CssClass="customClass" ID="DES_CATEOP" @bind-Value="@(catOpe.DES_CATEOP)"></SfTextBox>
+                                    </div>
+                                </div>
 
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label class="e-float-text e-label-top">VALOR_HORA:</label>
-                                                            <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(catOpe.VALOR_HORA)"></SfNumericTextBox>
-                                                        </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="e-float-text e-label-top">VALOR_HORA:</label>
+                                        <SfNumericTextBox ID="VALOR_HORA" @bind-Value="@(catOpe.VALOR_HORA)"></SfNumericTextBox>
+                                    </div>
 
-                                                        <div class="form-group col-md-6">
-                                                            <label class="e-float-text e-label-top">MONEDA:</label>
-                                                            <SfTextBox CssClass="customClass" ID="MONEDA" @bind-Value="@(catOpe.MONEDA)"></SfTextBox>
-                                                        </div>
-                                                    </div>
-
-
-
-
-                                                </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="e-float-text e-label-top">MONEDA:</label>
+                                        <SfTextBox CssClass="customClass" ID="MONEDA" @bind-Value="@(catOpe.MONEDA)"></SfTextBox>
+                                    </div>
+                                </div>
+                            </div>
                         }
                     </Template>
                 </GridEditSettings>
                 <GridColumns>
-                    <GridColumn Field=@nameof(CatOpe.CG_CATEOP) HeaderText="Código scrap" TextAlign="TextAlign.Left" IsPrimaryKey="true"></GridColumn>
-                    <GridColumn Field=@nameof(CatOpe.DES_CATEOP) HeaderText="DESCRIPCIÓN SCRAP" TextAlign="TextAlign.Left"></GridColumn>
-                    <GridColumn Field=@nameof(CatOpe.VALOR_HORA) HeaderText="DESCRIPCIÓN SCRAP" TextAlign="TextAlign.Left"></GridColumn>
-                    <GridColumn Field=@nameof(CatOpe.MONEDA) HeaderText="DESCRIPCIÓN SCRAP" TextAlign="TextAlign.Left"></GridColumn>
-
-
+                    <GridColumn Field=@nameof(CatOpe.CG_CATEOP) HeaderText="Codigo" TextAlign="TextAlign.Left" IsPrimaryKey="true"></GridColumn>
+                    <GridColumn Field=@nameof(CatOpe.DES_CATEOP) HeaderText="Categoría" TextAlign="TextAlign.Left"></GridColumn>
+                    <GridColumn Field=@nameof(CatOpe.VALOR_HORA) HeaderText="Valor por hora" TextAlign="TextAlign.Left"></GridColumn>
+                    <GridColumn Field=@nameof(CatOpe.MONEDA) HeaderText="Moneda" TextAlign="TextAlign.Left"></GridColumn>
                 </GridColumns>
             </SfGrid>
         </div>
@@ -95,11 +89,6 @@
         background-color: lightblue;
     }
 </style>
-
-@*<SfQRCodeGenerator Width="200px" Height="150px" Value="http://www.aerre.com.ar/">
-        <QRCodeGeneratorDisplayText text=" "></QRCodeGeneratorDisplayText>
-    </SfQRCodeGenerator>*@
-
 @code {
 
 }

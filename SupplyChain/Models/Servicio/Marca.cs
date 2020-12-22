@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupplyChain
 {
-    [Table("Marca")]
+    [Table("Marcas")]
 	public class Marca
 	{
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; set; } = 0;
-		public string Descripcion { get; set; } = "";
+		public string MARCA { get; set; } = "";
 	}
 }

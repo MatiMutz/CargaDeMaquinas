@@ -33,7 +33,7 @@
                 <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Service"></GridEvents>
                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                 <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog">
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
                     <Template>
                         @{
                             var servicio = (context as Service);
@@ -105,9 +105,13 @@
                                                 <SfTextBox ID="DESCARTICULO" @bind-Value="@(servicio.DESCARTICULO)" Enabled="@Disabled"></SfTextBox>
                                             </div>
 
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-4">
                                                 <label>Pedido anterior:</label>
                                                 <SfTextBox ID="PEDIDOANT" @bind-Value="@(servicio.PEDIDOANT)"></SfTextBox>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label>Datos del pedido anterior:</label>
+                                                <SfButton IsPrimary="true" CssClass="e-outline">Traer</SfButton>
                                             </div>
                                         </div>
 
@@ -129,13 +133,6 @@
                                                 <SfTextBox CssClass="e-custom-height e-outline" ID="OBSERV" @bind-Value="@(servicio.OBSERV)" Enabled="@Disabled"></SfTextBox>
                                             </div>
                                         </div>
-
-                                        <div class="form-row">
-                                            <div class="form-group col-md-12">
-                                                <label>Observaciones Anteriores:</label>
-                                                <SfTextBox CssClass="e-custom-height e-outline" ID="OBSERV" @bind-Value="@(servicio.OBSERVANT)" Enabled="@Disabled"></SfTextBox>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -151,7 +148,7 @@
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/marca/list" target="_blank">Marca:</a>
                                                 <SfDropDownList CssClass="customClass" ID="MARCA" TItem="Marca" @bind-Value="@(servicio.MARCA)" TValue="string" Placeholder="Seleccione la Marca" DataSource="@marcas">
-                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
+                                                    <DropDownListFieldSettings Value="MARCA" Text="MARCA"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
                                         </div>
@@ -163,10 +160,8 @@
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <a href="/sc/modelo/list" target="_blank">Modelo:</a>
-                                                <SfDropDownList CssClass="customClass" ID="MODELO" TItem="Modelo" @bind-Value="@(servicio.MODELO)" TValue="string" Placeholder="Seleccione el Modelo" DataSource="@modelos">
-                                                    <DropDownListFieldSettings Value="Modelo" Text="Modelo"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <label>Modelo:</label>
+                                                <SfTextBox ID="MODELO" @bind-Value="@(servicio.MODELO)"></SfTextBox>
                                             </div>
                                         </div>
 
@@ -174,14 +169,14 @@
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/medida/list" target="_blank">Medida:</a>
                                                 <SfDropDownList CssClass="customClass" ID="MEDIDA" TItem="Medida" @bind-Value="@(servicio.MEDIDA)" TValue="string" Placeholder="Seleccione la Medida" DataSource="@medidas">
-                                                    <DropDownListFieldSettings Value="Codigo" Text="Medida"></DropDownListFieldSettings>
+                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/serie/list" target="_blank">Serie:</a>
                                                 <SfDropDownList CssClass="customClass" ID="SERIE" TItem="Serie" @bind-Value="@(servicio.SERIE)" TValue="string" Placeholder="Seleccione la Serie" DataSource="@series">
-                                                    <DropDownListFieldSettings Value="Codigo" Text="Medida"></DropDownListFieldSettings>
+                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
                                         </div>
@@ -190,7 +185,7 @@
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/orificio/list" target="_blank">Orificio:</a>
                                                 <SfDropDownList CssClass="customClass" ID="ORIFICIO" TItem="Orificio" @bind-Value="@(servicio.ORIFICIO)" TValue="string" Placeholder="Seleccione el Orificio" DataSource="@orificios">
-                                                    <DropDownListFieldSettings Value="Orificio" Text="Area"></DropDownListFieldSettings>
+                                                    <DropDownListFieldSettings Value="Codigo" Text="Codigo"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
 
@@ -394,14 +389,14 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/operario/list" target="_blank">Responsable:</a>
-                                                <SfDropDownList CssClass="customClass" ID="RESP" TItem="Operario" @bind-Value="@(servicio.RESP)" TValue="string" Placeholder="Responsable" DataSource="@operarios">
+                                                <SfDropDownList CssClass="customClass" ID="RESP" TItem="Operario" @bind-Value="@(servicio.RESP)" TValue="string" Placeholder="Responsable" DataSource="@opers">
                                                     <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <a href="/sc/operario/list" target="_blank">Responsable:</a>
-                                                <SfDropDownList CssClass="customClass" ID="CONTROLO" TItem="Operario" @bind-Value="@(servicio.CONTROLO)" TValue="string" Placeholder="Controló" DataSource="@operarios">
+                                                <a href="/sc/operario/list" target="_blank">Controlo:</a>
+                                                <SfDropDownList CssClass="customClass" ID="CONTROLO" TItem="Operario" @bind-Value="@(servicio.CONTROLO)" TValue="string" Placeholder="Controló" DataSource="@opers">
                                                     <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
@@ -422,7 +417,7 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Responsable Técnico:</label>
-                                                <SfDropDownList CssClass="customClass" ID="RESPTECNICO" TItem="Operario" @bind-Value="@(servicio.RESPTECNICO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@operarios">
+                                                <SfDropDownList CssClass="customClass" ID="RESPTECNICO" TItem="Operario" @bind-Value="@(servicio.RESPTECNICO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@opers">
                                                     <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
@@ -462,11 +457,18 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Responsable Técnico:</label>
-                                                <SfDropDownList CssClass="customClass" ID="MANOMETRO" TItem="Operario" @bind-Value="@(servicio.MANOMETRO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@operarios">
+                                                <SfDropDownList CssClass="customClass" ID="MANOMETRO" TItem="Operario" @bind-Value="@(servicio.MANOMETRO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@opers">
                                                     <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
                                                 </SfDropDownList>
                                             </div>
                                         </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label>Observaciones del trabajo efectuado:</label>
+                                                <SfTextBox ID="OBSERVMANT" @bind-Value="@(servicio.OBSERVMANT)" Enabled="@Disabled"></SfTextBox>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="pills-file" role="tabpanel" aria-labelledby="pills-profile-tab">
@@ -568,7 +570,7 @@
                     <GridColumn Field=@nameof(Service.PRESENCIAINSPEC) Visible="false" HeaderText="Presencia Inspector" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Service.DESCARTICULO) Visible="false" HeaderText="Descripcion Articulo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
                     <GridColumn Field=@nameof(Service.OBSERV) HeaderText="Observaciones" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="400"></GridColumn>
-                    <GridColumn Field=@nameof(Service.OBSERVANT) HeaderText="Observaciones Anteriores" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="400"></GridColumn>
+                    <GridColumn Field=@nameof(Service.OBSERVMANT) HeaderText="Observaciones Anteriores" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="400"></GridColumn>
                     <GridColumn Field=@nameof(Service.CATALOGO) Visible="false" HeaderText="Ver Catalogo" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="200"></GridColumn>
 
                 </GridColumns>

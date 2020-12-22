@@ -63,11 +63,12 @@ namespace SupplyChain.Pages.Orificios
                 if (!found)
                 {
                     args.Data.Id = orificios.Max(s => s.Id) + 1;
-                    response = await Http.PostAsJsonAsync("api/Orificios", args.Data);
+                    args.Data.CG_ORDEN = 1;
+                    response = await Http.PostAsJsonAsync("api/Orificio", args.Data);
                 }
                 else
                 {
-                    response = await Http.PutAsJsonAsync($"api/Orificios/{args.Data.Id}", args.Data);
+                    response = await Http.PutAsJsonAsync($"api/Orificio/{args.Data.Id}", args.Data);
                 }
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -116,8 +117,9 @@ namespace SupplyChain.Pages.Orificios
                             Orificio Nuevo = new Orificio();
 
                             Nuevo.Id = orificios.Max(s => s.Id) + 1;
+                            Nuevo.Codigo = selectedRecord.Codigo;
                             Nuevo.Descripcion = selectedRecord.Descripcion;
-                            Nuevo.Area = selectedRecord.Area;
+                            Nuevo.CG_ORDEN = selectedRecord.CG_ORDEN;
 
                             var response = await Http.PostAsJsonAsync("api/Orificio", Nuevo);
 
