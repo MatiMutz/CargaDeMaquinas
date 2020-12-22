@@ -13,12 +13,12 @@ namespace SupplyChain
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepositosController : ControllerBase
+    public class DepositoController : ControllerBase
     {
         private int cg_cia_usuario = 1; /*CAMBIAR POR LA DEL USUARIO QUE INGRESÓ*/
         private readonly AppDbContext _context;
 
-        public DepositosController(AppDbContext context)
+        public DepositoController(AppDbContext context)
         {
             _context = context;
         }

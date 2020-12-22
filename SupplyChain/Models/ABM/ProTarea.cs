@@ -6,16 +6,20 @@ using System.Text;
 
 namespace SupplyChain
 {
-    [Table("Lineas")]
-    public class Lineas
+    [Table("ProTarea")]
+    public class ProTarea
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CG_LINEA { get; set; } = 0;
-        public string DES_LINEA { get; set; } = "";
+        public string TAREAPROC { get; set; } = "";//
+        public string DESCRIP { get; set; } = "";//
+        public string OBSERVAC { get; set; } = "";//
         public int CG_CIA { get; set; } = 0;//
 
-        //  public string RESP { get; set; } = "";
-        //   public decimal FACTOR { get; set; } = 0;
-
+        //cg_cia
     }
 }
+
+
+
+
+      

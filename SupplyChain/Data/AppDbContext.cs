@@ -33,7 +33,7 @@ namespace SupplyChain
 
         //MODULO SERVICIOS
 
-        public DbSet<Celdas> Celdas { get; set; }
+
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Marca> Marca { get; set; }
         public DbSet<Medida> Medida { get; set; }
@@ -43,9 +43,6 @@ namespace SupplyChain
         public DbSet<Sobrepresion> Sobrepresion { get; set; }
         public DbSet<Tipo> Tipo { get; set; }
         public DbSet<Trabajosefec> Trabajosefec { get; set; }
-
-        //Login
-        public DbSet<Usuarios> Usuarios { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
     }
