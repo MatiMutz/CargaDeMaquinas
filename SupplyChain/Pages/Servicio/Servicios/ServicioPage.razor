@@ -1,4 +1,5 @@
 ﻿@page "/sc/servicio/list"
+@page "/sc/servicio/list/{pedido}"
 @using Syncfusion.Blazor.FileManager;
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Data
@@ -27,8 +28,18 @@
     <div class="content-wrapper">
         <div class="row">
             <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                    @ref="Grid" DataSource="@servicios" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true"
+                    @ref="Grid" DataSource="@servDesc" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true" AllowMultiSorting="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                <SfToolbar>
+                    <ToolbarItems>
+                        <ToolbarItem Type="ItemType.Input" Align="Syncfusion.Blazor.Navigations.ItemAlign.Left">
+                            <Template>
+                                <SfTextBox Placeholder="Buscar" Input="OnInput"></SfTextBox>
+                                <span class="e-search-icon e-icons"></span>
+                            </Template>
+                        </ToolbarItem>
+                    </ToolbarItems>
+                </SfToolbar>
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="Service"></GridEvents>
                 <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
@@ -105,13 +116,9 @@
                                                 <SfTextBox ID="DESCARTICULO" @bind-Value="@(servicio.DESCARTICULO)" Enabled="@Disabled"></SfTextBox>
                                             </div>
 
-                                            <div class="form-group col-md-4">
+                                            <div class="form-group col-md-6">
                                                 <label>Pedido anterior:</label>
                                                 <SfTextBox ID="PEDIDOANT" @bind-Value="@(servicio.PEDIDOANT)"></SfTextBox>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label>Datos del pedido anterior:</label>
-                                                <SfButton IsPrimary="true" CssClass="e-outline">Traer</SfButton>
                                             </div>
                                         </div>
 
@@ -130,7 +137,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <label>Observaciones:</label>
-                                                <SfTextBox CssClass="e-custom-height e-outline" ID="OBSERV" @bind-Value="@(servicio.OBSERV)" Enabled="@Disabled"></SfTextBox>
+                                                <SfTextBox ID="OBSERV" @bind-Value="@(servicio.OBSERV)" Enabled="@Disabled" Multiline="true"></SfTextBox>
                                             </div>
                                         </div>
                                     </div>
@@ -147,9 +154,10 @@
 
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/marca/list" target="_blank">Marca:</a>
-                                                <SfDropDownList CssClass="customClass" ID="MARCA" TItem="Marca" @bind-Value="@(servicio.MARCA)" TValue="string" Placeholder="Seleccione la Marca" DataSource="@marcas">
-                                                    <DropDownListFieldSettings Value="MARCA" Text="MARCA"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Marca" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.MARCA)" DataSource="@marcas">
+                                                    <ComboBoxFieldSettings Value="MARCA" Text="MARCA"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
@@ -168,25 +176,28 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/medida/list" target="_blank">Medida:</a>
-                                                <SfDropDownList CssClass="customClass" ID="MEDIDA" TItem="Medida" @bind-Value="@(servicio.MEDIDA)" TValue="string" Placeholder="Seleccione la Medida" DataSource="@medidas">
-                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Medida" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.MEDIDA)" DataSource="@medidas">
+                                                    <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/serie/list" target="_blank">Serie:</a>
-                                                <SfDropDownList CssClass="customClass" ID="SERIE" TItem="Serie" @bind-Value="@(servicio.SERIE)" TValue="string" Placeholder="Seleccione la Serie" DataSource="@series">
-                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Serie" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.SERIE)" DataSource="@series">
+                                                    <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/orificio/list" target="_blank">Orificio:</a>
-                                                <SfDropDownList CssClass="customClass" ID="ORIFICIO" TItem="Orificio" @bind-Value="@(servicio.ORIFICIO)" TValue="string" Placeholder="Seleccione el Orificio" DataSource="@orificios">
-                                                    <DropDownListFieldSettings Value="Codigo" Text="Codigo"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Orificio" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.ORIFICIO)" DataSource="@orificios">
+                                                    <ComboBoxFieldSettings Value="Codigo" Text="Codigo"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -203,42 +214,44 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Fluido:</label>
-                                                <SfTextBox ID="FLUIDO" @bind-Value="@(servicio.FLUIDO)" Enabled="@Disabled"></SfTextBox>
+                                                <SfTextBox ID="FLUIDO" @bind-Value="@(servicio.FLUIDO)"></SfTextBox>
                                             </div>
                                         </div>
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Sobrepresión:</label>
-                                                <SfDropDownList CssClass="customClass" ID="SOBREPRESION" TItem="Sobrepresion" @bind-Value="@(servicio.SOBREPRESION)" TValue="string" Placeholder="Sobrepresion" DataSource="@sobrepresiones">
-                                                    <DropDownListFieldSettings Value="Sobrepresion" Text="Sobrepresion"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Sobrepresiones" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.SOBREPRESION)" DataSource="@SobrepresionData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label>Presión:</label>
-                                                <SfTextBox ID="PRESION" @bind-Value="@(servicio.PRESION)" Enabled="@Disabled"></SfTextBox>
+                                                <SfTextBox ID="PRESION" @bind-Value="@(servicio.PRESION)"></SfTextBox>
                                             </div>
                                         </div>
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Contrapresión:</label>
-                                                <SfTextBox ID="CONTRAPRESION" @bind-Value="@(servicio.CONTRAPRESION)" Enabled="@Disabled"></SfTextBox>
+                                                <SfTextBox ID="CONTRAPRESION" @bind-Value="@(servicio.CONTRAPRESION)"></SfTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label>Tipo:</label>
-                                                <SfDropDownList CssClass="customClass" ID="TIPO" TItem="Tipo" @bind-Value="@(servicio.TIPO)" TValue="string" Placeholder="Tipo" DataSource="@tipos">
-                                                    <DropDownListFieldSettings Value="Tipo" Text="Tipo"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Tipos" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.TIPO)" DataSource="@TipoData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Temperatura:</label>
-                                                <SfTextBox ID="TEMP" @bind-Value="@(servicio.TEMP)" Enabled="@Disabled"></SfTextBox>
+                                                <SfTextBox ID="TEMP" @bind-Value="@(servicio.TEMP)"></SfTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -250,7 +263,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Presión en Banco:</label>
-                                                <SfTextBox ID="PRESIONBANCO" @bind-Value="@(servicio.PRESIONBANCO)" Enabled="@Disabled"></SfTextBox>
+                                                <SfTextBox ID="PRESIONBANCO" @bind-Value="@(servicio.PRESIONBANCO)"></SfTextBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -272,16 +285,18 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Ensayo a la Recepcion:</label>
-                                                <SfDropDownList CssClass="customClass" ID="ENSRECEP" TItem="SIoNO" @bind-Value="@(servicio.ENSRECEP)" TValue="string" Placeholder="Hubo Ensayo a la Recepcion?" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.ENSRECEP)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
-                                                <a href="/estado/list" target="_blank">Estado:</a>
-                                                <SfDropDownList CssClass="customClass" ID="ESTADO" TItem="Estado" @bind-Value="@(servicio.ESTADO)" TValue="string" Placeholder="Estado" DataSource="@estados">
-                                                    <DropDownListFieldSettings Value="Estado" Text="Estado"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <label>Estado:</label>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Estados" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.ESTADO)" DataSource="@EstadosData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
@@ -298,9 +313,10 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Fugas:</label>
-                                                <SfDropDownList CssClass="customClass" ID="FUGAS" TItem="SIoNO" @bind-Value="@(servicio.FUGAS)" TValue="string" Placeholder="Hubo fugas?" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.FUGAS)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
@@ -317,9 +333,10 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Cambio de Presión:</label>
-                                                <SfDropDownList CssClass="customClass" ID="CAMBIOPRESION" TItem="SIoNO" @bind-Value="@(servicio.CAMBIOPRESION)" TValue="string" Placeholder="Hubo Cambio de Presión?" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.CAMBIOPRESION)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
@@ -342,9 +359,10 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Cambio de Repuesto:</label>
-                                                <SfDropDownList CssClass="customClass" ID="CAMBIOREPUESTO" TItem="SIoNO" @bind-Value="@(servicio.CAMBIOREPUESTO)" TValue="string" Placeholder="Hubo Cambio de Repuesto?" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.CAMBIOREPUESTO)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -366,18 +384,20 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Ensayo Contrapresion:</label>
-                                                <SfDropDownList CssClass="customClass" ID="ENSAYOCONTRAP" TItem="SIoNO" @bind-Value="@(servicio.ENSAYOCONTRAP)" TValue="string" Placeholder="Hubo Ensayo de Contrapresión?" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.ENSAYOCONTRAP)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Trabajos efectuados:</label>
-                                                <SfDropDownList CssClass="customClass" ID="TRABAJOSEFEC" TItem="Trabajosefec" @bind-Value="@(servicio.TRABAJOSEFEC)" TValue="string" Placeholder="Trabajos efectuados" DataSource="@trabajosEfectuados">
-                                                    <DropDownListFieldSettings Value="Descripcion" Text="Descripcion"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Trabajosefec" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.TRABAJOSEFEC)" DataSource="@trabajosEfectuados">
+                                                    <ComboBoxFieldSettings Value="Descripcion" Text="Descripcion"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -389,16 +409,18 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/operario/list" target="_blank">Responsable:</a>
-                                                <SfDropDownList CssClass="customClass" ID="RESP" TItem="Operario" @bind-Value="@(servicio.RESP)" TValue="string" Placeholder="Responsable" DataSource="@opers">
-                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.RESP)" DataSource="@opers">
+                                                    <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <a href="/sc/operario/list" target="_blank">Controlo:</a>
-                                                <SfDropDownList CssClass="customClass" ID="CONTROLO" TItem="Operario" @bind-Value="@(servicio.CONTROLO)" TValue="string" Placeholder="Controló" DataSource="@opers">
-                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.CONTROLO)" DataSource="@opers">
+                                                    <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
@@ -410,16 +432,18 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>POP:</label>
-                                                <SfDropDownList CssClass="customClass" ID="POP" TItem="SIoNO" @bind-Value="@(servicio.POP)" TValue="string" Placeholder="POP" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.POP)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label>Responsable Técnico:</label>
-                                                <SfDropDownList CssClass="customClass" ID="RESPTECNICO" TItem="Operario" @bind-Value="@(servicio.RESPTECNICO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@opers">
-                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.RESPTECNICO)" DataSource="@opers">
+                                                    <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
 
@@ -431,9 +455,10 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>OPDS:</label>
-                                                <SfDropDownList CssClass="customClass" ID="OPDS" TItem="SIoNO" @bind-Value="@(servicio.OPDS)" TValue="string" Placeholder="OPDS" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.OPDS)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
@@ -450,22 +475,24 @@
 
                                             <div class="form-group col-md-6">
                                                 <label>Presencia Inspector:</label>
-                                                <SfDropDownList CssClass="customClass" ID="PRESENCIAINSPEC" TItem="SIoNO" @bind-Value="@(servicio.PRESENCIAINSPEC)" TValue="string" Placeholder="Hubo Presencia de Inspector?" DataSource="@SIoNOData">
-                                                    <DropDownListFieldSettings Value="Text" Text="Text"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.PRESENCIAINSPEC)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
 
                                             <div class="form-group col-md-6">
                                                 <label>Responsable Técnico:</label>
-                                                <SfDropDownList CssClass="customClass" ID="MANOMETRO" TItem="Operario" @bind-Value="@(servicio.MANOMETRO)" TValue="string" Placeholder="Responsable Técnico" DataSource="@opers">
-                                                    <DropDownListFieldSettings Value="DES_OPER" Text="DES_OPER"></DropDownListFieldSettings>
-                                                </SfDropDownList>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.RESPTECNICO)" DataSource="@opers">
+                                                    <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                </SfComboBox>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <label>Observaciones del trabajo efectuado:</label>
-                                                <SfTextBox ID="OBSERVMANT" @bind-Value="@(servicio.OBSERVMANT)" Enabled="@Disabled"></SfTextBox>
+                                                <SfTextBox ID="OBSERVMANT" @bind-Value="@(servicio.OBSERVMANT)" Multiline="true"></SfTextBox>
                                             </div>
                                         </div>
 
@@ -579,23 +606,6 @@
     </div>
 </div>
 @code {
-    public class EmployeeData
-    {
-        public string FirstName { get; set; }
-        public string Country { get; set; }
-    }
-    List<EmployeeData> Data = new List<EmployeeData>
-{
-        new EmployeeData() { FirstName = "Andrew Fuller",  Country = "England" },
-        new EmployeeData() { FirstName = "Anne Dodsworth", Country = "USA" },
-        new EmployeeData() { FirstName = "Janet Leverling", Country = "USA" },
-        new EmployeeData() { FirstName = "Laura Callahan", Country = "USA"},
-        new EmployeeData() { FirstName = "Margaret Peacock", Country = "USA"},
-        new EmployeeData() { FirstName = "Michael Suyama", Country = "USA", },
-        new EmployeeData() { FirstName = "Nancy Davolio", Country = "USA"},
-        new EmployeeData() { FirstName = "Robert King", Country = "England"},
-        new EmployeeData() { FirstName = "Steven Buchanan", Country = "England"},
-    };
 }
 
 <style>

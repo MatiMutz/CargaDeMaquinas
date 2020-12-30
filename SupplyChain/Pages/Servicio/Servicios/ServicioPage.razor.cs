@@ -22,7 +22,10 @@ using Syncfusion.Pdf.Tables;
 using System.Data;
 using Syncfusion.Pdf.Parsing;
 using Syncfusion.Drawing;
+using Syncfusion.Blazor.Buttons;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components.Web;
+using Syncfusion.Blazor.Inputs;
 
 namespace SupplyChain.Pages.Servicios
 {
@@ -31,14 +34,16 @@ namespace SupplyChain.Pages.Servicios
         [Inject] protected CustomHttpClient Http { get; set; }
         [Inject] protected IJSRuntime JsRuntime { get; set; }
         [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
+
+        [Parameter]
+        public string pedido { get; set; } = "";
+
         protected SfGrid<Service> Grid;
         public string NroPedido = "";
         public bool Enabled = true;
         public bool Disabled = false;
         public bool Visible { get; set; } = true;
 
-        public string[] Items = new string[] { "Open", "|", "Delete", "Download", "|", "Details" };
-        public string[] ToolbarItems = new string[] { "NewFolder", "Upload", "Delete", "Download", "SortBy", "Refresh", "Selection", "View", "Details" };
         public void toolbarClick(ToolbarClickEventArgs args)
         {
             if (args.Item.Text == "Custom")
@@ -63,6 +68,36 @@ namespace SupplyChain.Pages.Servicios
             new SIoNO() {Text= "SI"},
             new SIoNO() {Text= "NO"}};
 
+        public class Sobrepresiones
+        {
+            public string Text { get; set; }
+        }
+        public List<Sobrepresiones> SobrepresionData = new List<Sobrepresiones> {
+            new Sobrepresiones() {Text= "3"},
+            new Sobrepresiones() {Text= "10"},
+            new Sobrepresiones() {Text= "16"},
+            new Sobrepresiones() {Text= "21"},
+            new Sobrepresiones() {Text= "25"}
+        };
+        public class Tipos
+        {
+            public string Text { get; set; }
+        }
+        public List<Tipos> TipoData = new List<Tipos> {
+            new Tipos() {Text= "Cte"},
+            new Tipos() {Text= "VAR"}
+        };
+
+        public class Estados
+        {
+            public string Text { get; set; }
+        }
+        public List<Estados> EstadosData = new List<Estados> {
+            new Estados() {Text= "BUENO"},
+            new Estados() {Text= "REGULAR"},
+            new Estados() {Text= "MUY DETERIORADO"}
+        };
+
         protected List<Service> servicios = new List<Service>();
         protected List<Medida> medidas = new List<Medida>();
         protected List<Serie> series = new List<Serie>();
@@ -76,11 +111,12 @@ namespace SupplyChain.Pages.Servicios
         protected IEnumerable<Operario> opers;
         protected List<Celdas> celdas = new List<Celdas>();
         protected List<Solution> rutas;
+        protected List<Service> servDesc;
+        protected string pedant;
 
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
         protected List<Object> Toolbaritems = new List<Object>(){
-        "Search",
         "Edit",
         "Delete",
         "Print",
@@ -92,6 +128,14 @@ namespace SupplyChain.Pages.Servicios
         protected override async Task OnInitializedAsync()
         {
             servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
+            if (!string.IsNullOrEmpty(pedido))
+            {
+                servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
+            }
+            else
+            {
+                servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
+            }
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");
             series = await Http.GetFromJsonAsync<List<Serie>>("api/Serie");
             orificios = await Http.GetFromJsonAsync<List<Orificio>>("api/Orificio");
@@ -104,10 +148,8 @@ namespace SupplyChain.Pages.Servicios
             opers = from opers in (IEnumerable<Operario>)operarios
                     where opers.ACTIVO == true
                     select opers;
-
             celdas = await Http.GetFromJsonAsync<List<Celdas>>("api/Celdas");
             rutas = await Http.GetFromJsonAsync<List<Solution>>("api/Solution");
-
             await base.OnInitializedAsync();
         }
 
@@ -134,25 +176,50 @@ namespace SupplyChain.Pages.Servicios
                 {
                     args.Data.PEDIDO = servicios.Max(s => s.PEDIDO) + 1;
                     response = await Http.PostAsJsonAsync("api/Servicios", args.Data);
+                    servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
                 }
                 else
                 {
-                    if (args.Data.PEDIDOANT != "")
+                    pedant = servicios.Where(s => s.PEDIDO == args.Data.PEDIDO).FirstOrDefault().PEDIDOANT;
+                    if (pedant != args.Data.PEDIDOANT)
                     {
-                        foreach (var rep in servicios)
+                        foreach (var ped in servicios)
                         {
-                            if (args.Data.PEDIDOANT == rep.PEDIDO)
+                            if (args.Data.PEDIDOANT == ped.PEDIDO)
                             {
-                                if (args.Data.CLIENTE != rep.CLIENTE)
+                                bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
+                                if (isConfirmed)
                                 {
-                                    bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Quiere traer los datos del pedido anterior?");
-                                    if (isConfirmed)
+                                    if (ped.FECHA.ToString().Substring(3, 1) == "/")
                                     {
-                                        if (args.Data.PEDIDOANT == rep.PEDIDO)
-                                        {
-                                            args.Data.CLIENTE = rep.CLIENTE;
-                                        }
+                                        args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 8);
                                     }
+                                    else if (ped.FECHA.ToString().Substring(4, 1) == "/")
+                                    {
+                                        args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 9);
+                                    }
+                                    else if (ped.FECHA.ToString().Substring(5, 1) == "/")
+                                    {
+                                        args.Data.FECMANTANT = ped.FECHA.ToString().Substring(0, 10);
+                                    }
+                                    args.Data.IDENTIFICACION = ped.IDENTIFICACION;
+                                    args.Data.MARCA = ped.MARCA;
+                                    args.Data.NSERIE = ped.NSERIE;
+                                    args.Data.MODELO = ped.MODELO;
+                                    args.Data.MEDIDA = ped.MEDIDA;
+                                    args.Data.SERIE = ped.SERIE;
+                                    args.Data.ORIFICIO = ped.ORIFICIO;
+                                    args.Data.AÑO = ped.AÑO;
+                                    args.Data.AREA = ped.AREA;
+                                    args.Data.FLUIDO = ped.FLUIDO;
+                                    args.Data.SOBREPRESION = ped.SOBREPRESION;
+                                    args.Data.PRESION = ped.PRESION;
+                                    args.Data.CONTRAPRESION = ped.CONTRAPRESION;
+                                    args.Data.TIPO = ped.TIPO;
+                                    args.Data.TEMP = ped.TEMP;
+                                    args.Data.RESORTE = ped.RESORTE;
+                                    args.Data.PRESIONBANCO = ped.PRESIONBANCO;
+                                    args.Data.SERVICIO = ped.SERVICIO;
                                 }
                             }
                         }
@@ -179,6 +246,7 @@ namespace SupplyChain.Pages.Servicios
                     args.Data.PRESENCIAINSPEC = string.IsNullOrEmpty(args.Data.PRESENCIAINSPEC) ? "" : args.Data.PRESENCIAINSPEC;
                     args.Data.MANOMETRO = string.IsNullOrEmpty(args.Data.MANOMETRO) ? "" : args.Data.MANOMETRO;
                     response = await Http.PutAsJsonAsync($"api/Servicios/{args.Data.PEDIDO}", args.Data);
+                    servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
                 }
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -204,6 +272,7 @@ namespace SupplyChain.Pages.Servicios
                     {
                         //servicios.Remove(servicios.Find(m => m.PEDIDO == args.Data.PEDIDO));
                         await Http.DeleteAsync($"api/Servicios/{args.Data.PEDIDO}");
+                        servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
                     }
                 }
             }
@@ -212,7 +281,10 @@ namespace SupplyChain.Pages.Servicios
 
             }
         }
-
+        public void OnInput(InputEventArgs args)
+        {
+            this.Grid.Search(args.Value);
+        }
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
             if (args.Item.Text == "Copy")
@@ -278,6 +350,7 @@ namespace SupplyChain.Pages.Servicios
                             Nuevo.OBSERV = selectedRecord.OBSERV;
 
                             var response = await Http.PostAsJsonAsync("api/Servicios", Nuevo);
+                            servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
 
                             if (response.StatusCode == System.Net.HttpStatusCode.Created)
                             {

@@ -29,11 +29,12 @@ namespace SupplyChain
         public DbSet<TipoArea> TipoArea { get; set; }
         public DbSet<TipoCelda> TipoCelda { get; set; }
         public DbSet<TiposNoConf> TiposNoConf { get; set; }
-
-
+        public DbSet<Indic> Indic { get; set; }
+        public DbSet<Parada> Parada { get; set; }
+        public DbSet<ProTarea> ProTarea { get; set; }
+        public DbSet<TipoMat> TipoMat { get; set; }
         //MODULO SERVICIOS
-
-
+        public DbSet<Celdas> Celdas { get; set; }
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Marca> Marca { get; set; }
         public DbSet<Medida> Medida { get; set; }

@@ -116,7 +116,7 @@ namespace SupplyChain.Pages.TiposNoConfx
                             TiposNoConf Nuevo = new TiposNoConf();
 
                             Nuevo.Cg_TipoNc = tipos.Max(s => s.Cg_TipoNc) + 1;
-                            Nuevo.Cg_TipoNc = selectedRecord.Des_TipoNc;
+                            Nuevo.Des_TipoNc = selectedRecord.Des_TipoNc;
 
                             Nuevo.CG_CIA = selectedRecord.CG_CIA;
                          

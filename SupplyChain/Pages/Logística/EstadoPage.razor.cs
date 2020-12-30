@@ -26,12 +26,35 @@ namespace SupplyChain.Pages.Modelos
         protected List<Programa> Programas = new List<Programa>();
         protected override async Task OnInitializedAsync()
         {
-            
+
             Pedclis = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli");
             Pedidoss = await Http.GetFromJsonAsync<List<Pedidos>>("api/Pedidos");
             Programas = await Http.GetFromJsonAsync<List<Programa>>("api/Programa");
 
             await base.OnInitializedAsync();
+        }
+
+        public string Cliente;
+        
+        protected void onDragStart(Syncfusion.Blazor.Kanban.DragEventArgs<PedCli> args)
+        {
+            //status = args.Data[0].Status;
+            Cliente = args.Data[0].DES_CLI;
+        }
+        protected async Task onDragStop(Syncfusion.Blazor.Kanban.DragEventArgs<PedCli> args)
+        {
+            HttpResponseMessage response;
+            if (args.Data[0].DES_CLI != Cliente)
+            {
+                // Preventing the drag action between the columns
+                args.Cancel = true;
+                await JsRuntime.InvokeAsync<bool>("confirm", "No es posible cambiar el cliente");
+            }
+            else
+            {
+                PedCli Nuevo = args.Data[0];
+                response = await Http.PutAsJsonAsync($"api/Pedcli/{Nuevo.PEDIDO}", Nuevo);
+            }
         }
     }
 }

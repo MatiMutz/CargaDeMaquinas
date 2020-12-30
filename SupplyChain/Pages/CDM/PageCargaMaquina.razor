@@ -15,13 +15,16 @@
 @using Syncfusion.Pdf.Tables
 <head>
 </head>
-<nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="#"><img src="/aerre.jpg" alt="logo" /></a>
-    <a class="navbar-brand" style=" font-weight: bold;" href="#">CARGA DE MÁQUINA</a>
-    <button class="btn btn-outline-primary btn-sm oi oi-reload" @onclick="@Refrescar">
-        Actualizar
-    </button>
-</nav>
+<div>
+    <nav>
+        <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
+        <a class="navbar-brand" style="font-weight: bold;" href="#">CARGA DE MÁQUINA</a>
+        <button class="btn btn-outline-primary btn-sm oi oi-reload" @onclick="@Refrescar">
+            Actualizar
+        </button>
+    </nav>
+</div>
+
 <hr />
 @*CODIGO HTML*@
 @if (dbCarga == null)
@@ -152,10 +155,23 @@ else
                                 OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == dbCarga.ElementAt(i).CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
                             }
                             <div class="CargaButtonClass">
-                                <input type="button"
-                                       @onclick=@(() => OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
-                                       value="@dbCarga[i].CG_ORDF" style="  width: 100%; font-size: 18px; border: 3px solid @dbCarga[i].BACKGROUND;"
-                                       id="of + @dbCarga[i].CG_ORDF" />
+                                @{
+
+                                    if (dbCarga[i].PEDIDO != 0)
+                                    {
+                                        <input type="button"
+                                               @onclick=@(() => OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
+                                               value="@dbCarga[i].PEDIDO" style="  width: 100%; font-size: 18px; border: 3px solid @dbCarga[i].BACKGROUND;"
+                                               id="of + @dbCarga[i].CG_ORDF" />
+                                    }
+                                    else
+                                    {
+                                        <input type="button"
+                                               @onclick=@(() => OrdenFabricacionOpen(xOrdenFabricacion, xExigeOA, xPedido, xCgProd, xCantidad))
+                                               value="@dbCarga[i].CG_ORDF" style="  width: 100%; font-size: 18px; border: 3px solid @dbCarga[i].BACKGROUND;"
+                                               id="of + @dbCarga[i].CG_ORDF" />
+                                    }
+                                }
                                 @{
 
                                     if (@dbCarga.ElementAt(i).DES_CLI == "")
@@ -164,7 +180,7 @@ else
                                     }
                                     else
                                     {
-                                        <span class="tooltiptext">@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
+                                        <span class="tooltiptext">@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
                                     }
                                 }
                             </div>
@@ -405,7 +421,7 @@ else
                                                                         <label>Identificación</label>
                                                                     </td>
                                                                     @{
-                                                                        if (ordenFabricacion.CG_CELDA == "BE3" || ordenFabricacion.CG_CELDA == "CG1")
+                                                                        if (ordenFabricacion.CG_CELDA == "BE3" || ordenFabricacion.CG_CELDA == "GC1")
                                                                         {
                                                                             <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                                 <label>Ensayo</label>
@@ -419,7 +435,14 @@ else
                                                                             <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
                                                                                 <label>Programa</label>
                                                                             </td>
-
+                                                                        }
+                                                                        if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
+                                                                            ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                                                                            ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                                                                        {
+                                                                            <td style="margin-left:10px;white-space:nowrap;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                                <label>Certificado</label>
+                                                                            </td>
                                                                         }
                                                                     }
                                                                     <td width="10%" style="margin-left:10px;text-align:right;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
@@ -443,7 +466,7 @@ else
                                                                         <button @onclick="@exportdata">Ver Etiqueta</button>
                                                                     </td>
                                                                     @{
-                                                                        if (ordenFabricacion.CG_CELDA == "BE3" || ordenFabricacion.CG_CELDA == "CG1")
+                                                                        if (ordenFabricacion.CG_CELDA == "BE3" || ordenFabricacion.CG_CELDA == "GC1")
                                                                         {
                                                                             <td>
                                                                                 <button @onclick="@DownloadText">Descargar Datos</button>
@@ -458,9 +481,44 @@ else
                                                                                 <label><a href="Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC" target="_blank">Ver Programa</a></label>
                                                                             </td>
                                                                         }
+                                                                        if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
+                                                                            ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                                                                            ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                                                                        {
+                                                                            <td>
+                                                                                <label><a href="sc/servicio/list/@(ordenFabricacion.PEDIDO.ToString().Trim())" target="_blank">Ir</a></label>
+                                                                            </td>
+                                                                        }
                                                                     }
                                                                     <td style="text-align:right">
-                                                                        <label>@ordenFabricacion.CANT</label>
+
+                                                                        <!--<label>@ordenFabricacion.CANT</label>-->
+                                                                        @{
+                                                                            if (@ordenFabricacion.CANT.ToString().Substring(1, 1) == ".")
+                                                                            {
+                                                                                <label>@ordenFabricacion.CANT.ToString().Substring(0, 4)</label>
+                                                                            }
+                                                                            else if (@ordenFabricacion.CANT.ToString().Substring(2, 1) == ".")
+                                                                            {
+                                                                                <label>@ordenFabricacion.CANT.ToString().Substring(0, 5)</label>
+                                                                            }
+                                                                            else if (@ordenFabricacion.CANT.ToString().Substring(3, 1) == ".")
+                                                                            {
+                                                                                <label>@ordenFabricacion.CANT.ToString().Substring(0, 6)</label>
+                                                                            }
+                                                                            else if (@ordenFabricacion.CANT.ToString().Substring(3, 1) == ".")
+                                                                            {
+                                                                                <label>@ordenFabricacion.CANT.ToString().Substring(0, 7)</label>
+                                                                            }
+                                                                            else if (@ordenFabricacion.CANT.ToString().Substring(4, 1) == ".")
+                                                                            {
+                                                                                <label>@ordenFabricacion.CANT.ToString().Substring(0, 8)</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label>@ordenFabricacion.CANT</label>
+                                                                            }
+                                                                        }
                                                                     </td>
                                                                     <td style="text-align:right">
                                                                         <label>@(ordenFabricacion.AVANCE.ToString() + " %")</label>
@@ -583,7 +641,48 @@ else
                                                                                     <label>@xMP.DES_ART</label>
                                                                                 </td>
                                                                                 <td style="text-align:right">
-                                                                                    <label>@xMP.STOCK</label>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                    <!--<label>@xMP.STOCK</label>-->
+                                                                                    @{
+                                                                                        if (@xMP.STOCK.ToString().Substring(1, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xMP.STOCK.ToString().Substring(0, 4)</label>
+                                                                                        }
+                                                                                        else if (@xMP.STOCK.ToString().Substring(2, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xMP.STOCK.ToString().Substring(0, 5)</label>
+                                                                                        }
+                                                                                        else if (@xMP.STOCK.ToString().Substring(3, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xMP.STOCK.ToString().Substring(0, 6)</label>
+                                                                                        }
+                                                                                        else if (@xMP.STOCK.ToString().Substring(3, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xMP.STOCK.ToString().Substring(0, 7)</label>
+                                                                                        }
+                                                                                        else if (@xMP.STOCK.ToString().Substring(4, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xMP.STOCK.ToString().Substring(0, 8)</label>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <label>@xMP.STOCK</label>
+                                                                                        }
+                                                                                    }
                                                                                 </td>
                                                                                 <td>
                                                                                     <label>@xMP.LOTE</label>
@@ -745,13 +844,63 @@ else
                                                                                     <label>@xHojaRuta.DES_CELDA</label>
                                                                                 </td>
                                                                                 <td style="text-align:right">
-                                                                                    <label>@xHojaRuta.TIEMPO_TOTAL</label>
+                                                                                    @{
+                                                                                        if (@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(1, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(0, 4)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(2, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(0, 5)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(3, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(0, 6)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(3, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(0, 7)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(4, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO_TOTAL.ToString().Substring(0, 8)</label>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO_TOTAL</label>
+                                                                                        }
+                                                                                    }
                                                                                 </td>
                                                                                 <td style="text-align:center">
                                                                                     <label>@xHojaRuta.PROPORC</label>
                                                                                 </td>
                                                                                 <td style="text-align:right">
-                                                                                    <label>@xHojaRuta.TIEMPO1</label>
+                                                                                    @{
+                                                                                        if (@xHojaRuta.TIEMPO1.ToString().Substring(1, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO1.ToString().Substring(0, 4)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO1.ToString().Substring(2, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO1.ToString().Substring(0, 5)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO1.ToString().Substring(3, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO1.ToString().Substring(0, 6)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO1.ToString().Substring(3, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO1.ToString().Substring(0, 7)</label>
+                                                                                        }
+                                                                                        else if (@xHojaRuta.TIEMPO1.ToString().Substring(4, 1) == ".")
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO1.ToString().Substring(0, 8)</label>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <label>@xHojaRuta.TIEMPO1</label>
+                                                                                        }
+                                                                                    }
                                                                                 </td>
                                                                             </tr>
                                                                         }
