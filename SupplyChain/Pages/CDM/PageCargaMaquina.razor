@@ -312,23 +312,49 @@ else
                                                             </SfDropDownList>
                                                         </td>
                                                         -->
-                                                        <td style="padding-top: 20px;padding-bottom: 20px">
-                                                            <div>
-                                                                <span style="color:blue">Operario:</span>
-                                                            </div>
-                                                            <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                                        @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosList">
-                                                                <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                                                <ComboBoxTemplates TItem="Operario">
-                                                                    <HeaderTemplate>
-                                                                        <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
-                                                                    </HeaderTemplate>
-                                                                    <ItemTemplate>
-                                                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
-                                                                    </ItemTemplate>
-                                                                </ComboBoxTemplates>
-                                                            </SfComboBox>
-                                                        </td>
+                                                        @{
+                                                            if (ordenFabricacion.CG_CELDA == "BE3")
+                                                            {
+                                                                <td style="padding-top: 20px;padding-bottom: 20px">
+                                                                    <div>
+                                                                        <span style="color:blue">Operario:</span>
+                                                                    </div>
+                                                                    <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                                                @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosBE3">
+                                                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                                        <ComboBoxTemplates TItem="Operario">
+                                                                            <HeaderTemplate>
+                                                                                <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
+                                                                            </HeaderTemplate>
+                                                                            <ItemTemplate>
+                                                                                <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
+                                                                            </ItemTemplate>
+                                                                        </ComboBoxTemplates>
+                                                                    </SfComboBox>
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="padding-top: 20px;padding-bottom: 20px">
+                                                                    <div>
+                                                                        <span style="color:blue">Operario:</span>
+                                                                    </div>
+                                                                    <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                                                @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosList">
+                                                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                                        <ComboBoxTemplates TItem="Operario">
+                                                                            <HeaderTemplate>
+                                                                                <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
+                                                                            </HeaderTemplate>
+                                                                            <ItemTemplate>
+                                                                                <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
+                                                                            </ItemTemplate>
+                                                                        </ComboBoxTemplates>
+                                                                    </SfComboBox>
+                                                                </td>
+                                                            }
+                                                        }
+
 
                                                         <td style="padding-left: 20px; padding-top: 20px; padding-bottom: 20px">
                                                             @if (ordenFabricacion.EXIGEOA == false)
@@ -641,21 +667,6 @@ else
                                                                                     <label>@xMP.DES_ART</label>
                                                                                 </td>
                                                                                 <td style="text-align:right">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                                                                     <!--<label>@xMP.STOCK</label>-->
                                                                                     @{
                                                                                         if (@xMP.STOCK.ToString().Substring(1, 1) == ".")
@@ -953,11 +964,15 @@ else
     protected List<ModeloGenericoStringString> dbCeldas;
     protected List<ModeloGenericoStringString> dbProcesos;
     protected List<Operario> operariosList = new List<Operario>();
-    protected List<Prod> prod = new List<Prod>();
+    protected IEnumerable<Operario> operariosBE3;
+    //protected List<Prod> prod = new List<Prod>();
+    protected List<PedCli> PedcliChapita;
     protected string Usuario = "USER";
     protected string responseString;
     protected int OrdenDeFabAlta;
-    protected string MedidaProd;
+    //protected string MedidaProd;
+    //protected string OrificioProd;
+    //protected string ClaseProd;
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
@@ -965,7 +980,10 @@ else
     {
         dbEstadoCarga = new List<ModeloGenericoIntString>();
         operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
-        prod = await Http.GetFromJsonAsync<List<Prod>>("api/Prod");
+        operariosBE3 = from operariosBE3 in (IEnumerable<Operario>)operariosList
+                       where operariosBE3.CG_OPER == 51 || operariosBE3.CG_OPER == 131 || operariosBE3.CG_OPER == 135 || operariosBE3.CG_OPER == 139 || operariosBE3.CG_OPER == 144
+                       select operariosBE3;
+        //prod = await Http.GetFromJsonAsync<List<Prod>>("api/Prod");
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 2, TEXTO = "FIRME" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 3, TEXTO = "EN CURSO" });
         dbEstadoCarga.Add(new ModeloGenericoIntString() { ID = 4, TEXTO = "CERRADA" });
@@ -1136,8 +1154,17 @@ else
             PdfLightTable pdfTable = new PdfLightTable();
             page.Graphics.RotateTransform(-360);
             //Draw the text.
-            MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
-            graphics.DrawString($"\r\n {ordenFabricacion.PEDIDO} \r\n {ordenFabricacion.CG_PROD} \r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)} \r\n {MedidaProd} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+            //MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
+            //OrificioProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3;
+            //ClaseProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5;
+            //PedcliChapita = await Http.GetFromJsonAsync<List<PedCli>>("api/PedcliChapita/" + ordenFabricacion.CG_PROD);
+            /*graphics.DrawString($"" +
+            $"\r\n {PedcliChapita}" +
+            $"\r\n {ordenFabricacion.CG_PROD}" +
+            $"\r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)}" +
+            $"\r\n {MedidaProd} "
+            , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
+            graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
             //graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
             //PdfTemplate template = null;
             MemoryStream xx = new MemoryStream();
@@ -1195,13 +1222,14 @@ else
         byte[] file;
         if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
         {
-            file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
+            await JsRuntime.InvokeAsync<bool>("confirm", "Antes de exportar debe asignar un operario");
+            //file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
         }
         else
         {
             file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}\r\n{ordenFabricacion.DES_OPER}");
+            await JS.InvokeVoidAsync("BlazorDownloadFile", $"{ordenFabricacion.PEDIDO}.txt", "text/plain", file);
         }
-        await JS.InvokeVoidAsync("BlazorDownloadFile", $"{ordenFabricacion.PEDIDO}.txt", "text/plain", file);
     }
 }
 <style>

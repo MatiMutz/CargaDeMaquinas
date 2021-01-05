@@ -110,6 +110,7 @@ namespace SupplyChain.Pages.Servicios
         protected List<Operario> operarios = new List<Operario>();
         protected IEnumerable<Operario> opers;
         protected List<Celdas> celdas = new List<Celdas>();
+        protected List<Prod> prods = new List<Prod>();
         protected List<Solution> rutas;
         protected List<Service> servDesc;
         protected string pedant;
@@ -577,7 +578,7 @@ namespace SupplyChain.Pages.Servicios
                         //Create the page
                         PdfPage page = document.Pages.Add();
                         //Create PDF graphics for the page
-                        FileStream fontStream = new FileStream("E:\\solution_page\\Servicio\\Servicio\\wwwroot\\Calibri 400.ttf", FileMode.Open, FileAccess.Read);
+                        FileStream fontStream = new FileStream("wwwroot\\Calibri 400.ttf", FileMode.Open, FileAccess.Read);
                         //Create a PdfGrid
                         PdfGrid pdfGrid = new PdfGrid();
                         //Create and customize the string formats
@@ -606,17 +607,22 @@ namespace SupplyChain.Pages.Servicios
                         for (int i = 0; i < 32; i++)
                         {
                             PdfGridRow row = pdfGrid.Rows.Add();
-                            if (i == 0 || i == 1 || i == 2 || i == 3 || i == 9 || i == 19 || i == 23)
+                            if (i == 0 || i == 1 || i == 2 || i == 3 || i == 7 || i == 17 || i == 21)
                             {
                                 row.Height = 26;
                             }
+                            else if (i == 31)
+                            {
+                                row.Height = 47;
+                            }
                             else
                             {
-                                row.Height = 23;
+                                row.Height = 22;
                             }
                         }
                         //Load the image from the stream 
-                        FileStream fs = new FileStream("E:\\solution_page\\Servicio\\Servicio\\wwwroot\\logo_aerre.jpg", FileMode.Open);
+                        FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
+                        FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
                         //Add RowSpan
                         PdfGridCell gridCell = pdfGrid.Rows[0].Cells[0];
                         gridCell.ColumnSpan = 2;
@@ -637,12 +643,12 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell4 = pdfGrid.Rows[0].Cells[4];
                         gridCell4.ColumnSpan = 2;
                         gridCell4.StringFormat = Centrado;
-                        gridCell4.Value = $"Fecha: {DateTime.Today.Day} / {DateTime.Today.Month} / {DateTime.Today.Year}";
+                        gridCell4.Value = $"FECHA: {DateTime.Today.Day} / {DateTime.Today.Month} / {DateTime.Today.Year}";
                         //Add RowSpan
                         PdfGridCell gridCell5 = pdfGrid.Rows[1].Cells[4];
                         gridCell5.ColumnSpan = 2;
                         gridCell5.StringFormat = Centrado;
-                        gridCell5.Value = $"Pedido Número: {selectedRecord.PEDIDO}";
+                        gridCell5.Value = $"PEDIDO NÚMERO: {selectedRecord.PEDIDO}";
                         //Add RowSpan
                         PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[0];
                         gridCell6.ColumnSpan = 6;
@@ -742,7 +748,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell27 = pdfGrid.Rows[12].Cells[3];
                         gridCell27.ColumnSpan = 3;
                         gridCell27.StringFormat = Izquierda;
-                        gridCell27.Value = $"   Fluido: {selectedRecord.FLUIDO}";
+                        gridCell27.Value = $"   Fluido: {selectedRecord.FLUIDO.Trim()}";
                         //Add RowSpan
                         PdfGridCell gridCell28 = pdfGrid.Rows[13].Cells[0];
                         gridCell28.ColumnSpan = 3;
@@ -752,7 +758,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell29 = pdfGrid.Rows[13].Cells[3];
                         gridCell29.ColumnSpan = 3;
                         gridCell29.StringFormat = Izquierda;
-                        gridCell29.Value = $"   Presión: {selectedRecord.PRESION} Bar";
+                        gridCell29.Value = $"   Presión: {selectedRecord.PRESION.Trim()} Bar";
                         //Add RowSpan
                         PdfGridCell gridCell30 = pdfGrid.Rows[14].Cells[0];
                         gridCell30.ColumnSpan = 3;
@@ -763,7 +769,7 @@ namespace SupplyChain.Pages.Servicios
                         }
                         else
                         {
-                            gridCell30.Value = $"   Contrapresión: {selectedRecord.CONTRAPRESION} Bar";
+                            gridCell30.Value = $"   Contrapresión: {selectedRecord.CONTRAPRESION.Trim()} Bar";
                         }
                         //Add RowSpan
                         PdfGridCell gridCell31 = pdfGrid.Rows[14].Cells[3];
@@ -784,7 +790,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell34 = pdfGrid.Rows[16].Cells[0];
                         gridCell34.ColumnSpan = 3;
                         gridCell34.StringFormat = Izquierda;
-                        gridCell34.Value = $"   Presión en Banco: {selectedRecord.PRESIONBANCO} Bar";
+                        gridCell34.Value = $"   Presión en Banco: {selectedRecord.PRESIONBANCO.Trim()} Bar";
                         //Add RowSpan
                         PdfGridCell gridCell35 = pdfGrid.Rows[16].Cells[3];
                         gridCell35.ColumnSpan = 3;
@@ -809,7 +815,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell39 = pdfGrid.Rows[19].Cells[0];
                         gridCell39.ColumnSpan = 3;
                         gridCell39.StringFormat = Izquierda;
-                        gridCell39.Value = $"   Presión ensayo recepción: {selectedRecord.PRESIONRECEP} Bar";
+                        gridCell39.Value = $"   Presión ensayo recepción: {selectedRecord.PRESIONRECEP.Trim()} Bar";
                         //Add RowSpan
                         PdfGridCell gridCell40 = pdfGrid.Rows[19].Cells[3];
                         gridCell40.ColumnSpan = 3;
@@ -819,7 +825,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell41 = pdfGrid.Rows[20].Cells[0];
                         gridCell41.ColumnSpan = 3;
                         gridCell41.StringFormat = Izquierda;
-                        gridCell41.Value = $"   Presión de fuga: {selectedRecord.PRESIONFUGA} Bar";
+                        gridCell41.Value = $"   Presión de fuga: {selectedRecord.PRESIONFUGA.Trim()} Bar";
                         //Add RowSpan
                         PdfGridCell gridCell42 = pdfGrid.Rows[20].Cells[3];
                         gridCell42.ColumnSpan = 3;
@@ -880,7 +886,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell50 = pdfGrid.Rows[27].Cells[0];
                         gridCell50.ColumnSpan = 3;
                         gridCell50.StringFormat = Izquierda;
-                        gridCell50.Value = $"   Presión solicitada: {selectedRecord.PRESIONSOLIC} Bar";
+                        gridCell50.Value = $"   Presión solicitada: {selectedRecord.PRESIONSOLIC.Trim()} Bar";
                         //Add RowSpan
                         PdfGridCell gridCell51 = pdfGrid.Rows[27].Cells[3];
                         gridCell51.ColumnSpan = 3;
@@ -900,7 +906,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell54 = pdfGrid.Rows[29].Cells[0];
                         gridCell54.ColumnSpan = 3;
                         gridCell54.StringFormat = Izquierda;
-                        gridCell54.Value = $"   Responsable técnino: {selectedRecord.RESPTECNICO}";
+                        gridCell54.Value = $"   Acta: {selectedRecord.ACTA}";
                         //Add RowSpan
                         PdfGridCell gridCell55 = pdfGrid.Rows[29].Cells[3];
                         gridCell55.ColumnSpan = 3;
@@ -909,8 +915,8 @@ namespace SupplyChain.Pages.Servicios
                         //Add RowSpan
                         PdfGridCell gridCell56 = pdfGrid.Rows[30].Cells[0];
                         gridCell56.ColumnSpan = 3;
-                        gridCell56.StringFormat = Izquierda;
-                        gridCell56.Value = $"   Acta: {selectedRecord.ACTA}";
+                        gridCell56.StringFormat = Centrado;
+                        gridCell56.Value = $"Responsable técnino:";
                         //Add RowSpan
                         PdfGridCell gridCell57 = pdfGrid.Rows[30].Cells[3];
                         gridCell57.ColumnSpan = 3;
@@ -918,14 +924,19 @@ namespace SupplyChain.Pages.Servicios
                         gridCell57.Value = $"   Presencia inspector: {selectedRecord.PRESENCIAINSPEC}";
                         //Add RowSpan
                         PdfGridCell gridCell58 = pdfGrid.Rows[31].Cells[0];
-                        gridCell58.ColumnSpan = 3;
-                        gridCell58.StringFormat = Izquierda;
-                        gridCell58.Value = "   Firma:";
+                        gridCell58.ColumnSpan = 2;
+                        gridCell58.StringFormat = Centrado;
+                        gridCell58.Value = new PdfBitmap(IMR);
                         //Add RowSpan
-                        PdfGridCell gridCell59 = pdfGrid.Rows[31].Cells[3];
-                        gridCell59.ColumnSpan = 3;
-                        gridCell59.StringFormat = Izquierda;
-                        gridCell59.Value = $"   Aclaración:";
+                        PdfGridCell gridCell59 = pdfGrid.Rows[31].Cells[2];
+                        gridCell59.ColumnSpan = 1;
+                        gridCell59.StringFormat = Centrado;
+                        gridCell59.Value = "Ing. Iris Mónica Rabboni\r\nNº en OPDS s/res 1126: 188\r\nMatrícula: 47642";
+                        //Add RowSpan
+                        PdfGridCell gridCell60 = pdfGrid.Rows[31].Cells[3];
+                        gridCell60.ColumnSpan = 3;
+                        gridCell60.StringFormat = Centrado;
+                        gridCell60.Value = "Parque Industrial Desarrollo Productivo\r\n Ruta 24 5801, Moreno, Provincia de Buenos Aires\r\nTel.: (54-11) 4957-0101 /4932-3123 /4931-9980";
                         //Draw the PdfGrid
                         pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 0));
                         //Saving the PDF to the MemoryStream
