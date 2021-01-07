@@ -518,6 +518,8 @@ else
                                                                     }
                                                                     <td style="text-align:right">
 
+
+
                                                                         <!--<label>@ordenFabricacion.CANT</label>-->
                                                                         @{
                                                                             if (@ordenFabricacion.CANT.ToString().Substring(1, 1) == ".")
@@ -1140,42 +1142,67 @@ else
     {
         if (ordenFabricacion.CG_CELDA == "BE3" || ordenFabricacion.CG_CELDA == "GC1")
         {
-            PdfDocument document1 = new PdfDocument();
-            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 294);
-            document1.PageSettings.Margins.All = 0;
-            //Create a PdfGrid
-            PdfGrid pdfGrid1 = new PdfGrid();
-            //Create the page
-            PdfPage page = document1.Pages.Add();
-            //Create PDF graphics for the page.
-            PdfGraphics graphics = page.Graphics;
-            //Set the standard font.
-            PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
-            PdfLightTable pdfTable = new PdfLightTable();
-            page.Graphics.RotateTransform(-360);
-            //Draw the text.
-            //MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
-            //OrificioProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3;
-            //ClaseProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5;
-            //PedcliChapita = await Http.GetFromJsonAsync<List<PedCli>>("api/PedcliChapita/" + ordenFabricacion.CG_PROD);
-            /*graphics.DrawString($"" +
-            $"\r\n {PedcliChapita}" +
-            $"\r\n {ordenFabricacion.CG_PROD}" +
-            $"\r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)}" +
-            $"\r\n {MedidaProd} "
-            , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
-            graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-            //graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
-            //PdfTemplate template = null;
-            MemoryStream xx = new MemoryStream();
-            document1.Save(xx);
+            if (ordenFabricacion.CG_PROD.Substring(0, 1) == "2")
+            {
+                //Chapa de 101 mm x 78 mm
 
-            //Set the position as '0'
-            //xx.Position = 0;
-            //Close the document
-            document1.Close(true);
+                PdfDocument document1 = new PdfDocument();
+                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 294);
+                document1.PageSettings.Margins.All = 0;
+                //Create a PdfGrid
+                PdfGrid pdfGrid1 = new PdfGrid();
+                //Create the page
+                PdfPage page = document1.Pages.Add();
+                //Create PDF graphics for the page.
+                PdfGraphics graphics = page.Graphics;
+                //Set the standard font.
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
+                PdfLightTable pdfTable = new PdfLightTable();
+                page.Graphics.RotateTransform(-360);
+                //Draw the text.
+                //MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
+                //OrificioProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3;
+                //ClaseProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5;
+                //PedcliChapita = await Http.GetFromJsonAsync<List<PedCli>>("api/PedcliChapita/" + ordenFabricacion.CG_PROD);
+                /*graphics.DrawString($"" +
+                $"\r\n {PedcliChapita}" +
+                $"\r\n {ordenFabricacion.CG_PROD}" +
+                $"\r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)}" +
+                $"\r\n {MedidaProd} "
+                , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
+                //graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                graphics.DrawString($"Renglon 1" +
+                    $"\r\n{ordenFabricacion.CG_PROD} {ordenFabricacion.CG_PROD}" +
+                    $"\r\nRenglon 3" +
+                    $"\r\nRenglon 4" +
+                    $"\r\nRenglon 5" +
+                    $"\r\nRenglon 6" +
+                    $"\r\nRenglon 7" +
+                    $"\r\nRenglon 8" +
+                    $"\r\nRenglon 9" +
+                    $"\r\nRenglon 10" +
+                    $"\r\nRenglon 11" +
+                    $"\r\nRenglon 12" +
+                    $"\r\nRenglon 13" +
+                    $"\r\nRenglon 14" +
+                    $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                MemoryStream xx = new MemoryStream();
+                document1.Save(xx);
+                document1.Close(true);
+                await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
+            }
+            if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
+                ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+            {
+                //Chapa de 31 x 78
 
-            await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".wmf", xx.ToArray());
+            }
+            if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
+            {
+                //Chapa de 25 x 95
+
+            }
         }
         else
         {
@@ -1205,7 +1232,7 @@ else
             //Close the document
             document1.Close(true);
 
-            await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".wmf", xx.ToArray());
+            await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
 
         }
     }
