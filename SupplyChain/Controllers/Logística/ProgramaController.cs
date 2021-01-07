@@ -30,5 +30,15 @@ namespace SupplyChain
             string xSQL = string.Format("SELECT Programa.REGISTRO, Programa.PEDIDO, Programa.CG_ESTADO, Programa.CG_ESTADOCARGA, Programa.FE_CIERRE FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) UNION SELECT Programa.REGISTRO, Programa.PEDIDO, Programa.CG_ESTADO, Programa.CG_ESTADOCARGA, Programa.FE_CIERRE FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
             return _context.Programa.FromSqlRaw(xSQL).ToList<Programa>();
         }
+
+
+        [HttpGet("GetPedidos")]
+        public IEnumerable<Programa> Gets(string PEDIDO)
+        {
+            string xSQL = string.Format("SELECT * FROM Programa ");
+            return _context.Programa.FromSqlRaw(xSQL).ToList<Programa>();
+        }
+
+
     }
 }

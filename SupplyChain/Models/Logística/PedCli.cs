@@ -21,5 +21,14 @@ namespace SupplyChain
         public int CG_ESTADPEDCLI { get; set; } = 0;
         public string ESTADO_LOGISTICA { get; set; } = "";
         public string LOTE { get; set; } = "";
+        public string CAMPOCOM1 { get; set; } = "";
+        public string CAMPOCOM6 { get; set; } = "";
+        public string CAMPOCOM3 { get; set; } = "";
+        public string CAMPOCOM4 { get; set; } = "";
+        public string CAMPOCOM5 { get; set; } = "";
+        public string CAMPOCOM2 { get; set; } = "";
+
+
+
     }
 }

@@ -14,5 +14,7 @@ namespace SupplyChain
         public int CG_ESTADO { get; set; } = 0;
         public int CG_ESTADOCARGA { get; set; } = 0;
         public DateTime FE_CIERRE { get; set; }
+        public DateTime FE_ENTREGA { get; set; }
+
     }
 }

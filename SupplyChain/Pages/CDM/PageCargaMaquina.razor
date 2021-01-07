@@ -1175,20 +1175,21 @@ else
                 $"\r\n {MedidaProd} "
                 , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
                 //graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-                graphics.DrawString($"{ LoteProd }" +
-                    $"\r\n{ordenFabricacion.CG_OPER} {ordenFabricacion.CG_PROD}" +
-                    $"\r\n { ordenFabricacionEncabezado.CAMPOCOM4 }" +
-                    $"\r\nRenglon 4" +
-                    $"\r\nRenglon 5" +
-                    $"\r\nRenglon 6" +
+                graphics.DrawString($"{ LoteProd } N° {ordenFabricacion.PEDIDO} " +
+                    $"\r\n Tipo: { ordenFabricacionEncabezado.CAMPOCOM6 } Año: {DateTime.Now.Year}" +
+                    $"\r\n Código: { ordenFabricacion.CG_PROD }" +
+                    $"\r\n Medida: { ordenFabricacionEncabezado.CAMPOCOM2}" +
+                    $"\r\n Clase: { ordenFabricacionEncabezado.CAMPOCOM5 } Orif: { ordenFabricacionEncabezado.CAMPOCOM3 }" +
+                    $"\r\n Presión: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1 } Temp: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6 }" +
+                    $"\r\n Fluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3 }" +
                     $"\r\nRenglon 7" +
                     $"\r\nRenglon 8" +
                     $"\r\nRenglon 9" +
-                    $"\r\nRenglon 10" +
-                    $"\r\nRenglon 11" +
-                    $"\r\nRenglon 12" +
-                    $"\r\nRenglon 13" +
-                    $"\r\nRenglon 14" +
+                    $"\r\nP.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 }" +
+                    $"\r\n Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
+                    $"\r\n T.OPDS N°:8/11 M.OPDS N°:47642" +
+                    $"\r\n www.aerre.com.ar" +
+                    $"\r\n Arbos S.A. - Industria Argentina" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
