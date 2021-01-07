@@ -975,6 +975,8 @@ else
     //protected string MedidaProd;
     //protected string OrificioProd;
     //protected string ClaseProd;
+    protected string LoteProd;
+    protected List<PedCli> PedCliList = new List<PedCli>();
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
@@ -982,6 +984,8 @@ else
     {
         dbEstadoCarga = new List<ModeloGenericoIntString>();
         operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
+        PedCliList = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/GetPedidos");
+
         operariosBE3 = from operariosBE3 in (IEnumerable<Operario>)operariosList
                        where operariosBE3.CG_OPER == 51 || operariosBE3.CG_OPER == 131 || operariosBE3.CG_OPER == 135 || operariosBE3.CG_OPER == 139 || operariosBE3.CG_OPER == 144
                        select operariosBE3;
@@ -1163,7 +1167,7 @@ else
                 //MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
                 //OrificioProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3;
                 //ClaseProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5;
-                //PedcliChapita = await Http.GetFromJsonAsync<List<PedCli>>("api/PedcliChapita/" + ordenFabricacion.CG_PROD);
+                LoteProd = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE;
                 /*graphics.DrawString($"" +
                 $"\r\n {PedcliChapita}" +
                 $"\r\n {ordenFabricacion.CG_PROD}" +
@@ -1171,9 +1175,9 @@ else
                 $"\r\n {MedidaProd} "
                 , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
                 //graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-                graphics.DrawString($"Renglon 1" +
-                    $"\r\n{ordenFabricacion.CG_PROD} {ordenFabricacion.CG_PROD}" +
-                    $"\r\nRenglon 3" +
+                graphics.DrawString($"{ LoteProd }" +
+                    $"\r\n{ordenFabricacion.CG_OPER} {ordenFabricacion.CG_PROD}" +
+                    $"\r\n { ordenFabricacionEncabezado.CAMPOCOM4 }" +
                     $"\r\nRenglon 4" +
                     $"\r\nRenglon 5" +
                     $"\r\nRenglon 6" +
