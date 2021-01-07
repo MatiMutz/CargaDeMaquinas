@@ -119,10 +119,8 @@ namespace SupplyChain.Pages.Servicios
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Edit",
-        "Delete",
         "Print",
         new Syncfusion.Blazor.Navigations.ItemModel { Text = "PdfExport", TooltipText = "PdfExport", PrefixIcon = "e-copy", Id = "PdfExport" },
-        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
         "ExcelExport"
     };
 
@@ -288,88 +286,6 @@ namespace SupplyChain.Pages.Servicios
         }
         public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
         {
-            if (args.Item.Text == "Copy")
-            {
-                if (this.Grid.SelectedRecords.Count > 0)
-                {
-                    foreach (Service selectedRecord in this.Grid.SelectedRecords)
-                    {
-                        bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Seguro de que desea copiar el Servicios / la reparacion?");
-                        if (isConfirmed)
-                        {
-                            Service Nuevo = new Service();
-
-                            Nuevo.PEDIDO = (servicios.Max(s => Int32.Parse(s.PEDIDO)) + 1).ToString();
-                            Nuevo.FECHA = selectedRecord.FECHA;
-                            Nuevo.CLIENTE = selectedRecord.CLIENTE;
-                            Nuevo.PLANTA = selectedRecord.PLANTA;
-                            Nuevo.OCOMPRA = selectedRecord.OCOMPRA;
-                            Nuevo.REMITOREC = selectedRecord.REMITOREC;
-                            Nuevo.REMITO = selectedRecord.REMITO;
-                            Nuevo.IDENTIFICACION = selectedRecord.IDENTIFICACION;
-                            Nuevo.NSERIE = selectedRecord.NSERIE;
-                            Nuevo.MARCA = selectedRecord.MARCA;
-                            Nuevo.MODELO = selectedRecord.MODELO;
-                            Nuevo.MEDIDA = selectedRecord.MEDIDA;
-                            Nuevo.SERIE = selectedRecord.SERIE;
-                            Nuevo.ORIFICIO = selectedRecord.ORIFICIO;
-                            Nuevo.AREA = selectedRecord.AREA;
-                            Nuevo.FLUIDO = selectedRecord.FLUIDO;
-                            Nuevo.AÑO = selectedRecord.AÑO;
-                            Nuevo.PRESION = selectedRecord.PRESION;
-                            Nuevo.TEMP = selectedRecord.TEMP;
-                            Nuevo.PRESIONBANCO = selectedRecord.PRESIONBANCO;
-                            Nuevo.SOBREPRESION = selectedRecord.SOBREPRESION;
-                            Nuevo.CONTRAPRESION = selectedRecord.CONTRAPRESION;
-                            Nuevo.TIPO = selectedRecord.TIPO;
-                            Nuevo.RESORTE = selectedRecord.RESORTE;
-                            Nuevo.SERVICIO = selectedRecord.SERVICIO;
-                            Nuevo.ENSRECEP = selectedRecord.ENSRECEP;
-                            Nuevo.ESTADO = selectedRecord.ESTADO;
-                            Nuevo.PRESIONRECEP = selectedRecord.PRESIONRECEP;
-                            Nuevo.FUGAS = selectedRecord.FUGAS;
-                            Nuevo.PRESIONFUGA = selectedRecord.PRESIONFUGA;
-                            Nuevo.CAMBIOPRESION = selectedRecord.CAMBIOPRESION;
-                            Nuevo.PRESIONSOLIC = selectedRecord.PRESIONSOLIC;
-                            Nuevo.CAMBIOREPUESTO = selectedRecord.CAMBIOREPUESTO;
-                            Nuevo.CODRESORTE = selectedRecord.CODRESORTE;
-                            Nuevo.REPUESTOS = selectedRecord.REPUESTOS;
-                            Nuevo.TRABAJOSEFEC = selectedRecord.TRABAJOSEFEC;
-                            Nuevo.TRABAJOSACCES = selectedRecord.TRABAJOSACCES;
-                            Nuevo.MANOMETRO = selectedRecord.MANOMETRO;
-                            Nuevo.FECMANTANT = selectedRecord.FECMANTANT;
-                            Nuevo.PEDIDOANT = selectedRecord.PEDIDOANT;
-                            Nuevo.ENSAYOCONTRAP = selectedRecord.ENSAYOCONTRAP;
-                            Nuevo.RESP = selectedRecord.RESP;
-                            Nuevo.CONTROLO = selectedRecord.CONTROLO;
-                            Nuevo.POP = selectedRecord.POP;
-                            Nuevo.RESPTECNICO = selectedRecord.RESPTECNICO;
-                            Nuevo.OPDS = selectedRecord.OPDS;
-                            Nuevo.ACTA = selectedRecord.ACTA;
-                            Nuevo.PRESENCIAINSPEC = selectedRecord.PRESENCIAINSPEC;
-                            Nuevo.DESCARTICULO = selectedRecord.DESCARTICULO;
-                            Nuevo.OBSERV = selectedRecord.OBSERV;
-
-                            var response = await Http.PostAsJsonAsync("api/Servicios", Nuevo);
-                            servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
-
-                            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                            {
-                                Grid.Refresh();
-                                var servicio = await response.Content.ReadFromJsonAsync<Service>();
-                                await InvokeAsync(StateHasChanged);
-                                Nuevo.PEDIDO = servicio.PEDIDO;
-                                servicios.Add(Nuevo);
-                                var itemsJson = JsonSerializer.Serialize(servicio);
-                                Console.WriteLine(itemsJson);
-                                //toastService.ShowToast($"Registrado Correctemente.Vale {StockGuardado.VALE}", TipoAlerta.Success);
-                                servicios.OrderByDescending(o => o.PEDIDO);
-                            }
-
-                        }
-                    }
-                }
-            }
             if (args.Item.Text == "Excel Export")
             {
                 if (this.Grid.SelectedRecords.Count > 0)
@@ -728,7 +644,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell23 = pdfGrid.Rows[10].Cells[3];
                         gridCell23.ColumnSpan = 3;
                         gridCell23.StringFormat = Izquierda;
-                        gridCell23.Value = $"   Serie: {selectedRecord.SERIE}";
+                        gridCell23.Value = $"   Clase: {selectedRecord.SERIE}";
                         //Add RowSpan
                         PdfGridCell gridCell24 = pdfGrid.Rows[11].Cells[0];
                         gridCell24.ColumnSpan = 3;
@@ -936,7 +852,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell60 = pdfGrid.Rows[31].Cells[3];
                         gridCell60.ColumnSpan = 3;
                         gridCell60.StringFormat = Centrado;
-                        gridCell60.Value = "Parque Industrial Desarrollo Productivo\r\n Ruta 24 5801, Moreno, Provincia de Buenos Aires\r\nTel.: (54-11) 4957-0101 /4932-3123 /4931-9980";
+                        gridCell60.Value = "Parque Industrial Desarrollo Productivo\r\n Ruta 24 5801, Moreno, Provincia de Buenos Aires\r\nTel.: (+54 9 11) 4497-8011 / 8033 / 8077";
                         //Draw the PdfGrid
                         pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 0));
                         //Saving the PDF to the MemoryStream
