@@ -555,7 +555,7 @@ namespace SupplyChain.Pages.Servicios
                         PdfGridCell gridCell2 = pdfGrid.Rows[0].Cells[2];
                         gridCell2.ColumnSpan = 2;
                         gridCell2.StringFormat = Centrado;
-                        gridCell2.Value = new PdfTextElement("CERTIFICADO DE MANTENIMIENTO Y CALIBRACIÓN", font, new PdfPen(PdfColor.Empty),  PdfBrushes.Black, Centrado);
+                        gridCell2.Value = new PdfTextElement("CERTIFICADO DE MANTENIMIENTO Y CALIBRACIÓN", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
                         //Add RowSpan
                         PdfGridCell gridCell3 = pdfGrid.Rows[1].Cells[2];
                         gridCell3.ColumnSpan = 2;
