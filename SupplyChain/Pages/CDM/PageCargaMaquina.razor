@@ -973,12 +973,10 @@ else
     protected string responseString;
     protected int OrdenDeFabAlta;
     protected List<PedCli> PedCliList = new List<PedCli>();
-<<<<<<< HEAD
+
     protected List<Prod> ProdList = new List<Prod>();
 
-=======
     protected List<Prod> prodList = new List<Prod>();
->>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
@@ -1194,11 +1192,9 @@ else
                 //Chapa de 31 x 78
 
                 PdfDocument document1 = new PdfDocument();
-<<<<<<< HEAD
-                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 294);
-=======
+
                 document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(117, 295);
->>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
+
                 document1.PageSettings.Margins.All = 0;
                 //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
@@ -1207,7 +1203,7 @@ else
                 //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
                 //Set the standard font.
-<<<<<<< HEAD
+
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
@@ -1229,13 +1225,7 @@ else
                     $"\r\n Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
                     $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-=======
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
-                PdfLightTable pdfTable = new PdfLightTable();
-                page.Graphics.RotateTransform(-360);
-                graphics.DrawString($"\r\n\r\nRenglon 1" +
-                    $"\r\nRenglon 2", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
->>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
+
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
@@ -1245,14 +1235,9 @@ else
             {
                 //Chapa de 25 x 95
 
-<<<<<<< HEAD
-
                 PdfDocument document1 = new PdfDocument();
                 document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 294);
-=======
-                PdfDocument document1 = new PdfDocument();
-                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(94, 359);
->>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
+
                 document1.PageSettings.Margins.All = 0;
                 //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
@@ -1261,7 +1246,7 @@ else
                 //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
                 //Set the standard font.
-<<<<<<< HEAD
+
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
@@ -1283,22 +1268,12 @@ else
                     $"\r\n Cod. Resorte: { ProdList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
                     $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-=======
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
-                PdfLightTable pdfTable = new PdfLightTable();
-                page.Graphics.RotateTransform(-90);
-                graphics.DrawString($"\r\n\r\nRenglon 1" +
-                    $"\r\nRenglon 2" +
-                    $"\r\nRenglon 3", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
->>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
+
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
                 await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
-<<<<<<< HEAD
 
-=======
->>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
             }
         }
         else
