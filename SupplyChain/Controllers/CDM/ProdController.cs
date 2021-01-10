@@ -26,6 +26,15 @@ namespace SupplyChain
             return await _context.Prod.ToListAsync();
         }
 
+
+        [HttpGet("GetPedidos")]
+        public IEnumerable<Prod> Gets(string PEDIDO)
+        {
+            string xSQL = string.Format("SELECT * FROM Prod ");
+            return _context.Prod.FromSqlRaw(xSQL).ToList<Prod>();
+        }
+
+
         // GET: api/Prod/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Prod>> GetProd(string id)

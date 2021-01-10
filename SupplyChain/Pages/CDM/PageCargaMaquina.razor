@@ -972,13 +972,13 @@ else
     protected string Usuario = "USER";
     protected string responseString;
     protected int OrdenDeFabAlta;
-    //protected string MedidaProd;
-    //protected string OrificioProd;
-    //protected string ClaseProd;
-    protected string LoteProd;
     protected List<PedCli> PedCliList = new List<PedCli>();
+<<<<<<< HEAD
     protected List<Prod> ProdList = new List<Prod>();
 
+=======
+    protected List<Prod> prodList = new List<Prod>();
+>>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
 
     [Inject] protected Microsoft.JSInterop.IJSRuntime JS { get; set; }
 
@@ -987,6 +987,7 @@ else
         dbEstadoCarga = new List<ModeloGenericoIntString>();
         operariosList = await Http.GetFromJsonAsync<List<Operario>>("api/Operario");
         PedCliList = await Http.GetFromJsonAsync<List<PedCli>>("api/PedCli/GetPedidos");
+        prodList = await Http.GetFromJsonAsync<List<Prod>>("api/Prod/GetPedidos");
 
         operariosBE3 = from operariosBE3 in (IEnumerable<Operario>)operariosList
                        where operariosBE3.CG_OPER == 51 || operariosBE3.CG_OPER == 131 || operariosBE3.CG_OPER == 135 || operariosBE3.CG_OPER == 139 || operariosBE3.CG_OPER == 144
@@ -1153,7 +1154,7 @@ else
                 //Chapa de 101 mm x 78 mm
 
                 PdfDocument document1 = new PdfDocument();
-                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 294);
+                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
                 document1.PageSettings.Margins.All = 0;
                 //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
@@ -1162,36 +1163,24 @@ else
                 //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
                 //Set the standard font.
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
-                //Draw the text.
-                //MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
-                //OrificioProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3;
-                //ClaseProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5;
-                LoteProd = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE;
-                /*graphics.DrawString($"" +
-                $"\r\n {PedcliChapita}" +
-                $"\r\n {ordenFabricacion.CG_PROD}" +
-                $"\r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)}" +
-                $"\r\n {MedidaProd} "
-                , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
-                //graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-                graphics.DrawString($"{ LoteProd } N° {ordenFabricacion.PEDIDO} " +
-                    $"\r\n Tipo: { ordenFabricacionEncabezado.CAMPOCOM6 } Año: {DateTime.Now.Year}" +
-                    $"\r\n Código: { ordenFabricacion.CG_PROD }" +
-                    $"\r\n Medida: { ordenFabricacionEncabezado.CAMPOCOM2}" +
-                    $"\r\n Clase: { ordenFabricacionEncabezado.CAMPOCOM5 } Orif: { ordenFabricacionEncabezado.CAMPOCOM3 }" +
-                    $"\r\n Presión: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1 } Temp: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6 }" +
-                    $"\r\n Fluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3 }" +
+                graphics.DrawString($"\r\n\r\nLote:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE } N° {ordenFabricacion.PEDIDO} " +
+                    $"\r\nTipo: { ordenFabricacionEncabezado.CAMPOCOM6 } Año: {DateTime.Now.Year}" +
+                    $"\r\nCódigo: { ordenFabricacion.CG_PROD }" +
+                    $"\r\nMedida: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2}" +
+                    $"\r\nClase: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5 } Orif: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3 }" +
+                    $"\r\nPresión: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1 } Temp: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6 }" +
+                    $"\r\nFluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3 }" +
                     $"\r\nRenglon 7" +
                     $"\r\nRenglon 8" +
                     $"\r\nRenglon 9" +
                     $"\r\nP.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 }" +
-                    $"\r\n Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
-                    $"\r\n T.OPDS N°:8/11 M.OPDS N°:47642" +
-                    $"\r\n www.aerre.com.ar" +
-                    $"\r\n Arbos S.A. - Industria Argentina" +
+                    $"\r\nCod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
+                    $"\r\nT.OPDS N°:8/11 M.OPDS N°:47642" +
+                    $"\r\nwww.aerre.com.ar" +
+                    $"\r\nArbros S.A. - Industria Argentina" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
@@ -1205,7 +1194,11 @@ else
                 //Chapa de 31 x 78
 
                 PdfDocument document1 = new PdfDocument();
+<<<<<<< HEAD
                 document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 294);
+=======
+                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(117, 295);
+>>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
                 document1.PageSettings.Margins.All = 0;
                 //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
@@ -1214,6 +1207,7 @@ else
                 //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
                 //Set the standard font.
+<<<<<<< HEAD
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
@@ -1235,6 +1229,13 @@ else
                     $"\r\n Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
                     $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+=======
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
+                PdfLightTable pdfTable = new PdfLightTable();
+                page.Graphics.RotateTransform(-360);
+                graphics.DrawString($"\r\n\r\nRenglon 1" +
+                    $"\r\nRenglon 2", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+>>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
@@ -1244,9 +1245,14 @@ else
             {
                 //Chapa de 25 x 95
 
+<<<<<<< HEAD
 
                 PdfDocument document1 = new PdfDocument();
                 document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 294);
+=======
+                PdfDocument document1 = new PdfDocument();
+                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(94, 359);
+>>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
                 document1.PageSettings.Margins.All = 0;
                 //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
@@ -1255,6 +1261,7 @@ else
                 //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
                 //Set the standard font.
+<<<<<<< HEAD
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
@@ -1276,11 +1283,22 @@ else
                     $"\r\n Cod. Resorte: { ProdList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
                     $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+=======
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
+                PdfLightTable pdfTable = new PdfLightTable();
+                page.Graphics.RotateTransform(-90);
+                graphics.DrawString($"\r\n\r\nRenglon 1" +
+                    $"\r\nRenglon 2" +
+                    $"\r\nRenglon 3", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+>>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
                 await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
+<<<<<<< HEAD
 
+=======
+>>>>>>> 915189461218751c01880283bf146c8ab7d0fba6
             }
         }
         else
