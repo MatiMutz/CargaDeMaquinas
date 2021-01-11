@@ -1206,25 +1206,14 @@ else
 
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
                 PdfLightTable pdfTable = new PdfLightTable();
-                page.Graphics.RotateTransform(-360);
+                page.Graphics.RotateTransform(-90);
                 //Draw the text.
-                //MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
-                //OrificioProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3;
-                //ClaseProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5;
-                LoteProd = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE;
-                /*graphics.DrawString($"" +
-                $"\r\n {PedcliChapita}" +
-                $"\r\n {ordenFabricacion.CG_PROD}" +
-                $"\r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)}" +
-                $"\r\n {MedidaProd} "
-                , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
-                //graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
                 graphics.DrawString($" Ref. Servicio P.I. {ordenFabricacion.PEDIDO} Fecha:(mes/año) {DateTime.Now.Month} / {DateTime.Now.Year} " +
-                    $"\r\n Identificacion Tag.: { LoteProd } Presión de Apertura: {ordenFabricacionEncabezado.CAMPOCOM4} Bar" +
+                    $"\r\n Identificacion Tag.: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE } Presión de Apertura: {ordenFabricacionEncabezado.CAMPOCOM4} Bar" +
                     $"\r\nP.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 }" +
                     $"\r\n Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
                     $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
-                    $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                    $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
@@ -1251,18 +1240,7 @@ else
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
                 //Draw the text.
-                //MedidaProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2;
-                //OrificioProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3;
-                //ClaseProd = prod.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5;
-                LoteProd = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE;
-                /*graphics.DrawString($"" +
-                $"\r\n {PedcliChapita}" +
-                $"\r\n {ordenFabricacion.CG_PROD}" +
-                $"\r\n {ordenFabricacion.FE_CIERRE.ToString().Substring(6, 4)}" +
-                $"\r\n {MedidaProd} "
-                , font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));*/
-                //graphics.DrawString($".                                               .\r\nPrueba de tamaño de letra 0123456789\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n.                                               .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-                graphics.DrawString($" Ref. Servicio P.I. {ordenFabricacion.PEDIDO}  TAG: { LoteProd } AÑO: {DateTime.Now.Year} " +
+                graphics.DrawString($" Ref. Servicio P.I. {ordenFabricacion.PEDIDO}  TAG: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE } AÑO: {DateTime.Now.Year} " +
                     $"\r\n COD: {ordenFabricacion.CG_PROD } MED: {ordenFabricacionEncabezado.CAMPOCOM2} ORIF: {ordenFabricacionEncabezado.CAMPOCOM3} " +
                     $"\r\n TIMBRE: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 }" +
                     $"\r\n Cod. Resorte: { ProdList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
@@ -1273,7 +1251,6 @@ else
                 document1.Save(xx);
                 document1.Close(true);
                 await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
-
             }
         }
         else
