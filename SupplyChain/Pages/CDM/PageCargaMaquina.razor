@@ -1243,13 +1243,13 @@ else
                 //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
                 //Set the standard font.
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 8);
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-90);
                 //Draw the text.
                 OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
-                graphics.DrawString($"\r\n\r\n                  {ordenFabricacion.PEDIDO}                  {DateTime.Now.Month} / {DateTime.Now.Year} " +
-                    $"\r\n                  {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                  {ordenFabricacionEncabezado.CAMPOCOM4.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+                graphics.DrawString($"\r\n\r\n\r\n{ordenFabricacion.PEDIDO}                               {DateTime.Now.Month} / {DateTime.Now.Year} " +
+                    $"\r\n{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
                 //PdfTemplate template = null;
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
