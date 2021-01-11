@@ -1165,13 +1165,13 @@ else
                     PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
-                    graphics.DrawString($"\r\n\r\n    TAG:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE }          N° {ordenFabricacion.PEDIDO} " +
-                        $"\r\n    Tipo: { ordenFabricacionEncabezado.CAMPOCOM6 } " +
-                        $"\r\n    Código: { ordenFabricacion.CG_PROD }" +
-                        $"\r\n    Medida: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2}   Orif: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3 }" +
-                        $"\r\n    Clase: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5 }   Año: {DateTime.Now.Year} " +
-                        $"\r\n    Presión: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1 } Temp: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6 }" +
-                        $"\r\n    Fluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3 }" +
+                    graphics.DrawString($"\r\n\r\n    TAG:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() }          N° {ordenFabricacion.PEDIDO} " +
+                        $"\r\n    Tipo: { ordenFabricacionEncabezado.CAMPOCOM6.Trim() } " +
+                        $"\r\n    Código: { ordenFabricacion.CG_PROD.Trim() }" +
+                        $"\r\n    Medida: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim()}   Orif: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() }" +
+                        $"\r\n    Clase: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() }   Año: {DateTime.Now.Year} " +
+                        $"\r\n    Presión: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim() } Temp: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim() }" +
+                        $"\r\n    Fluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim() }" +
                         $"\r\n    Renglon 7" +
                         $"\r\n    Renglon 8" +
                         $"\r\n    Renglon 9" +
@@ -1203,15 +1203,15 @@ else
                     page.Graphics.RotateTransform(-360);
                     graphics.DrawString($"\r\n\r\n    TAG:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE }          N° {ordenFabricacion.PEDIDO} " +
                         $"\r\n    Tipo: { ordenFabricacion.CG_PROD }  Año: {DateTime.Now.Year} " +
-                        $"\r\n    Dimensiones: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2}   " +
-                        $"\r\n    Clase: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5 }  Orif: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3 }" +
-                        $"\r\n    Presión de apertura: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1 } Bar" +
-                        $"\r\n    Fluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3 } Sobrep. %" +
-                        $"\r\n    Contrapresion: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 } % de presion de aprtura" +
+                        $"\r\n    Dimensiones: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim()}   " +
+                        $"\r\n    Clase: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() }  Orif: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() }" +
+                        $"\r\n    Presión de apertura: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim() } Bar" +
+                        $"\r\n    Fluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim() } Sobrep. %" +
+                        $"\r\n    Contrapresion: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim() } % de presion de aprtura" +
                         $"\r\n    Capacidad de descarga:" +
                         $"\r\n    _ N. m3/h  _ Kg:/hora _m3/h" +
-                        $"\r\n    P.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 }    Ctra.P:" +
-                        $"\r\n    Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
+                        $"\r\n    P.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() }    Ctra.P:" +
+                        $"\r\n    Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim() }" +
                         $"\r\n                   INDUSTRIA ARGENTINA" +
                         $"\r\n     Sanchez de Loria 1362/66   Telefax:4931-9980" +
                         $"\r\n     (1241) Buenos Aires                4957-0101" +
