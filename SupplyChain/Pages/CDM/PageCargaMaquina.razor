@@ -1164,18 +1164,18 @@ else
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
-                graphics.DrawString($"\r\n\r\nLote:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE } N° {ordenFabricacion.PEDIDO} " +
-                    $"\r\nTipo: { ordenFabricacionEncabezado.CAMPOCOM6 } Año: {DateTime.Now.Year}" +
-                    $"\r\nCódigo: { ordenFabricacion.CG_PROD }" +
-                    $"\r\nMedida: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2}" +
-                    $"\r\nClase: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5 } Orif: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3 }" +
-                    $"\r\nPresión: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1 } Temp: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6 }" +
-                    $"\r\nFluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3 }" +
+                graphics.DrawString($"\r\n\r\nLote:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() } N° {ordenFabricacion.PEDIDO} " +
+                    $"\r\nTipo: { ordenFabricacionEncabezado.CAMPOCOM6.Trim() } Año: {DateTime.Now.Year}" +
+                    $"\r\nCódigo: { ordenFabricacion.CG_PROD.Trim() }" +
+                    $"\r\nMedida: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}" +
+                    $"\r\nClase: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim() } Orif: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim() }" +
+                    $"\r\nPresión: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim() } Temp: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim() }" +
+                    $"\r\nFluido: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim() }" +
                     $"\r\nRenglon 7" +
                     $"\r\nRenglon 8" +
                     $"\r\nRenglon 9" +
-                    $"\r\nP.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 }" +
-                    $"\r\nCod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
+                    $"\r\nP.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim() }" +
+                    $"\r\nCod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim() }" +
                     $"\r\nT.OPDS N°:8/11 M.OPDS N°:47642" +
                     $"\r\nwww.aerre.com.ar" +
                     $"\r\nArbros S.A. - Industria Argentina" +
@@ -1192,11 +1192,8 @@ else
                 //Chapa de 31 x 78
 
                 PdfDocument document1 = new PdfDocument();
-
-                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(117, 295);
-
+                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
                 document1.PageSettings.Margins.All = 0;
-
                 //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
                 //Create the page
@@ -1204,22 +1201,22 @@ else
                 //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
                 //Set the standard font.
-
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 8);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-90);
                 //Draw the text.
-                graphics.DrawString($" Ref. Servicio P.I. {ordenFabricacion.PEDIDO} Fecha:(mes/año) {DateTime.Now.Month} / {DateTime.Now.Year} " +
-                    $"\r\n Identificacion Tag.: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE } Presión de Apertura: {ordenFabricacionEncabezado.CAMPOCOM4} Bar" +
-                    $"\r\nP.Aj. Bco: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 }" +
-                    $"\r\n Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
-                    $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
-                    $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
-                document1.PageSettings.Margins.All = 0;
-
+                OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
+                graphics.DrawString($"\r\n\r\n                  {ordenFabricacion.PEDIDO}                  {DateTime.Now.Month} / {DateTime.Now.Year} " +
+                    $"\r\n                  {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                  {ordenFabricacionEncabezado.CAMPOCOM4.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+                //PdfTemplate template = null;
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
+
+                //Set the position as '0'
+                //xx.Position = 0;
+                //Close the document
                 document1.Close(true);
+
                 await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
             }
             if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
@@ -1242,10 +1239,10 @@ else
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-360);
                 //Draw the text.
-                graphics.DrawString($" Ref. Servicio P.I. {ordenFabricacion.PEDIDO}  TAG: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE } AÑO: {DateTime.Now.Year} " +
-                    $"\r\n COD: {ordenFabricacion.CG_PROD } MED: {ordenFabricacionEncabezado.CAMPOCOM2} ORIF: {ordenFabricacionEncabezado.CAMPOCOM3} " +
-                    $"\r\n TIMBRE: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4 } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5 }" +
-                    $"\r\n Cod. Resorte: { ProdList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2 }" +
+                graphics.DrawString($" Ref. Servicio P.I. {ordenFabricacion.PEDIDO}  TAG: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() } AÑO: {DateTime.Now.Year} " +
+                    $"\r\n COD: {ordenFabricacion.CG_PROD.Trim() } MED: {ordenFabricacionEncabezado.CAMPOCOM2.Trim()} ORIF: {ordenFabricacionEncabezado.CAMPOCOM3.Trim()} " +
+                    $"\r\n TIMBRE: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() } Ctra.P:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim() }" +
+                    $"\r\n Cod. Resorte: { ProdList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim() }" +
                     $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
