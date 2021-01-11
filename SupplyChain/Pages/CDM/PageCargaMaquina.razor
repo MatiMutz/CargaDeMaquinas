@@ -1196,6 +1196,7 @@ else
                 document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(117, 295);
 
                 document1.PageSettings.Margins.All = 0;
+
                 //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
                 //Create the page
@@ -1214,6 +1215,7 @@ else
                     $"\r\n Cod. Resorte: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
                     $"\r\n Sanchez de Loria 1362 66 (1241) Bs. As. Telefax: 4931-9980 4957-0101" +
                     $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+                document1.PageSettings.Margins.All = 0;
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
