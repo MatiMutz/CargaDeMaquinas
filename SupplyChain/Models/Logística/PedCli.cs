@@ -27,8 +27,5 @@ namespace SupplyChain
         public string CAMPOCOM4 { get; set; } = "";
         public string CAMPOCOM5 { get; set; } = "";
         public string CAMPOCOM2 { get; set; } = "";
-
-
-
     }
 }

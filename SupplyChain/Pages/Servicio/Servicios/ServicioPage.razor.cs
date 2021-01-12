@@ -114,13 +114,15 @@ namespace SupplyChain.Pages.Servicios
         protected List<Solution> rutas;
         protected List<Service> servDesc;
         protected string pedant;
+        protected List<Cliente> ClienteList = new List<Cliente>();
 
         protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
         protected List<Object> Toolbaritems = new List<Object>(){
         "Edit",
         "Print",
-        new Syncfusion.Blazor.Navigations.ItemModel { Text = "PdfExport", TooltipText = "PdfExport", PrefixIcon = "e-copy", Id = "PdfExport" },
+        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Certificado", TooltipText = "Certificado", PrefixIcon = "e-copy", Id = "Certificado" },
+        new Syncfusion.Blazor.Navigations.ItemModel { Text = "OPDS", TooltipText = "OPDS", PrefixIcon = "e-copy", Id = "OPDS" },
         "ExcelExport"
     };
 
@@ -483,7 +485,7 @@ namespace SupplyChain.Pages.Servicios
                 }
                 //await this.Grid.ExcelExport();
             }
-            if (args.Item.Text == "PdfExport")
+            if (args.Item.Text == "Certificado")
             {
                 if (this.Grid.SelectedRecords.Count > 0)
                 {
@@ -869,6 +871,152 @@ namespace SupplyChain.Pages.Servicios
                         //Close the document 
                         document.Close(true);
                         await JS.SaveAs(selectedRecord.PEDIDO + ".pdf", stream.ToArray());
+                    }
+                }
+            }
+            if (args.Item.Text == "OPDS")
+            {
+                if (this.Grid.SelectedRecords.Count > 0)
+                {
+                    foreach (Service selectedRecord in this.Grid.SelectedRecords)
+                    {
+                        ClienteList = await Http.GetFromJsonAsync<List<Cliente>>($"api/Cliente/BuscarPorCliente/{selectedRecord.CG_CLI}");
+                        PdfDocument document1 = new PdfDocument();
+                        document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(612, 1009);
+                        document1.PageSettings.Margins.All = 0;
+                        //Create a PdfGrid
+                        PdfGrid pdfGrid1 = new PdfGrid();
+                        //Create the page
+                        PdfPage page = document1.Pages.Add();
+                        //Create PDF graphics for the page.
+                        PdfGraphics graphics = page.Graphics;
+                        //Set the standard font.
+
+                        PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 12);
+                        PdfLightTable pdfTable = new PdfLightTable();
+                        page.Graphics.RotateTransform(-360);
+                        string espaciosCodPost = "";
+                        for (int i = 0; i < (52 - ClienteList.FirstOrDefault().LOCALIDAD.Trim().Length); i++)
+                        {
+                            espaciosCodPost = espaciosCodPost + " ";
+                        }
+                        string espaciosEmail = "";
+                        for (int i = 0; i < (38 - ClienteList.FirstOrDefault().DES_PROV.Trim().Length); i++)
+                        {
+                            espaciosEmail = espaciosEmail + " ";
+                        }
+                        string email = "";
+                        if (ClienteList.FirstOrDefault().EMAIL.Trim().Length > 29)
+                        {
+                            email = ClienteList.FirstOrDefault().EMAIL;
+                        }
+                        string espaciosMedida = "45";
+                        for (int i = 0; i < (45 - selectedRecord.IDENTIFICACION.Trim().Length); i++)
+                        {
+                            espaciosMedida = espaciosMedida + " ";
+                        }
+                        string espaciosSerie = "41";
+                        for (int i = 0; i < (41 - selectedRecord.MARCA.Trim().Length); i++)
+                        {
+                            espaciosSerie = espaciosSerie + " ";
+                        }
+                        string espaciosFluido = "47";
+                        for (int i = 0; i < (47 - selectedRecord.MODELO.Trim().Length); i++)
+                        {
+                            espaciosFluido = espaciosFluido + " ";
+                        }
+                        string espaciosTemperatura = "50";
+                        for (int i = 0; i < (50 - selectedRecord.MODELO.Trim().Length); i++)
+                        {
+                            espaciosTemperatura = espaciosTemperatura + " ";
+                        }
+                        //Draw the text.
+                        graphics.DrawString(
+                            $"\r\n" +//1
+                            $"\r\n" +
+                            $"\r\n" +
+                            $"\r\n" +
+                            $"\r\n" +//5
+                            $"\r\n" +
+                            $"\r\n" +
+                            $"\r\n" +
+                            $"\r\n" +
+                            $"\r\n" +//10
+                            $"            Nro. Serie Rep.: {selectedRecord.PEDIDO.Trim()}                             Fecha: {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}\r\n" +
+                            $"\r\n" +
+                            $"                 {selectedRecord.CLIENTE.Trim()}\r\n" +
+                            $"\r\n" +
+                            $"                  {ClienteList.FirstOrDefault().DIRECC.Trim()}\r\n" +//15
+                            $"\r\n" +
+                            $"                  {ClienteList.FirstOrDefault().LOCALIDAD.Trim()}{espaciosCodPost}{ClienteList.FirstOrDefault().CG_POST}\r\n" +
+                            $"                 {ClienteList.FirstOrDefault().DES_PROV.Trim()}{espaciosEmail}{email}\r\n" +
+                            $"\r\n" +
+                            $"\r\n" +//20
+                            $"                         ARBROS S.A.\r\n" +
+                            $"                                     08/11\r\n" +
+                            $"\r\n" +
+                            $"                                                        188\r\n" +
+                            $"\r\n" +//25
+                            $"\r\n" +
+                            $"             {selectedRecord.IDENTIFICACION.Trim()}{espaciosMedida}Medida ExS: {selectedRecord.MEDIDA.Trim()}\r\n" +
+                            $"\r\n" +
+                            $"               {selectedRecord.MARCA.Trim()}{espaciosSerie}Conexión ExS: {selectedRecord.SERIE.Trim()}\r\n" +
+                            $"                {selectedRecord.MODELO.Trim()}{espaciosFluido}{selectedRecord.FLUIDO.Trim()}\r\n" +//30
+                            $"31    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"             {selectedRecord.AÑO.Trim()}{espaciosTemperatura}{selectedRecord.TEMP.Trim()}°C\r\n" +
+                            $"                                                      {selectedRecord.CONTRAPRESION.Trim()} {selectedRecord.TIPO.Trim()}\r\n" +//DescargaTeorica
+                            $"34    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"35    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"36    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"37    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"38    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"39    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"40    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"41    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"42    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"43    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"44    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"45    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"46    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"47    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"48    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"49    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"50    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"51    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"52    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"53    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"54    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"55    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"56    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"57    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"58    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"59    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"60    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"61    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"62    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"63    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"64    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"65    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"66    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"67    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"68    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"69    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"70    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"71    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"72    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"73    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"74    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"75    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"76    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"77    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"78    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"79    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n" +
+                            $"80    2     3     4     5     6     7     8     9     0     1     2     3     4     5\r\n", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+                        MemoryStream xx = new MemoryStream();
+                        document1.Save(xx);
+                        document1.Close(true);
+                        await JS.SaveAs("ETOF" + ".pdf", xx.ToArray());
                     }
                 }
             }
