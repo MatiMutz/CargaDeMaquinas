@@ -1299,8 +1299,8 @@ else
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
                 PdfLightTable pdfTable = new PdfLightTable();
 
-                graphics.DrawString($"\r\n\r\n\r\n{ordenFabricacion.PEDIDO}                      {DateTime.Now.Month} / {DateTime.Now.Year} " +
-                    $"\r\n{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                               {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(50, 0));
+                graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n{ordenFabricacion.PEDIDO}                      {DateTime.Now.Month} / {DateTime.Now.Year} " +
+                    $"\r\n{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                               {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(75, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
