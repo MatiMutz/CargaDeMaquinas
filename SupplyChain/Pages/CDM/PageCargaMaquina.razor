@@ -1153,22 +1153,15 @@ else
                 string espaciosSegundoCampo2 = "50";
                 string espaciosSegundoCampo3 = "50";
                 string espaciosSegundoCampo4 = "50";
-                string espaciosSegundoCampo5 = "50";
-
-
-                //Chapa de 101 mm x 78 mm
                 if (PedCliList.Where(t => t.DES_CLI.Contains("YPF")).Count() > 0)
                 {
+                    //Chapa de 101 mm x 78 mm
                     PdfDocument document1 = new PdfDocument();
                     document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
                     document1.PageSettings.Margins.All = 0;
-                    //Create a PdfGrid
                     PdfGrid pdfGrid1 = new PdfGrid();
-                    //Create the page
                     PdfPage page = document1.Pages.Add();
-                    //Create PDF graphics for the page.
                     PdfGraphics graphics = page.Graphics;
-                    //Set the standard font.
                     PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
@@ -1189,23 +1182,20 @@ else
                         espaciosSegundoCampo4 = espaciosSegundoCampo4 + " ";
                     }
                     graphics.DrawString($"\r\n\r\n\r\n\r\n      { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() }          N° {ordenFabricacion.PEDIDO} " +
-        $"\r\n      { ordenFabricacionEncabezado.CAMPOCOM6.Trim() } " +
-        $"\r\n       { ordenFabricacion.CG_PROD.Trim() }" +
-        $"\r\n        {prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosSegundoCampo2}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()}" +
-        $"\r\n       {prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}{espaciosSegundoCampo}{DateTime.Now.Year}" +
-
-        $"\r\n           {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosSegundoCampo3}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}" +
-
-        $"\r\n        { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim() }" +
-        $"\r\n    " +
-        $"\r\n    " +
-        $"\r\n    " +
-        $"\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4}{espaciosSegundoCampo4}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}" +
-
-        $"\r\n         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
-        $"\r\n         T.OPDS N°:8/11      M.OPDS N°:47642" +
-        $"\r\n                www.aerre.com.ar" +
-        $"\r\n         Arbros S.A. - Industria Argentina", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                        $"\r\n      { ordenFabricacionEncabezado.CAMPOCOM6.Trim() } " +
+                        $"\r\n       { ordenFabricacion.CG_PROD.Trim() }" +
+                        $"\r\n        {prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosSegundoCampo2}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()}" +
+                        $"\r\n       {prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}{espaciosSegundoCampo}{DateTime.Now.Year}" +
+                        $"\r\n           {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosSegundoCampo3}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}" +
+                        $"\r\n        { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim() }" +
+                        $"\r\n    " +
+                        $"\r\n    " +
+                        $"\r\n    " +
+                        $"\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4}{espaciosSegundoCampo4}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}" +
+                        $"\r\n         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
+                        $"\r\n         T.OPDS N°:8/11      M.OPDS N°:47642" +
+                        $"\r\n                www.aerre.com.ar" +
+                        $"\r\n         Arbros S.A. - Industria Argentina", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
@@ -1214,19 +1204,17 @@ else
                 }
                 else
                 {
+                    //Chapa de 101 mm x 78 mm
                     PdfDocument document1 = new PdfDocument();
                     document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
                     document1.PageSettings.Margins.All = 0;
-                    //Create a PdfGrid
                     PdfGrid pdfGrid1 = new PdfGrid();
-                    //Create the page
                     PdfPage page = document1.Pages.Add();
-                    //Create PDF graphics for the page.
                     PdfGraphics graphics = page.Graphics;
-                    //Set the standard font.
                     PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
+
                     graphics.DrawString($"\r\n\r\n        { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE }          N° {ordenFabricacion.PEDIDO} " +
                         $"\r\n          { ordenFabricacion.CG_PROD }  Año: {DateTime.Now.Year} " +
                         $"\r\n                 { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim()}   " +
@@ -1242,82 +1230,52 @@ else
                         $"\r\n     Sanchez de Loria 1362/66   Telefax:4931-9980" +
                         $"\r\n     (1241) Buenos Aires                4957-0101" +
                         $"\r\nRenglon 15", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
                     document1.Close(true);
                     await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
                 }
-
-
-
             }
             if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
             {
-
                 //Chapa de 25 x 95
-
                 PdfDocument document1 = new PdfDocument();
                 document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(359, 94);
-
                 document1.PageSettings.Margins.All = 0;
-                //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
-                //Create the page
                 PdfPage page = document1.Pages.Add();
-                //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
-                //Set the standard font.
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-90);
-                //Draw the text.
-                OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
 
                 graphics.DrawString($"                    {ordenFabricacion.PEDIDO}  TAG: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() } AÑO: {DateTime.Now.Year} " +
-                 $"\r\n      {ordenFabricacion.CG_PROD.Trim() } MED: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}    ORIF: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() } " +
-                 $"\r\n              Timbre:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() } Clase { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() } ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10)); 
+                    $"\r\n      {ordenFabricacion.CG_PROD.Trim() } MED: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}    ORIF: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() } " +
+                    $"\r\n              Timbre:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() } Clase { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() } ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
 
-
-                //PdfTemplate template = null;
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
-
-                //Set the position as '0'
-                //xx.Position = 0;
-                //Close the document
                 document1.Close(true);
-
                 await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
             }
             if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
-    ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
-    ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
-
+                ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
             {
                 //Chapa de 31 x 78
-
                 PdfDocument document1 = new PdfDocument();
-
                 document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(117, 295);
-
-
                 document1.PageSettings.Orientation = PdfPageOrientation.Landscape;
                 document1.PageSettings.Margins.All = 0;
-                //Create a PdfGrid
                 PdfGrid pdfGrid1 = new PdfGrid();
-                //Create the page
                 PdfPage page = document1.Pages.Add();
-                //Create PDF graphics for the page.
                 PdfGraphics graphics = page.Graphics;
-                //Set the standard font.
-
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
                 PdfLightTable pdfTable = new PdfLightTable();
-                //page.Graphics.RotateTransform(-360);
-                //Draw the text.
-                graphics.DrawString($"\r\n\r\n\r\n{ordenFabricacion.PEDIDO}                               {DateTime.Now.Month} / {DateTime.Now.Year} " +
-              $"\r\n{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
 
+                graphics.DrawString($"\r\n\r\n\r\n{ordenFabricacion.PEDIDO}                               {DateTime.Now.Month} / {DateTime.Now.Year} " +
+                    $"\r\n{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
@@ -1330,29 +1288,20 @@ else
             PdfDocument document1 = new PdfDocument();
             document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
             document1.PageSettings.Margins.All = 0;
-            //Create a PdfGrid
             PdfGrid pdfGrid1 = new PdfGrid();
-            //Create the page
             PdfPage page = document1.Pages.Add();
-            //Create PDF graphics for the page.
             PdfGraphics graphics = page.Graphics;
-            //Set the standard font.
             PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
             PdfLightTable pdfTable = new PdfLightTable();
             page.Graphics.RotateTransform(-90);
-            //Draw the text.
+
             OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
             graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+
             document1.PageSettings.Margins.All = 0;
-            //PdfTemplate template = null;
             MemoryStream xx = new MemoryStream();
             document1.Save(xx);
-
-            //Set the position as '0'
-            //xx.Position = 0;
-            //Close the document
             document1.Close(true);
-
             await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
 
         }
