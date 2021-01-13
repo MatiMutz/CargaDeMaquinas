@@ -1149,11 +1149,11 @@ else
         {
             if (ordenFabricacion.CG_PROD.Substring(0, 1) == "2")
             {
-                string espaciosSegundoCampo = "50";
-                string espaciosSegundoCampo2 = "50";
-                string espaciosSegundoCampo3 = "50";
-                string espaciosSegundoCampo4 = "50";
-                string espaciosSegundoCampo5 = "50";
+                string espaciosSegundoCampo = "";
+                string espaciosSegundoCampo2 = "";
+                string espaciosSegundoCampo3 = "";
+                string espaciosSegundoCampo4 = "";
+                string espaciosSegundoCampo5 = "";
 
                 if (PedCliList.Where(t => t.DES_CLI.Contains("YPF")).Count() > 0)
                 {
@@ -1187,8 +1187,26 @@ else
                     {
                         espaciosSegundoCampo5 = espaciosSegundoCampo5 + " ";
                     }
+                    var tipo2 = from item in ProdList
+                                where item.CG_PROD == ordenFabricacion.CG_PROD
+                                select item.CAMPOCOM6;
+                    string tipo = "";
+                    if (tipo2 is null || tipo2.Contains("System.Linq") )
+                    {
+                        tipo = "";
+                    }
+                    else {
+                        tipo = tipo2.ToString();
+                    }
+                    // if (String.IsNullOrEmpty(tipo2.ToString()))
+                    // {
+                    //    tipo2 = ()xd;
+                    //  }
+
+
+
                     graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n      {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosSegundoCampo5}N° {ordenFabricacion.PEDIDO} " +
-                    $"\r\n      {ordenFabricacionEncabezado.CAMPOCOM6.Trim()} " +
+                      $"\r\n      {tipo} " +
                     $"\r\n       {ordenFabricacion.CG_PROD.Trim()}" +
                     $"\r\n        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosSegundoCampo2}{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
                     $"\r\n       {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}{espaciosSegundoCampo}{DateTime.Now.Year}" +
