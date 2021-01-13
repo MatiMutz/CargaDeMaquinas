@@ -1165,11 +1165,11 @@ else
                     PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
-                    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim().Length); i++)
+                    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim().Length); i++)
                     {
                         espaciosSegundoCampo = espaciosSegundoCampo + " ";
                     }
-                    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
+                    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
                     {
                         espaciosSegundoCampo2 = espaciosSegundoCampo2 + " ";
                     }
@@ -1181,18 +1181,18 @@ else
                     {
                         espaciosSegundoCampo4 = espaciosSegundoCampo4 + " ";
                     }
-                    graphics.DrawString($"\r\n\r\n\r\n\r\n      { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() }          N° {ordenFabricacion.PEDIDO} " +
-                        $"\r\n      { ordenFabricacionEncabezado.CAMPOCOM6.Trim() } " +
-                        $"\r\n       { ordenFabricacion.CG_PROD.Trim() }" +
-                        $"\r\n        {prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosSegundoCampo2}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()}" +
-                        $"\r\n       {prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}{espaciosSegundoCampo}{DateTime.Now.Year}" +
+                    graphics.DrawString($"\r\n\r\n\r\n\r\n      {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}          N° {ordenFabricacion.PEDIDO} " +
+                        $"\r\n      {ordenFabricacionEncabezado.CAMPOCOM6.Trim()} " +
+                        $"\r\n       {ordenFabricacion.CG_PROD.Trim()}" +
+                        $"\r\n        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosSegundoCampo2}{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
+                        $"\r\n       {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}{espaciosSegundoCampo}{DateTime.Now.Year}" +
                         $"\r\n           {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosSegundoCampo3}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}" +
-                        $"\r\n        { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim() }" +
+                        $"\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}" +
                         $"\r\n    " +
                         $"\r\n    " +
                         $"\r\n    " +
                         $"\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4}{espaciosSegundoCampo4}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}" +
-                        $"\r\n         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2 }" +
+                        $"\r\n         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2}" +
                         $"\r\n         T.OPDS N°:8/11      M.OPDS N°:47642" +
                         $"\r\n                www.aerre.com.ar" +
                         $"\r\n         Arbros S.A. - Industria Argentina", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
@@ -1215,17 +1215,17 @@ else
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
 
-                    graphics.DrawString($"\r\n\r\n        { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE }          N° {ordenFabricacion.PEDIDO} " +
-                        $"\r\n          { ordenFabricacion.CG_PROD }  Año: {DateTime.Now.Year} " +
-                        $"\r\n                 { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM2.Trim()}   " +
-                        $"\r\n           { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() }  Orif: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() }" +
-                        $"\r\n                         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim() } Bar" +
-                        $"\r\n            { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim() } Sobrep. %" +
-                        $"\r\n                   { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim() } % de presion de aprtura" +
+                    graphics.DrawString($"\r\n\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE}          N° {ordenFabricacion.PEDIDO} " +
+                        $"\r\n          {ordenFabricacion.CG_PROD}  Año: {DateTime.Now.Year} " +
+                        $"\r\n                 {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}   " +
+                        $"\r\n           {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}  Orif: {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
+                        $"\r\n                         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()} Bar" +
+                        $"\r\n            {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()} Sobrep. %" +
+                        $"\r\n                   {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()} % de presion de aprtura" +
                         $"\r\n                           " +
                         $"\r\n                               " +
-                        $"\r\n               { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() }    Ctra.P:" +
-                        $"\r\n                  { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim() }" +
+                        $"\r\n               {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}     Ctra.P:" +
+                        $"\r\n                  {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
                         $"\r\n                   INDUSTRIA ARGENTINA" +
                         $"\r\n     Sanchez de Loria 1362/66   Telefax:4931-9980" +
                         $"\r\n     (1241) Buenos Aires                4957-0101" +
@@ -1249,10 +1249,14 @@ else
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-90);
-
-                graphics.DrawString($"                    {ordenFabricacion.PEDIDO}  TAG: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() } AÑO: {DateTime.Now.Year} " +
-                    $"\r\n      {ordenFabricacion.CG_PROD.Trim() } MED: { prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}    ORIF: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() } " +
-                    $"\r\n              Timbre:{ PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() } Clase { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() } ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+                string espaciosTag = "";
+                for (int i = 0; i < (25 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim().Length); i++)
+                {
+                    espaciosTag = espaciosTag + " ";
+                }
+                graphics.DrawString($"\r\n\r\n      {ordenFabricacion.PEDIDO}  TAG: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() } AÑO: {DateTime.Now.Year} " +
+                $"\r\n      {ordenFabricacion.CG_PROD.Trim()} MED: {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}    ORIF: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() } " +
+                $"\r\n              Timbre:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() } Clase { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() } ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
@@ -1275,7 +1279,7 @@ else
                 PdfLightTable pdfTable = new PdfLightTable();
 
                 graphics.DrawString($"\r\n\r\n\r\n{ordenFabricacion.PEDIDO}                               {DateTime.Now.Month} / {DateTime.Now.Year} " +
-                    $"\r\n{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+                    $"\r\n{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}                                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
