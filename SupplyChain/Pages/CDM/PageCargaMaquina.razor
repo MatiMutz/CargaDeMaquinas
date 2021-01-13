@@ -1250,13 +1250,34 @@ else
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-90);
                 string espaciosTag = "";
-                for (int i = 0; i < (25 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim().Length); i++)
+                for (int i = 0; i < (5 - ordenFabricacion.PEDIDO.Length); i++)
                 {
                     espaciosTag = espaciosTag + " ";
                 }
-                graphics.DrawString($"\r\n\r\n      {ordenFabricacion.PEDIDO}  TAG: { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim() } AÑO: {DateTime.Now.Year} " +
-                $"\r\n      {ordenFabricacion.CG_PROD.Trim()} MED: {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}    ORIF: { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim() } " +
-                $"\r\n              Timbre:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim() } Clase { prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim() } ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+                string espaciosAnio = "";
+                for (int i = 0; i < (10 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+                {
+                    espaciosAnio = espaciosAnio + " ";
+                }
+                string espaciosMed = "";
+                for (int i = 0; i < (15 - ordenFabricacion.CG_PROD.Trim().Length); i++)
+                {
+                    espaciosMed = espaciosMed + " ";
+                }
+                string espaciosOrif = "";
+                for (int i = 0; i < (20 - prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
+                {
+                    espaciosOrif = espaciosOrif + " ";
+                }
+                string espaciosClase = "";
+                for (int i = 0; i < (5 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim().Length); i++)
+                {
+                    espaciosClase = espaciosClase + " ";
+                }
+
+                graphics.DrawString($"\r\n\r\n      {ordenFabricacion.PEDIDO}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year} " +
+                $"\r\n         {ordenFabricacion.CG_PROD.Trim()}{espaciosMed}{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
+                $"\r\n              {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
