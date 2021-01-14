@@ -448,11 +448,21 @@
                                                 </SfComboBox>
                                             </div>
 
+                                            <!--
                                             <div class="form-group col-md-6">
                                                 <label>Responsable Técnico:</label>
                                                 <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
                                                             @bind-Value="@(servicio.RESPTECNICO)" DataSource="@opers">
                                                     <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                                </SfComboBox>
+                                            </div>
+                                                -->
+
+                                            <div class="form-group col-md-6">
+                                                <label>Presencia Inspector:</label>
+                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
+                                                            @bind-Value="@(servicio.PRESENCIAINSPEC)" DataSource="@SIoNOData">
+                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
                                                 </SfComboBox>
                                             </div>
                                         </div>
@@ -477,28 +487,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-row">
-                                            @*<div class="form-group col-md-6">
-                                                    <label>Presencia inspector:</label>
-                                                    <SfTextBox ID="PRESENCIAINSPEC" @bind-Value="@(servicio.PRESENCIAINSPEC)"></SfTextBox>
-                                                </div>*@
 
-                                            <div class="form-group col-md-6">
-                                                <label>Presencia Inspector:</label>
-                                                <SfComboBox TValue="string" CssClass="customClass" TItem="SIoNO" PopupWidth="auto" AllowFiltering="true"
-                                                            @bind-Value="@(servicio.PRESENCIAINSPEC)" DataSource="@SIoNOData">
-                                                    <ComboBoxFieldSettings Value="Text" Text="Text"></ComboBoxFieldSettings>
-                                                </SfComboBox>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label>Responsable Técnico:</label>
-                                                <SfComboBox TValue="string" CssClass="customClass" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                                            @bind-Value="@(servicio.RESPTECNICO)" DataSource="@opers">
-                                                    <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                                </SfComboBox>
-                                            </div>
-                                        </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <label>Observaciones del trabajo efectuado:</label>
