@@ -1279,8 +1279,8 @@ else
 $"\r\n\r\n          {ordenFabricacion.CG_PROD} {espaciosSegundoCampo2bis}      {DateTime.Now.Year} " +
 $"\r\n\r\n                {primeramedida1}                       {segundamedida1}" +
 $"\r\n\r\n          {primeramedida2}        {segundamedida2}        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
-$"\r\n                         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
-$"\r\n            {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} Sobrep. %" +
+$"\r\n\r\n                         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
+$"\r\n\r\n            {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} Sobrep. %" +
 $"\r\n                   {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
 $"\r\n                           " +
 $"\r\n                               " +
