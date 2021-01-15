@@ -101,7 +101,7 @@
 
     protected List<Pedidos> pedidos = new List<Pedidos>();
     protected List<Pedidos> Pedidoslist = new List<Pedidos>();
-    protected List<Pedidos> Clienteslist = new List<Pedidos>();
+    protected List<Pedidos> Busquedalist = new List<Pedidos>();
     protected string BoxPedido = "";
     protected string BoxCliente = "";
     protected int CantidadMostrar = 100;
@@ -166,21 +166,21 @@
         CantidadMostrar = 100;
         if (BoxCliente == "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/{CantidadMostrar}");
         }
         else if (BoxPedido == "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/{CantidadMostrar}");
         }
         else
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{CantidadMostrar}");
         }
         IsVisible = true;
     }
     protected async Task MostrarTrazabilidad()
     {
-        previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
+        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
         CgString = "";
         DesString = "";
         previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
