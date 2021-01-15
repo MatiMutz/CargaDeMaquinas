@@ -24,7 +24,7 @@
             <div class="col-sm-3 my-1">
                 <SfTextBox Placeholder="Nombre de Cliente" Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
             </div>
-            <div class="col-sm-1 my-1">
+            <div class="col-sm-3 my-1">
                 <button type="submit" class="btn btn-primary" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
             </div>
             <div class="col-sm-3 my-1">
@@ -34,14 +34,14 @@
     </div>
 </div>
 
-<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+<SfDialog Width="1000px" MinHeight="450px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
     <DialogTemplates>
         <Content>
             <SfGrid @ref="Grid2" DataSource="@Busquedalist">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                 <GridEvents RowSelected="OnSelected" TValue="Pedidos"></GridEvents>
                 <GridColumns>
-                    <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Producto" Width="90px"></GridColumn>
+                    <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Producto" Width="110px"></GridColumn>
                     <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Descripcion" Width="150px"></GridColumn>
                 </GridColumns>
             </SfGrid>
@@ -57,22 +57,23 @@
     </DialogTemplates>
 </SfDialog>
 @{
-    if (pedidos != null)
+    if (Showgrid == true)
     {
+        <label class="centrado">Trazabilidad del Pedido Nro @TrzNro</label>
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            @ref="Grid" DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true"
-                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                    <SfGrid ShowColumnChooser="true" AllowResizing="true" Width="auto" @ref="Grid" DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true" Toolbar="@Toolbaritems">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents OnToolbarClick="@ClickHandler" TValue="Pedidos"></GridEvents>
                         <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
                         <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Cliente" Width="110px"></GridColumn>
-                            <GridColumn Field=@nameof(Pedidos.CG_ORDF) HeaderText="Orden de Fabricacion" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.CG_ART) HeaderText="Producto" Width="55px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.DES_ART) HeaderText="Descripcion" Width="130px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.DESPACHO) HeaderText="Despacho" Width="60px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.LOTE) HeaderText="Lote" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.FE_MOV) HeaderText="Fecha Movimiento" Width="110px"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 </div>
@@ -81,13 +82,23 @@
     }
     else
     {
-        <label>Debe buscar arriba una orden de armado para ver su trazabilidad.</label>
+        <label class="centrado">Debe buscar arriba una orden de armado para ver su trazabilidad.</label>
     }
 
 }
+<!--
+<SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" Width="auto"
+                            @ref="Grid" DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true" EnableVirtualization="true"
+                            AllowSorting="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+-->
 <style>
     .e-input-group.e-corner {
         border-radius: 4px;
+    }
+
+    label.centrado {
+        margin: 0 auto;
+        text-align: center;
     }
 </style>
 
@@ -97,24 +108,29 @@
 
     public bool Enabled = true;
     public bool Disabled = false;
-    public bool Showgrid = true;
+    public bool Showgrid = false;
 
     protected List<Pedidos> pedidos = new List<Pedidos>();
     protected List<Pedidos> Pedidoslist = new List<Pedidos>();
     protected List<Pedidos> Busquedalist = new List<Pedidos>();
     protected string BoxPedido = "";
     protected string BoxCliente = "";
+    protected string TrzNro = "";
     protected int CantidadMostrar = 100;
     protected bool IsVisible { get; set; } = false;
+    public int GridRowHeight = 20;
 
     protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
 
     protected List<Object> Toolbaritems = new List<Object>(){
             "Search",
             "Print",
-            "ExcelExport"
+            "ExcelExport",
+            "ColumnChooser"
+            //new Syncfusion.Blazor.Navigations.ItemModel { Text = "small", TooltipText = "20px", PrefixIcon = "e-big-icon", Id = "small", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right},
+            //new Syncfusion.Blazor.Navigations.ItemModel { Text = "medium", TooltipText = "40px", PrefixIcon = "e-medium-icon", Id = "medium", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right},
+            //new Syncfusion.Blazor.Navigations.ItemModel { Text = "big", TooltipText = "60px", PrefixIcon = "e-small-icon", Id = "big", Align = Syncfusion.Blazor.Navigations.ItemAlign.Right}
         };
-
     public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Text == "Excel Export")
@@ -125,12 +141,25 @@
         {
             await this.Grid.Print();
         }
+        if (args.Item.Text == "small")
+        {
+            GridRowHeight = 20;
+        }
+        if (args.Item.Text == "medium")
+        {
+            GridRowHeight = 40;
+        }
+        if (args.Item.Text == "big")
+        {
+            GridRowHeight = 60;
+        }
     }
 
     public void OnSelected()
     {
         BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().PEDIDO.ToString(); // return the details of selected record
-        BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_CLI; // return the details of selected record
+        TrzNro = BoxPedido;
+        BoxCliente = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_CLI; // return the details of selected record
         CantidadMostrar = 0;
         IsVisible = false;
     }
@@ -153,7 +182,8 @@
         Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
         if (Pedidoslist.Count > 0)
         {
-            BoxPedido = Pedidoslist.FirstOrDefault().DES_CLI;
+            BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+            TrzNro = BoxPedido;
         }
         else
         {
@@ -180,25 +210,25 @@
     }
     protected async Task MostrarTrazabilidad()
     {
-        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/AgregarProductoPrevision/{BoxPedido}");
+        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
+        Showgrid = true;
         BoxPedido = "";
         BoxCliente = "";
-        Grid.Refresh();
     }
     protected async Task AgregarValores()
     {
         CantidadMostrar = CantidadMostrar + 100;
         if (BoxCliente == "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/BuscarProductoPrevision/{BoxPedido}/Vacio/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/{CantidadMostrar}");
         }
         else if (BoxPedido == "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/BuscarProductoPrevision/Vacio/{BoxCliente}/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/{CantidadMostrar}");
         }
         else
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/BuscarProductoPrevision/{BoxPedido}/{BoxCliente}/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{CantidadMostrar}");
         }
     }
 }

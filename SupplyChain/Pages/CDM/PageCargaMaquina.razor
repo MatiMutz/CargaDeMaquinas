@@ -22,7 +22,6 @@
         <button class="btn btn-outline-primary btn-sm oi oi-reload" @onclick="@Refrescar">
             Actualizar
         </button>
-        <a href="/sc/trazabilidad" class="btn btn-outline-primary btn-sm oi oi-reload">Trazabilidad</a>
     </nav>
 </div>
 <hr />
@@ -1192,11 +1191,12 @@ else
                                 where item.CG_PROD == ordenFabricacion.CG_PROD
                                 select item.CAMPOCOM6;
                     string tipo = "";
-                    if (tipo2 is null || tipo2.Contains("System.Linq") )
+                    if (tipo2 is null || tipo2.Contains("System.Linq"))
                     {
                         tipo = "";
                     }
-                    else {
+                    else
+                    {
                         tipo = tipo2.ToString();
                     }
                     graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n      {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosSegundoCampo5}N° {ordenFabricacion.PEDIDO} " +
@@ -1265,9 +1265,9 @@ else
                     string xd2 = prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim();
                     int UbicacionXMedida = xd1.ToLower().IndexOf('x');
                     int UbicacionXMedida2 = xd2.ToLower().IndexOf('x');
-                   
+
                     string primeramedida1 = xd1.Substring(0, UbicacionXMedida);
-                    string segundamedida1 = xd1.Substring(UbicacionXMedida + 1 );
+                    string segundamedida1 = xd1.Substring(UbicacionXMedida + 1);
                     string primeramedida2 = xd2.Substring(0, UbicacionXMedida2);
                     string segundamedida2 = xd2.Substring(UbicacionXMedida2 + 1);
 
