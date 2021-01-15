@@ -31,6 +31,39 @@ namespace SupplyChain
             return _context.Pedidos.FromSqlRaw(xSQL).ToList<Pedidos>();
         }
 
+        // GET: api/Pedidos/BuscarPorPedido/{Pedido}
+        [HttpGet("BuscarPorPedido/{Pedido}")]
+        public async Task<ActionResult<List<Pedidos>>> BuscarPorPedido(string Pedido)
+        {
+            List<Pedidos> lPedidos = new List<Pedidos>();
+            if (_context.Pedidos.Any())
+            {
+                lPedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == Pedido).ToListAsync();
+            }
+            if (lPedidos == null)
+            {
+                return NotFound();
+            }
+            return lPedidos;
+        }
+
+        // GET: api/Pedidos/BuscarPorCliente/{Cliente}
+        [HttpGet("BuscarPorCliente/{Cliente}")]
+        public async Task<ActionResult<List<Pedidos>>> BuscarPorCliente(string Cliente)
+        {
+            List<Pedidos> lPedidos = new List<Pedidos>();
+            if (_context.Pedidos.Any())
+            {
+                lPedidos = await _context.Pedidos.Where(p => p.DES_CLI == Cliente).ToListAsync();
+            }
+            if (lPedidos == null)
+            {
+                return NotFound();
+            }
+            return lPedidos;
+        }
+
+
         // GET:
         [HttpGet("BuscarTrazabilidad/{Pedido}/{Cliente}/{Busqueda}")]
         public async Task<ActionResult<List<Pedidos>>> BuscarTrazabilidad(string Pedido, string Cliente, int Busqueda)

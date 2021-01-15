@@ -1,307 +1,244 @@
-﻿@*
-        @page "/Trazabilidad"
-    @using Syncfusion.Blazor.Popups
-    @using Syncfusion.Blazor.Notifications
-    @using Syncfusion.Pdf;
-    @using Syncfusion.Pdf.Graphics;
-    @using Syncfusion.Pdf.Grid;
-    @using System.Drawing;
-    @using System.IO;
-    @using Syncfusion.Blazor.Inputs
-    @using Syncfusion.Blazor.Calendars
-    @using Syncfusion.Blazor.DropDowns
-    @using System.Text.Json
-    @using Syncfusion.Blazor.Grids
-    @inject IJSRuntime JsRuntime
-    @inject CustomHttpClient Http
-    @using Syncfusion.Pdf.Tables
-    <div class="col-lg-12 control-section">
-        <div class="content-wrapper">
-            <div class="row">
-                <div class="col-sm-3 my-1">
-                    <SfTextBox Placeholder="Número de Pedido" Input="OnInputCG_PROD" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                </div>
-                <div class="col-sm-3 my-1">
-                    <SfTextBox Placeholder="Nombre de Cliente" Input="OnInputDES_PROD" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
-                </div>
-                <div class="col-sm-1 my-1">
-                    <button type="submit" class="btn btn-primary" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
-                </div>
-                <div class="col-sm-3 my-1">
-                    <button type="submit" class="btn btn-primary" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
-                </div>
+﻿@*@page "/Trazabilidad"
+@page "/sc/Trazabilidad"
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Notifications
+@using Syncfusion.Pdf;
+@using Syncfusion.Pdf.Graphics;
+@using Syncfusion.Pdf.Grid;
+@using System.Drawing;
+@using System.IO;
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using System.Text.Json
+@using Syncfusion.Blazor.Grids
+@inject IJSRuntime JsRuntime
+@inject CustomHttpClient Http
+@using Syncfusion.Pdf.Tables
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-sm-3 my-1">
+                <SfTextBox Placeholder="Número de Pedido" Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+            <div class="col-sm-3 my-1">
+                <SfTextBox Placeholder="Nombre de Cliente" Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+            <div class="col-sm-1 my-1">
+                <button type="submit" class="btn btn-primary" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
+            </div>
+            <div class="col-sm-3 my-1">
+                <button type="submit" class="btn btn-primary" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
             </div>
         </div>
     </div>
+</div>
 
-    <SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
-        <DialogTemplates>
-            <Content>
-                <SfGrid @ref="Grid2" DataSource="@Busquedalist">
-                    <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                    <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
-                    <GridColumns>
-                        <GridColumn Field=@nameof(Producto.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                        <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
-                    </GridColumns>
-                </SfGrid>
-                @{
-                    if (Busquedalist.Count == CantidadMostrar)
-                    {
-                        <div class="col-sm-3 my-1">
-                            <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
-                        </div>
-                    }
-                }
-            </Content>
-        </DialogTemplates>
-    </SfDialog>
-    @{
-        if (pedidos != null)
-        {
-            <div class="col-lg-12 control-section">
-                <div class="content-wrapper">
-                    <div class="row">
-                        <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                                @ref="Grid" DataSource="@previsiones" AllowExcelExport="true" AllowGrouping="true"
-                                AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
-                            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                            <GridEvents OnToolbarClick="@ClickHandler" OnActionBegin="ActionBegin" TValue="PresAnual"></GridEvents>
-                            <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
-                            <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
-                            <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
-                                <Template>
-                                    @{
-                                        var prev = (context as PresAnual);
-                                        <div>
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label class="e-float-text e-label-top">Producto:</label>
-                                                    <br />
-                                                    <SfTextBox ID="CG_ART" @bind-Value="@(prev.CG_ART)" Enabled="false"></SfTextBox>
-                                                </div>
-
-                                                <div class="form-group col-md-6">
-                                                    <label class="e-float-text e-label-top">Descripcion del Producto:</label>
-                                                    <br />
-                                                    <SfTextBox ID="DES_ART" @bind-Value="@(prev.DES_ART)" Enabled="false"></SfTextBox>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label class="e-float-text e-label-top">Unidad:</label>
-                                                    <br />
-                                                    <SfTextBox ID="CG_ART" @bind-Value="@(prev.UNID)" Enabled="false"></SfTextBox>
-                                                </div>
-
-                                                <div class="form-group col-md-6">
-                                                    <label class="e-float-text e-label-top">Cantidad Pedida:</label>
-                                                    <br />
-                                                    <SfNumericTextBox ID="Codigo" @bind-Value="@(prev.CANTPED)" Enabled="true"></SfNumericTextBox>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-row">
-                                                <div class="form-group col-md-12">
-                                                    <label>Fecha Prevista:</label>
-                                                    <br />
-                                                    <SfDatePicker ID="FE_PED" @bind-Value="@(prev.FE_PED)" Enabled="true" Placeholder="Fecha Prevista"></SfDatePicker>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </Template>
-                            </GridEditSettings>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(PresAnual.CG_ART) HeaderText="Producto" Edit="false" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                                <GridColumn Field=@nameof(PresAnual.DES_ART) HeaderText="Descripcion del Producto" Edit="false" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                                <GridColumn Field=@nameof(PresAnual.UNID) HeaderText="Unidad" Edit="false" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                                <GridColumn Field=@nameof(PresAnual.CANTPED) HeaderText="Cantidad Pedida" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                                <GridColumn Field=@nameof(PresAnual.FE_PED) HeaderText="Fecha Prevista" CustomFormat="@(new { type= "date", format= "dd/MM/yyyy" })" TextAlign="TextAlign.Left" Width="30px"></GridColumn>
-                            </GridColumns>
-                        </SfGrid>
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+    <DialogTemplates>
+        <Content>
+            <SfGrid @ref="Grid2" DataSource="@Busquedalist">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
+                <GridColumns>
+                    <GridColumn Field=@nameof(Producto.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                    <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+            @{
+                if (Busquedalist.Count == CantidadMostrar)
+                {
+                    <div class="col-sm-3 my-1">
+                        <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Buscar más</button>
                     </div>
+                }
+            }
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+@{
+    if (pedidos != null)
+    {
+        <div class="col-lg-12 control-section">
+            <div class="content-wrapper">
+                <div class="row">
+                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
+                            @ref="Grid" DataSource="@previsiones" AllowExcelExport="true" AllowGrouping="true"
+                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                        <GridEvents OnToolbarClick="@ClickHandler" TValue="Pedidos"></GridEvents>
+                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                        <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Pedido" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Cliente" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Pedidos.CG_ORDF) HeaderText="Orden de Fabricacion" Width="110px"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
                 </div>
             </div>
-        }
-        else
-        {
-            <label>Debe buscar arriba una orden de armado para ver su trazabilidad.</label>
-        }
-
+        </div>
     }
-    <style>
-        .e-input-group.e-corner {
-            border-radius: 4px;
-        }
-    </style>
+    else
+    {
+        <label>Debe buscar arriba una orden de armado para ver su trazabilidad.</label>
+    }
 
-    @code {
-        protected SfGrid<Pedidos> Grid;
-        protected SfGrid<Pedidos> Grid2;
+}
+<style>
+    .e-input-group.e-corner {
+        border-radius: 4px;
+    }
+</style>
 
-        public bool Enabled = true;
-        public bool Disabled = false;
-        public bool Showgrid = true;
+@code {
+    protected SfGrid<Pedidos> Grid;
+    protected SfGrid<Pedidos> Grid2;
 
-        protected List<Pedidos> pedidos = new List<Pedidos>();
-        protected List<Pedidos> Pedidoslist = new List<Pedidos>();
-        protected List<Pedidos> Clienteslist = new List<Pedidos>();
-        protected string BoxPedido = "";
-        protected string BoxCliente = "";
-        protected int CantidadMostrar = 100;
-        protected bool IsVisible { get; set; } = false;
+    public bool Enabled = true;
+    public bool Disabled = false;
+    public bool Showgrid = true;
 
-        protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
+    protected List<Pedidos> pedidos = new List<Pedidos>();
+    protected List<Pedidos> Pedidoslist = new List<Pedidos>();
+    protected List<Pedidos> Clienteslist = new List<Pedidos>();
+    protected string BoxPedido = "";
+    protected string BoxCliente = "";
+    protected int CantidadMostrar = 100;
+    protected bool IsVisible { get; set; } = false;
 
-        protected List<Object> Toolbaritems = new List<Object>(){
+    protected DialogSettings DialogParams = new DialogSettings { MinHeight = "400px", Width = "1100px" };
+
+    protected List<Object> Toolbaritems = new List<Object>(){
             "Search",
             "Print",
             "ExcelExport"
         };
 
-        public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async Task ClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Text == "Excel Export")
         {
-            if (args.Item.Text == "Excel Export")
-            {
-                await this.Grid.ExcelExport();
-            }
-            if (args.Item.Text == "Print")
-            {
-                await this.Grid.Print();
-            }
+            await this.Grid.ExcelExport();
         }
-
-        public async Task ActionBegin(ActionEventArgs<Pedidos> args)
+        if (args.Item.Text == "Print")
         {
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-            {
-                HttpResponseMessage response;
-                response = await Http.PutAsJsonAsync($"api/Prevision/PutPrev/{args.Data.REGISTRO}", args.Data);
-                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
-                Grid.Refresh();
-            }
-            if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-            {
-
-            }
+            await this.Grid.Print();
         }
-
-        public void OnSelected()
-        {
-            BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().PEDIDO.ToString(); // return the details of selected record
-            BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_CLI; // return the details of selected record
-            CantidadMostrar = 0;
-            IsVisible = false;
-        }
-
-        protected async Task OnInputCG_PROD(InputEventArgs args)
-        {
-            CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorCG_PROD/{args.Value}");
-            if (CG_PRODlist.Count > 0)
-            {
-                DesString = CG_PRODlist.FirstOrDefault().DES_PROD;
-            }
-            else
-            {
-                DesString = "";
-            }
-        }
-
-        protected async Task OnInputDES_PROD(InputEventArgs args)
-        {
-            CG_PRODlist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarPorDES_PROD/{args.Value}");
-            if (CG_PRODlist.Count > 0)
-            {
-                CgString = CG_PRODlist.FirstOrDefault().CG_PROD;
-            }
-            else
-            {
-                CgString = "";
-            }
-        }
-
-        protected async Task BuscarTrazabilidad()
-        {
-            CantidadMostrar = 100;
-            if (DesString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
-            }
-            else if (CgString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
-            }
-            else
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
-            }
-            IsVisible = true;
-        }
-        protected async Task MostrarTrazabilidad()
-        {
-            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
-            CgString = "";
-            DesString = "";
-            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
-            Grid.Refresh();
-        }
-        protected async Task AgregarValores()
-        {
-            CantidadMostrar = CantidadMostrar + 100;
-            if (DesString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
-            }
-            else if (CgString == "")
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
-            }
-            else
-            {
-                Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
-            }
-        }
-        protected async Task GuardarDatos(CellSaveArgs<PresAnual> args)
-        {
-            if (args.ColumnName == "CANTPED")
-            {
-                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
-                await Grid.UpdateCell(args.RowData.REGISTRO, "CANTPED", args.Value);
-            }
-            else if (args.ColumnName == "FE_PED")
-            {
-                string Dia = ((DateTime)args.Value).Day.ToString();
-                string Mes = ((DateTime)args.Value).Month.ToString();
-                string Anio = ((DateTime)args.Value).Year.ToString();
-                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
-                //await Grid.UpdateCell(args.RowData.REGISTRO, "FE_PED", args.Value);
-                Grid.Refresh();
-                Showgrid = false;
-            }
-            //Grid.Refresh();
-            //StateHasChanged();
-            Showgrid = true;
-            Grid.Refresh();
-            StateHasChanged();
-        }
-        public async Task CellSaveHandlerAsync(CellSaveArgs<PresAnual> args)
-        {
-            if (args.ColumnName == "CANTPED")
-            {
-                previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
-            }
-            else if (args.ColumnName == "FE_PED")
-            {
-                string Dia = ((DateTime)args.Value).Day.ToString();
-                string Mes = ((DateTime)args.Value).Month.ToString();
-                string Anio = ((DateTime)args.Value).Year.ToString();
-                prueba = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
-            }
-            await Grid.EndEdit();
-        }
-
     }
 
-*@
+    public void OnSelected()
+    {
+        BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().PEDIDO.ToString(); // return the details of selected record
+        BoxPedido = this.Grid2.GetSelectedRecords().Result.FirstOrDefault().DES_CLI; // return the details of selected record
+        CantidadMostrar = 0;
+        IsVisible = false;
+    }
+
+    protected async Task OnInputPedido(InputEventArgs args)
+    {
+        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorPedido/{args.Value}");
+        if (Pedidoslist.Count > 0)
+        {
+            BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
+        }
+        else
+        {
+            BoxCliente = "";
+        }
+    }
+
+    protected async Task OnInputCliente(InputEventArgs args)
+    {
+        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
+        if (Pedidoslist.Count > 0)
+        {
+            BoxPedido = Pedidoslist.FirstOrDefault().DES_CLI;
+        }
+        else
+        {
+            BoxPedido = "";
+        }
+    }
+
+    protected async Task BuscarTrazabilidad()
+    {
+        CantidadMostrar = 100;
+        if (BoxCliente == "")
+        {
+            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
+        }
+        else if (BoxPedido == "")
+        {
+            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
+        }
+        else
+        {
+            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
+        }
+        IsVisible = true;
+    }
+    protected async Task MostrarTrazabilidad()
+    {
+        previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
+        CgString = "";
+        DesString = "";
+        previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
+        Grid.Refresh();
+    }
+    protected async Task AgregarValores()
+    {
+        CantidadMostrar = CantidadMostrar + 100;
+        if (DesString == "")
+        {
+            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
+        }
+        else if (CgString == "")
+        {
+            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
+        }
+        else
+        {
+            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
+        }
+    }
+    protected async Task GuardarDatos(CellSaveArgs<PresAnual> args)
+    {
+        if (args.ColumnName == "CANTPED")
+        {
+            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
+            await Grid.UpdateCell(args.RowData.REGISTRO, "CANTPED", args.Value);
+        }
+        else if (args.ColumnName == "FE_PED")
+        {
+            string Dia = ((DateTime)args.Value).Day.ToString();
+            string Mes = ((DateTime)args.Value).Month.ToString();
+            string Anio = ((DateTime)args.Value).Year.ToString();
+            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
+            //await Grid.UpdateCell(args.RowData.REGISTRO, "FE_PED", args.Value);
+            Grid.Refresh();
+            Showgrid = false;
+        }
+        //Grid.Refresh();
+        //StateHasChanged();
+        Showgrid = true;
+        Grid.Refresh();
+        StateHasChanged();
+    }
+    public async Task CellSaveHandlerAsync(CellSaveArgs<PresAnual> args)
+    {
+        if (args.ColumnName == "CANTPED")
+        {
+            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
+        }
+        else if (args.ColumnName == "FE_PED")
+        {
+            string Dia = ((DateTime)args.Value).Day.ToString();
+            string Mes = ((DateTime)args.Value).Month.ToString();
+            string Anio = ((DateTime)args.Value).Year.ToString();
+            prueba = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
+        }
+        await Grid.EndEdit();
+    }
+
+}*@
