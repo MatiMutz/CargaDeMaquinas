@@ -1156,7 +1156,7 @@ else
                 string espaciosSegundoCampo4 = "";
                 string espaciosSegundoCampo5 = "";
                 string CLIENTE = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
-                if (CLIENTE.Contains("YPF"))
+                if (CLIENTE.Contains("YPF") || CLIENTE.Contains("Y.P.F"))
                 {
                     //Chapa de 101 mm x 78 mm
                     PdfDocument document1 = new PdfDocument();
