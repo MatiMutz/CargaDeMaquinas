@@ -1,4 +1,4 @@
-﻿@*@page "/Trazabilidad"
+﻿@page "/Trazabilidad"
 @page "/sc/Trazabilidad"
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Notifications
@@ -39,10 +39,10 @@
         <Content>
             <SfGrid @ref="Grid2" DataSource="@Busquedalist">
                 <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
-                <GridEvents RowSelected="OnSelected" TValue="Producto"></GridEvents>
+                <GridEvents RowSelected="OnSelected" TValue="Pedidos"></GridEvents>
                 <GridColumns>
-                    <GridColumn Field=@nameof(Producto.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
-                    <GridColumn Field=@nameof(Producto.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Pedidos.PEDIDO) HeaderText="Producto" Width="90px"></GridColumn>
+                    <GridColumn Field=@nameof(Pedidos.DES_CLI) HeaderText="Descripcion" Width="150px"></GridColumn>
                 </GridColumns>
             </SfGrid>
             @{
@@ -63,7 +63,7 @@
             <div class="content-wrapper">
                 <div class="row">
                     <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true"
-                            @ref="Grid" DataSource="@previsiones" AllowExcelExport="true" AllowGrouping="true"
+                            @ref="Grid" DataSource="@pedidos" AllowExcelExport="true" AllowGrouping="true"
                             AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
                         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
                         <GridEvents OnToolbarClick="@ClickHandler" TValue="Pedidos"></GridEvents>
@@ -180,65 +180,25 @@
     }
     protected async Task MostrarTrazabilidad()
     {
-        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/AgregarProductoPrevision/{CgString}");
-        CgString = "";
-        DesString = "";
-        previsiones = await Http.GetFromJsonAsync<List<PresAnual>>("api/Prevision");
+        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/AgregarProductoPrevision/{BoxPedido}");
+        BoxPedido = "";
+        BoxCliente = "";
         Grid.Refresh();
     }
     protected async Task AgregarValores()
     {
         CantidadMostrar = CantidadMostrar + 100;
-        if (DesString == "")
+        if (BoxCliente == "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/Vacio/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/BuscarProductoPrevision/{BoxPedido}/Vacio/{CantidadMostrar}");
         }
-        else if (CgString == "")
+        else if (BoxPedido == "")
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/Vacio/{DesString}/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/BuscarProductoPrevision/Vacio/{BoxCliente}/{CantidadMostrar}");
         }
         else
         {
-            Busquedalist = await Http.GetFromJsonAsync<List<Producto>>($"api/Prevision/BuscarProductoPrevision/{CgString}/{DesString}/{CantidadMostrar}");
+            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Prevision/BuscarProductoPrevision/{BoxPedido}/{BoxCliente}/{CantidadMostrar}");
         }
     }
-    protected async Task GuardarDatos(CellSaveArgs<PresAnual> args)
-    {
-        if (args.ColumnName == "CANTPED")
-        {
-            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
-            await Grid.UpdateCell(args.RowData.REGISTRO, "CANTPED", args.Value);
-        }
-        else if (args.ColumnName == "FE_PED")
-        {
-            string Dia = ((DateTime)args.Value).Day.ToString();
-            string Mes = ((DateTime)args.Value).Month.ToString();
-            string Anio = ((DateTime)args.Value).Year.ToString();
-            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
-            //await Grid.UpdateCell(args.RowData.REGISTRO, "FE_PED", args.Value);
-            Grid.Refresh();
-            Showgrid = false;
-        }
-        //Grid.Refresh();
-        //StateHasChanged();
-        Showgrid = true;
-        Grid.Refresh();
-        StateHasChanged();
-    }
-    public async Task CellSaveHandlerAsync(CellSaveArgs<PresAnual> args)
-    {
-        if (args.ColumnName == "CANTPED")
-        {
-            previsiones = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateCant/{args.RowData.REGISTRO}/{args.Value}");
-        }
-        else if (args.ColumnName == "FE_PED")
-        {
-            string Dia = ((DateTime)args.Value).Day.ToString();
-            string Mes = ((DateTime)args.Value).Month.ToString();
-            string Anio = ((DateTime)args.Value).Year.ToString();
-            prueba = await Http.GetFromJsonAsync<List<PresAnual>>($"api/Prevision/UpdateFecha/{args.RowData.REGISTRO}/{Dia}/{Mes}/{Anio}");
-        }
-        await Grid.EndEdit();
-    }
-
-}*@
+}

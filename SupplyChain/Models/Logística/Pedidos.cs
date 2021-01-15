@@ -18,5 +18,11 @@ namespace SupplyChain
         public int TIPOO { get; set; } = 0;
         public int CG_TIRE { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
+        public string CG_ART { get; set; } = "";
+        public string DES_ART { get; set; } = "";
+        public string DESPACHO { get; set; } = "";
+        public string LOTE { get; set; } = "";
+        public string AVISO { get; set; } = "";
+        public DateTime FE_MOV { get; set; }
     }
 }
