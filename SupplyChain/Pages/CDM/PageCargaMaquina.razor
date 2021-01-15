@@ -1277,18 +1277,18 @@ else
 
                     graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE}{espaciosSegundoCampobis}{ordenFabricacion.PEDIDO} " +
 $"\r\n          {ordenFabricacion.CG_PROD} {espaciosSegundoCampo2bis}      {DateTime.Now.Year} " +
-$"\r\n Dimensiones: E {primeramedida1} S {segundamedida1}" +
-$"\r\n Clase: E {primeramedida2} S {segundamedida2}  Orif: {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
-$"\r\n                         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()} Bar" +
+$"\r\n                {primeramedida1}   {segundamedida1}" +
+$"\r\n          {primeramedida2}   {segundamedida2}        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
+$"\r\n                         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
 $"\r\n            {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} Sobrep. %" +
-$"\r\n                   {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()} % de presion de aprtura" +
+$"\r\n                   {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
 $"\r\n                           " +
 $"\r\n                               " +
 $"\r\n               {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}     Ctra.P:" +
 $"\r\n                  {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
-$"\r\n                   INDUSTRIA ARGENTINA" +
-$"\r\n     Sanchez de Loria 1362/66   Telefax:4931-9980" +
-$"\r\n     (1241) Buenos Aires                4957-0101", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+$"\r\n                                      " +
+$"\r\n                                                 " +
+$"\r\n                                                 ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
