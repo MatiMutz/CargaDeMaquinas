@@ -1233,7 +1233,7 @@ else
                     PdfGrid pdfGrid1 = new PdfGrid();
                     PdfPage page = document1.Pages.Add();
                     PdfGraphics graphics = page.Graphics;
-                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 13);
+                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
 
