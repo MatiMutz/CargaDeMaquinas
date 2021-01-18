@@ -682,7 +682,7 @@ namespace SupplyChain.Pages.Servicios
                         stream.Position = 0;
                         //Close the document 
                         document.Close(true);
-                        await JS.SaveAs(selectedRecord.PEDIDO + ".pdf", stream.ToArray());
+                        await JS.SaveAs($"{selectedRecord.PEDIDO} Certificado" + ".pdf", stream.ToArray());
                     }
                 }
             }
@@ -707,11 +707,6 @@ namespace SupplyChain.Pages.Servicios
                         PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 12);
                         PdfLightTable pdfTable = new PdfLightTable();
                         page.Graphics.RotateTransform(-360);
-                        string espaciosCodPost = "";
-                        for (int i = 0; i < (49 - ClienteList.FirstOrDefault().LOCALIDAD.Trim().Length); i++)
-                        {
-                            espaciosCodPost = espaciosCodPost + " ";
-                        }
                         string espaciosEmail = "";
                         for (int i = 0; i < (38 - ClienteList.FirstOrDefault().DES_PROV.Trim().Length); i++)
                         {
@@ -733,12 +728,12 @@ namespace SupplyChain.Pages.Servicios
                             espaciosSerie = espaciosSerie + " ";
                         }
                         string espaciosFluido = "";
-                        for (int i = 0; i < (47 - selectedRecord.MODELO.Trim().Length); i++)
+                        for (int i = 0; i < (57 - selectedRecord.MODELO.Trim().Length); i++)
                         {
                             espaciosFluido = espaciosFluido + " ";
                         }
                         string espaciosTemperatura = "";
-                        for (int i = 0; i < (50 - selectedRecord.MODELO.Trim().Length); i++)
+                        for (int i = 0; i < (60 - selectedRecord.MODELO.Trim().Length); i++)
                         {
                             espaciosTemperatura = espaciosTemperatura + " ";
                         }
@@ -752,7 +747,7 @@ namespace SupplyChain.Pages.Servicios
                             fugas = "     x";
                         }
                         string espaciosfugas = "";
-                        for (int i = 0; i < (25 - fugas.Length); i++)
+                        for (int i = 0; i < (24 - fugas.Length); i++)
                         {
                             espaciosfugas = espaciosfugas + " ";
                         }
@@ -817,8 +812,8 @@ namespace SupplyChain.Pages.Servicios
                             $"                 {selectedRecord.CLIENTE.Trim()}\r\n" +
                             $"\r\n" +
                             $"                  {ClienteList.FirstOrDefault().DIRECC.Trim()}\r\n" +//15
-                            $"\r\n" +
-                            $"                  {ClienteList.FirstOrDefault().LOCALIDAD.Trim()}{espaciosCodPost}{ClienteList.FirstOrDefault().CG_POST}\r\n" +
+                            $"                                                                    {ClienteList.FirstOrDefault().CG_POST}\r\n" +//no va
+                            $"                  {ClienteList.FirstOrDefault().LOCALIDAD.Trim()}\r\n" +
                             $"                 {ClienteList.FirstOrDefault().DES_PROV.Trim()}{espaciosEmail}{email}\r\n" +
                             $"\r\n" +
                             $"\r\n" +//20
@@ -828,9 +823,9 @@ namespace SupplyChain.Pages.Servicios
                             $"                                                        188\r\n" +
                             $"\r\n" +//25
                             $"\r\n" +
-                            $"             {selectedRecord.IDENTIFICACION.Trim()}{espaciosMedida}Med. ExS: {selectedRecord.MEDIDA.Trim()}\r\n" +
+                            $"             {selectedRecord.IDENTIFICACION.Trim()}{espaciosMedida}Med ExS: {selectedRecord.MEDIDA.Trim()}\r\n" +
                             $"\r\n" +
-                            $"               {selectedRecord.MARCA.Trim()}{espaciosSerie}Cnx. ExS: {selectedRecord.SERIE.Trim()}\r\n" +
+                            $"               {selectedRecord.MARCA.Trim()}{espaciosSerie}Cnx ExS: {selectedRecord.SERIE.Trim()}\r\n" +
                             $"                {selectedRecord.MODELO.Trim()}{espaciosFluido}{selectedRecord.FLUIDO.Trim()}\r\n" +//30
                             $"\r\n" +
                             $"             {selectedRecord.AÑO.Trim()}{espaciosTemperatura}{selectedRecord.TEMP.Trim()}°C\r\n" +
@@ -838,29 +833,29 @@ namespace SupplyChain.Pages.Servicios
                             $"\r\n" +
                             $"\r\n" +//35
                             $"\r\n" +
-                            $"                                     {fugas}{espaciosfugas}{selectedRecord.PRESIONFUGA.Trim()} {presionfuga}\r\n" +
-                            $"\r\n" +
+                            $"                                      {fugas}{espaciosfugas}{selectedRecord.PRESIONFUGA.Trim()} {presionfuga}\r\n" +
                             $"                          {selectedRecord.PRESION.Trim()} {presionA}\r\n" +
+                            $"\r\n" +
                             $"\r\n" +//40
                             $"\r\n" +
                             $"\r\n" +
-                            $"                                Lapidado                     x      Helicoidal\r\n" +
-                            $"                     x          \r\n" +
-                            $"                                Lapidado\r\n" +//45
-                            $"                     x\r\n" +
+                            $"\r\n" +
+                            $"                     x          Lapidado                       x      Helicoidal\r\n" +
+                            $"                     x          Lapidado\r\n" +//45
+                            $"\r\n" +
                             $"\r\n" +
                             $"\r\n" +
                             $"                     {DateTime.Today.Day}    {DateTime.Today.Month}    {DateTime.Today.Year}\r\n" +
                             $"" +//50
+                            $"\r\n" +
                             $"              x\r\n" +
                             $"                          {selectedRecord.PRESIONSOLIC.Trim()} {presionSolic}\r\n" +
                             $"\r\n" +
                             $"                                 {DateTime.Today.Day}    {DateTime.Today.Month}    {DateTime.Today.AddYears(1).Year}\r\n" +
-                            $"\r\n" +//55
+                            $"\r\n" +
                             $"\r\n" +
                             $"                     {TrEfec}\r\n" +
                             $"          {TrEfec2}\r\n" +
-                            $"\r\n" +
                             $"\r\n" +//60
                             $"\r\n" +
                             $"\r\n" +
@@ -878,7 +873,7 @@ namespace SupplyChain.Pages.Servicios
                         MemoryStream xx = new MemoryStream();
                         document1.Save(xx);
                         document1.Close(true);
-                        await JS.SaveAs("ETOF" + ".pdf", xx.ToArray());
+                        await JS.SaveAs($"{selectedRecord.PEDIDO.Trim()} OPDS {selectedRecord.ACTA.Trim()}" + ".pdf", xx.ToArray());
                     }
                 }
             }
