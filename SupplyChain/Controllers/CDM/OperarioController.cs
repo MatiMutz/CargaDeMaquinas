@@ -29,6 +29,7 @@ namespace SupplyChain
         public IEnumerable<Operario> Get()
         {
             var xitem = _context.Operario.ToList();
+
             return xitem;
         }
 

@@ -171,7 +171,7 @@ else
                                                id="of + @dbCarga[i].CG_ORDF" />
                                     }
                                 }
-                                @{
+                                @*@{
 
                                     if (@dbCarga.ElementAt(i).DES_CLI == "")
                                     {
@@ -182,7 +182,7 @@ else
                                     {
                                         <span class="tooltiptext">@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
                                     }
-                                }
+                                }*@
                             </div>
                             <style>
                                 .CargaButtonClass {
@@ -1233,7 +1233,7 @@ else
                     PdfGrid pdfGrid1 = new PdfGrid();
                     PdfPage page = document1.Pages.Add();
                     PdfGraphics graphics = page.Graphics;
-                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
+                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 13);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
 
@@ -1277,12 +1277,12 @@ $"\r\n\r\n          {ordenFabricacion.CG_PROD} {espaciosSegundoCampo2bis}      {
 $"\r\n\r\n                {primeramedida1}                       {segundamedida1}" +
 $"\r\n\r\n          {primeramedida2}        {segundamedida2}        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
 $"\r\n\r\n                         { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
-$"\r\n\r\n            {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} Sobrep. %" +
-$"\r\n\r\n                   {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
-$"\r\n                           " +
-$"\r\n\r\n\r\n                             " +
-$"\r\n               {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}     Ctra.P:" +
-$"\r\n                  {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
+$"\r\n\r\n          {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} " +
+$"\r\n\r\n              {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
+$"\r\n    " +
+$"\r\n\r\n\r\n\r\n\r\n                             " +
+$"\r\n                                  {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}   " +
+$"\r\n\r\n                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
 $"\r\n                                      " +
 $"\r\n                                                 " +
 $"\r\n                                                 ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
@@ -1304,7 +1304,7 @@ $"\r\n                                                 ", font, PdfBrushes.Black
                 PdfGraphics graphics = page.Graphics;
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 8);
                 PdfLightTable pdfTable = new PdfLightTable();
-                page.Graphics.RotateTransform(-90);
+                page.Graphics.RotateTransform(90);
                 string espaciosTag = "";
                 for (int i = 0; i < (40 - ordenFabricacion.PEDIDO.ToString().Length); i++)
                 {
@@ -1333,7 +1333,7 @@ $"\r\n                                                 ", font, PdfBrushes.Black
 
                 graphics.DrawString($"\r\n\r\n\r\n                  {ordenFabricacion.PEDIDO}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year} " +
                     $"\r\n\r\n                        {ordenFabricacion.CG_PROD.Trim()}{espaciosMed}{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                    $"\r\n\r\n                                                                        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+                    $"\r\n\r\n                                                                        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(359, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
