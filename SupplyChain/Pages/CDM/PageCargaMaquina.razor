@@ -1339,7 +1339,7 @@ else
                 ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
             {
                 string espaciosbar = "";
-                for (int i = 0; i < (23 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+                for (int i = 0; i < (17 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
                 {
                     espaciosbar = espaciosbar + " ";
                 }
@@ -1351,11 +1351,12 @@ else
                 PdfGrid pdfGrid1 = new PdfGrid();
                 PdfPage page = document1.Pages.Add();
                 PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10);
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 13);
                 PdfLightTable pdfTable = new PdfLightTable();
 
-                graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n    {ordenFabricacion.PEDIDO}                   {DateTime.Now.Month} / {DateTime.Now.Year} " +
-                    $"\r\n\r\n     {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(75, 0));
+                graphics.DrawString($"\"\r\n\r\n\r\n            {ordenFabricacion.PEDIDO}            {DateTime.Now.Month}/{DateTime.Now.Year} " +
+                    $"\r\n\r\n            {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}" +
+                    $"\r\n\r\n\r\n                                     \"", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
