@@ -171,7 +171,7 @@ else
                                                id="of + @dbCarga[i].CG_ORDF" />
                                     }
                                 }
-                                @{
+                                @*@{
 
                                     if (@dbCarga.ElementAt(i).DES_CLI == "")
                                     {
@@ -182,7 +182,7 @@ else
                                     {
                                         <span class="tooltiptext">@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
                                     }
-                                }
+                                }*@
                             </div>
                             <style>
                                 .CargaButtonClass {
@@ -1225,7 +1225,7 @@ else
                     {
                         espaciosPedidox = espaciosPedidox + " ";
                     }
-                    for (int i = 0; i < (25 - ordenFabricacion.CG_PROD.Length); i++)
+                    for (int i = 0; i < (16 - ordenFabricacion.CG_PROD.Length); i++)
                     {
                         espaciosAnio = espaciosAnio + " ";
                     }
@@ -1253,16 +1253,16 @@ else
                     string segundamedida2 = xd2.Substring(UbicacionXMedida2 + 1);
 
                     graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE}{espaciosPedidox}{ordenFabricacion.PEDIDO} " +
-                        $"\r\n\r\n    {ordenFabricacion.CG_PROD} {espaciosAnio}      {DateTime.Now.Year} " +
-                        $"\r\n    {primeramedida1}                       {segundamedida1}" +
-                        $"\r\n\r\n    {primeramedida2}        {segundamedida2}        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
-                        $"\r\n    { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
-                        $"\r\n\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} " +
-                        $"\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
+                        $"\r\n\r\n         {ordenFabricacion.CG_PROD} {espaciosAnio}     {DateTime.Now.Year} " +
+                        $"\r\n             {primeramedida1}                {segundamedida1}" +
+                        $"\r\n\r\n    {primeramedida2}   {segundamedida2}        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
+                        $"\r\n                     { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
+                        $"\r\n\r\n       {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} " +
+                        $"\r\n         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
                         $"\r\n\r\n" +
                         $"\r\n" +
-                        $"\r\n\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}   " +
-                        $"\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
+                        $"\r\n\r\n                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}   " +
+                        $"\r\n                     {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
                         $"\r\n\r\n" +
                         $"\r\n    " +
                         $"\r\n    ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
