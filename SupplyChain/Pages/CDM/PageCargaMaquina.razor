@@ -171,7 +171,7 @@ else
                                                id="of + @dbCarga[i].CG_ORDF" />
                                     }
                                 }
-                                @*@{
+                                @{
 
                                     if (@dbCarga.ElementAt(i).DES_CLI == "")
                                     {
@@ -182,7 +182,7 @@ else
                                     {
                                         <span class="tooltiptext">@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
                                     }
-                                }*@
+                                }
                             </div>
                             <style>
                                 .CargaButtonClass {
@@ -1157,7 +1157,7 @@ else
                     PdfGrid pdfGrid1 = new PdfGrid();
                     PdfPage page = document1.Pages.Add();
                     PdfGraphics graphics = page.Graphics;
-                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 13);
+                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
                     for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
@@ -1177,24 +1177,31 @@ else
                         tipo = tipo2.ToString();
                     }
                     FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
-                    graphics.DrawString($"\"\r\n\r\n\r\n\r\n\r\n  TAG:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosPedido}N° {ordenFabricacion.PEDIDO} " +
-                        $"\r\n\r\n  Tipo:                   Año:{DateTime.Now.Year}" +
-                        $"\r\n\r\n  Codigo:{ordenFabricacion.CG_PROD.Trim()}" +
-                        $"\r\n\r\n  Medida:{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}" +
-                        $"\r\n  Orif:{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
-                        $"\r\n  Clase:{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}" +
-                        $"\r\n  Temp:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}" +
-                        $"\r\n  Presion SET:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}" +
-                        $"\r\n  P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}" +
-                        $"\r\n  Ctra.P:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}" +
-                        $"\r\n  Fluido:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}" +
-                        $"\r\n\r\n  Mat. Cuerpo:" +
-                        $"\r\n  Mat. Resorte:           Cod.:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2}" +
-                        $"\r\n  Mat. Tobera:" +
-                        $"\r\n\r\n  T.OPDS N°:8/11      M.OPDS N°:47642" +
-                        $"\r\n          www.aerre.com.ar" +
-                        $"\r\n   Arbros S.A. - Industria Argentina  " +
-                        $"\r\n                                     .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+                    graphics.DrawString($"\"\r\n" +
+                        $"\r\n" +
+                        $"\r\n" +
+                        $"    Año:{DateTime.Now.Year}  N°:{ordenFabricacion.PEDIDO} \r\n" +
+                        $"    TAG:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
+                        $"    Tipo:\r\n" +
+                        $"    Codigo:{ordenFabricacion.CG_PROD.Trim()}\r\n" +
+                        $"    Medida:{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}  {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
+                        $"    Clase:{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
+                        $"    Temp:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}\r\n" +
+                        $"    Presion SET:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}\r\n" +
+                        $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
+                        $"    Ctra.P:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
+                        $"    Fluido:{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
+                        $"    Cuerpo:\r\n" +
+                        $"    Tobera:\r\n" +
+                        $"    Resorte:\r\n" +
+                        $"    T.OPDS N°:8/11\r\n" +
+                        $"    M.OPDS N°:47642\r\n" +
+                        $"          Arbros S.A.\r\n" +
+                        $"       www.aerre.com.ar\r\n" +
+                        $"     Industria  Argentina\r\n" +
+                        $"                              -", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
 
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
@@ -1217,7 +1224,7 @@ else
                     PdfGrid pdfGrid1 = new PdfGrid();
                     PdfPage page = document1.Pages.Add();
                     PdfGraphics graphics = page.Graphics;
-                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 13);
+                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
 
@@ -1339,7 +1346,7 @@ else
                 ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
             {
                 string espaciosbar = "";
-                for (int i = 0; i < (17 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+                for (int i = 0; i < (16 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
                 {
                     espaciosbar = espaciosbar + " ";
                 }
@@ -1351,12 +1358,15 @@ else
                 PdfGrid pdfGrid1 = new PdfGrid();
                 PdfPage page = document1.Pages.Add();
                 PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 13);
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
                 PdfLightTable pdfTable = new PdfLightTable();
 
-                graphics.DrawString($"\"\r\n\r\n\r\n            {ordenFabricacion.PEDIDO}            {DateTime.Now.Month}/{DateTime.Now.Year} " +
-                    $"\r\n\r\n            {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}" +
-                    $"\r\n\r\n\r\n                                     \"", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                string presionMostrar = PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+                int found = presionMostrar.ToUpper().IndexOf("B");
+
+                graphics.DrawString($"\"\r\n\r\n\r\n        {ordenFabricacion.PEDIDO}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
+                $"\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{presionMostrar.Substring(0, found)}" +
+                $"\r\n\r\n                              .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
@@ -1399,7 +1409,9 @@ else
         byte[] file;
         if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
         {
-            await JsRuntime.InvokeAsync<bool>("confirm", "Antes de exportar debe asignar un operario");
+            bool isConfirmed = await JsRuntime.InvokeAsync<bool>("confirm", "QAntes de exportar debe asignar un operario?");
+            if (isConfirmed)
+            { }
             //file = System.Text.Encoding.UTF8.GetBytes($"{ordenFabricacionEncabezado.DES_CLI.Trim()}\r\n{ordenFabricacion.PEDIDO}\r\n{presion}");
         }
         else
