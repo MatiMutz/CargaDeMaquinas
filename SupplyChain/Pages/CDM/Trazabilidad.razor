@@ -602,28 +602,33 @@
         //Add RowSpan
         PdfGridCell gridCell2 = pdfGrid.Rows[0].Cells[2];
         gridCell2.ColumnSpan = 2;
+        gridCell2.RowSpan = 2;
         gridCell2.StringFormat = Centrado;
-        gridCell2.Value = new PdfTextElement("CERTIFICADO DE MANTENIMIENTO Y CALIBRACIÓN", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+        gridCell2.Value = new PdfTextElement("ACTA DE INSPECCIÓN", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
-        PdfGridCell gridCell3 = pdfGrid.Rows[1].Cells[2];
+        PdfGridCell gridCell3 = pdfGrid.Rows[2].Cells[2];
         gridCell3.ColumnSpan = 2;
+        gridCell3.RowSpan = 2;
         gridCell3.StringFormat = Centrado;
         gridCell3.Value = new PdfTextElement("VALVULA DE SEGURIDAD Y ALIVIO", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCell4 = pdfGrid.Rows[0].Cells[4];
         gridCell4.ColumnSpan = 2;
+        gridCell4.RowSpan = 2;
         gridCell4.StringFormat = Centrado;
-        gridCell4.Value = new PdfTextElement($"FECHA: {DateTime.Today.Day} / {DateTime.Today.Month} / {DateTime.Today.Year}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+        gridCell4.Value = new PdfTextElement($"Cliente: {Pedidoslist.FirstOrDefault().DES_CLI.ToString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
-        PdfGridCell gridCell5 = pdfGrid.Rows[1].Cells[4];
+        PdfGridCell gridCell5 = pdfGrid.Rows[2].Cells[4];
         gridCell5.ColumnSpan = 2;
+        gridCell5.RowSpan = 2;
         gridCell5.StringFormat = Centrado;
-        gridCell5.Value = new PdfTextElement($"PEDIDO: {Pedidoslist.FirstOrDefault().PEDIDO.ToString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+        gridCell5.Value = new PdfTextElement($"O.C.I.: {Pedidoslist.FirstOrDefault().PEDIDO.ToString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[0];
-        gridCell6.ColumnSpan = 6;
+        gridCell6.ColumnSpan = 2;
+        gridCell6.RowSpan = 2;
         gridCell6.StringFormat = Centrado;
-        gridCell6.Value = new PdfTextElement("ENSAYOS EFECTUADOS EN BANCO CON PULMÓN HIDRO NEUMÁTICO. FLUIDO DE PRUEBA: AIRE A TEMPERATURA AMBIENTE", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+        gridCell6.Value = new PdfTextElement("xE", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCell7 = pdfGrid.Rows[3].Cells[0];
         gridCell7.ColumnSpan = 6;
@@ -631,9 +636,15 @@
         gridCell7.Value = new PdfTextElement("GENERALIDADES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
         //Add RowSpan
         PdfGridCell gridCell8 = pdfGrid.Rows[4].Cells[0];
-        gridCell8.ColumnSpan = 3;
+        gridCell8.ColumnSpan = 2;
         gridCell8.StringFormat = Izquierda;
-        gridCell8.Value = new PdfTextElement($"   Cliente: {Pedidoslist.FirstOrDefault().DES_CLI.ToString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Izquierda);
+        gridCell8.Value = new PdfTextElement($"   Generalidades:", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Izquierda);
+        //Add RowSpan
+        //Add RowSpan
+        PdfGridCell gridCellx = pdfGrid.Rows[4].Cells[2];
+        gridCellx.ColumnSpan = 1;
+        gridCellx.StringFormat = Izquierda;
+        gridCellx.Value = $"   Orden de compra: \n   Remito de entrega:";
         //Add RowSpan
         PdfGridCell gridCell9 = pdfGrid.Rows[4].Cells[3];
         gridCell9.ColumnSpan = 3;
@@ -642,18 +653,22 @@
         //Add RowSpan
         PdfGridCell gridCell10 = pdfGrid.Rows[5].Cells[0];
         gridCell10.ColumnSpan = 2;
+        gridCell10.RowSpan = 8;
         gridCell10.StringFormat = Izquierda;
-        gridCell10.Value = $"   Remito Recep: ";
+        gridCell10.Value = $"   DATOS DE PLACA: ";
         //Add RowSpan
         PdfGridCell gridCell11 = pdfGrid.Rows[5].Cells[2];
-        gridCell11.ColumnSpan = 2;
+        gridCell11.ColumnSpan = 1;
+        gridCell11.RowSpan = 8;
         gridCell11.StringFormat = Izquierda;
-        gridCell11.Value = $"   Orden de Compra: {PedCliList.FirstOrDefault().ORCO.ToString()}";
+        gridCell11.Value = $"   datps: {PedCliList.FirstOrDefault().ORCO.ToString()}";
         //Add RowSpan
-        PdfGridCell gridCell16 = pdfGrid.Rows[5].Cells[4];
-        gridCell16.ColumnSpan = 2;
+        PdfGridCell gridCell16 = pdfGrid.Rows[5].Cells[3];
+        gridCell16.ColumnSpan = 3;
+        gridCell16.RowSpan = 8;
+
         gridCell16.StringFormat = Izquierda;
-        gridCell16.Value = new PdfTextElement($"   Remito: ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Izquierda);
+        gridCell16.Value = new PdfTextElement($"   mas datos", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Izquierda);
         //Add RowSpan
         PdfGridCell gridCell14 = pdfGrid.Rows[6].Cells[0];
         gridCell14.ColumnSpan = 3;
@@ -721,12 +736,24 @@
         gridCell27.Value = $"   Fluido:";
         //Add RowSpan
         PdfGridCell gridCell28 = pdfGrid.Rows[13].Cells[0];
-        gridCell28.ColumnSpan = 3;
+        gridCell28.ColumnSpan = 2;
+        gridCell28.RowSpan = 2;
+
         gridCell28.StringFormat = Izquierda;
-        gridCell28.Value = $"   Sobrepresión:%";
+        gridCell28.Value = $"   CONTROL DIMENSIONAL";
+        //Add RowSpan
+        //Add RowSpan
+        PdfGridCell gridCellX2 = pdfGrid.Rows[13].Cells[2];
+        gridCellX2.ColumnSpan = 1;
+        gridCellX2.StringFormat = Izquierda;
+        gridCellX2.RowSpan = 2;
+
+        gridCellX2.Value = $"   DATOS 1";
         //Add RowSpan
         PdfGridCell gridCell29 = pdfGrid.Rows[13].Cells[3];
         gridCell29.ColumnSpan = 3;
+        gridCell29.RowSpan = 2;
+
         gridCell29.StringFormat = Izquierda;
         gridCell29.Value = new PdfTextElement($"   Presión Bar", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Izquierda);
         //Add RowSpan
@@ -748,15 +775,40 @@
         gridCell31.Value = $"   Tipo:";
         //Add RowSpan
         PdfGridCell gridCell32 = pdfGrid.Rows[15].Cells[0];
-        gridCell32.ColumnSpan = 3;
+        gridCell32.ColumnSpan = 2;
+        gridCell32.RowSpan = 8;
+
         gridCell32.StringFormat = Izquierda;
-        gridCell32.Value = $"   Temperatura: ";
+        gridCell32.Value = $"   PRUEBA HIDRAULICA Y MATERIALES ";
         //Add RowSpan
-        PdfGridCell gridCell33 = pdfGrid.Rows[15].Cells[3];
-        gridCell33.ColumnSpan = 3;
+        PdfGridCell gridCell33 = pdfGrid.Rows[15].Cells[2];
+        gridCell33.ColumnSpan = 1;
+        gridCell33.RowSpan = 2;
+
         gridCell33.StringFormat = Izquierda;
-        gridCell33.Value = $"   Resorte:";
+        gridCell33.Value = $"   Material Disco \n Identificación Disco \n Presión de Prueba Hidráulica";
         //Add RowSpan
+        //Add RowSpan
+        PdfGridCell gridCellx3 = pdfGrid.Rows[15].Cells[2];
+        gridCellx3.ColumnSpan = 1;
+        gridCellx3.RowSpan = 2;
+
+        gridCellx3.StringFormat = Izquierda;
+        gridCellx3.Value = $"   Material Disco \n Identificación Disco \n Presión de Prueba Hidráulica";
+        //Add RowSpan
+        PdfGridCell gridCellx5 = pdfGrid.Rows[17].Cells[2];
+        gridCellx5.ColumnSpan = 1;
+        gridCellx5.RowSpan = 2;
+
+        gridCellx5.StringFormat = Izquierda;
+        gridCellx5.Value = $"   Material Disco \n Identificación Disco \n Presión de Prueba Hidráulica";
+        //Add RowSpan
+        PdfGridCell gridCellx6 = pdfGrid.Rows[18].Cells[2];
+        gridCellx6.ColumnSpan = 1;
+        gridCellx6.RowSpan = 2;
+
+        gridCellx6.StringFormat = Izquierda;
+        gridCellx6.Value = $"   Material Disco \n Identificación Disco \n Presión de Prueba Hidráulica";
         PdfGridCell gridCell34 = pdfGrid.Rows[16].Cells[0];
         gridCell34.ColumnSpan = 3;
         gridCell34.StringFormat = Izquierda;
