@@ -173,7 +173,7 @@ else
                                 }
                                 @{
 
-                                    if (@dbCarga.ElementAt(i).DES_CLI == "")
+                                    @*if (@dbCarga.ElementAt(i).DES_CLI == "")
                                     {
                                         int found = dbCarga.ElementAt(i).CANT.ToString().IndexOf(".");
                                         <span class="tooltiptext">@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD<br />CANTIDAD: @dbCarga.ElementAt(i).CANT.ToString().Substring(0, found)<br />OF INICIAL:@dbCarga.ElementAt(i).CG_ORDFASOC<br />OF ALTA: @OrdenDeFabAlta</span>
@@ -181,7 +181,7 @@ else
                                     else
                                     {
                                         <span class="tooltiptext">@dbCarga.ElementAt(i).PEDIDO<br />@dbCarga.ElementAt(i).DES_CLI<br />@dbCarga.ElementAt(i).CG_PROD<br />@dbCarga.ElementAt(i).DES_PROD</span>
-                                    }
+                                    }*@
                                 }
                             </div>
                             <style>
