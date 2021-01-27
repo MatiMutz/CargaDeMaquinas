@@ -659,7 +659,7 @@
         gridCell11.ColumnSpan = 1;
         gridCell11.RowSpan = 8;
         gridCell11.StringFormat = Izquierda;
-        gridCell11.Value = $" Linea de Producto: \n Nro de Serie:\n TAG: \n Medida (Ent x Sal):\n Clase (Ent x Sal):\n Orif. API 526 / Area:\n Presión de Apertura:\n Contrapresión:\n Presion de ajuste en Banco\n Fluido\n Temperatura:\nCodigo de Resorte: \n Código de la válvula: ";
+        gridCell11.Value = $" Linea de Producto: \n Nro de Serie:\n TAG: {Pedidoslist.FirstOrDefault().LOTE.ToString()} \n Medida (Ent x Sal):\n Clase (Ent x Sal): {prodList.FirstOrDefault().CAMPOCOM5.ToString()} \n Orif. API 526 / Area:\n Presión de Apertura:\n Contrapresión:\n Presion de ajuste en Banco\n Fluido\n Temperatura:\nCodigo de Resorte: \n Código de la válvula: ";
         //Add RowSpan
         PdfGridCell gridCell16 = pdfGrid.Rows[5].Cells[3];
         gridCell16.ColumnSpan = 3;
