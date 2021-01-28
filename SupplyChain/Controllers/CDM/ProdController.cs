@@ -127,5 +127,21 @@ namespace SupplyChain
         {
             return _context.Prod.Any(e => e.CG_PROD == id);
         }
+
+        // GET: api/Prod/BuscarPorCG_PROD/{CG_PROD}
+        [HttpGet("BuscarPorCG_PROD/{CG_PROD}")]
+        public async Task<ActionResult<List<Prod>>> BuscarPorCG_PROD(string CG_PROD)
+        {
+            List<Prod> lDesProd = new List<Prod>();
+            if (_context.Prod.Any())
+            {
+                lDesProd = await _context.Prod.Where(p => p.CG_PROD == CG_PROD).ToListAsync();
+            }
+            if (lDesProd == null)
+            {
+                return NotFound();
+            }
+            return lDesProd;
+        }
     }
 }

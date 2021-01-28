@@ -17,6 +17,7 @@ namespace SupplyChain
         public int CG_ORDF { get; set; } = 0;
         public int TIPOO { get; set; } = 0;
         public int CG_TIRE { get; set; } = 0;
+        public int CG_ORDEN { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
         public string CG_ART { get; set; } = "";
         public string DES_ART { get; set; } = "";

@@ -11,6 +11,7 @@ namespace SupplyChain
         [Key]
         public int REGISTRO { get; set; } = 0; 
         public int PEDIDO { get; set; } = 0;
+        public int NUMOCI { get; set; } = 0;
         public string DES_CLI { get; set; } = "";
         public string ORCO { get; set; } = "";
         public string CG_ART { get; set; } = "";
@@ -27,5 +28,6 @@ namespace SupplyChain
         public string CAMPOCOM4 { get; set; } = "";
         public string CAMPOCOM5 { get; set; } = "";
         public string CAMPOCOM2 { get; set; } = "";
+        public string REMITO { get; set; } = "";
     }
 }

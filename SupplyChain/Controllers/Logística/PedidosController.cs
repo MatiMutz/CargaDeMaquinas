@@ -170,5 +170,21 @@ namespace SupplyChain
             }
             return lPedidos;
         }
+
+        // GET: api/Pedidos/BusquedaParaFE_MOV/{PEDIDO}
+        [HttpGet("BusquedaParaFE_MOV/{PEDIDO}")]
+        public async Task<ActionResult<List<Pedidos>>> BuscarPorCG_PROD(string PEDIDO)
+        {
+            List<Pedidos> lpedidos = new List<Pedidos>();
+            if (_context.Pedidos.Any())
+            {
+                lpedidos = await _context.Pedidos.Where(p => p.PEDIDO.ToString() == PEDIDO && p.CG_ORDEN == 1).ToListAsync();
+            }
+            if (lpedidos == null)
+            {
+                return NotFound();
+            }
+            return lpedidos;
+        }
     }
 }

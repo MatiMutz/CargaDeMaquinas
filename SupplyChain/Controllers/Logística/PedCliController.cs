@@ -75,5 +75,20 @@ namespace SupplyChain
             return _context.PedCli.Any(e => e.PEDIDO == id);
         }
 
+        // GET: api/pedcli/BuscarPorPedido/{PEDIDO}
+        [HttpGet("BuscarPorPedido/{PEDIDO}")]
+        public async Task<ActionResult<List<PedCli>>> BuscarPorPedido(string PEDIDO)
+        {
+            List<PedCli> lpedcli = new List<PedCli>();
+            if (_context.PedCli.Any())
+            {
+                lpedcli = await _context.PedCli.Where(p => p.PEDIDO.ToString() == PEDIDO).ToListAsync();
+            }
+            if (lpedcli == null)
+            {
+                return NotFound();
+            }
+            return lpedcli;
+        }
     }
 }
