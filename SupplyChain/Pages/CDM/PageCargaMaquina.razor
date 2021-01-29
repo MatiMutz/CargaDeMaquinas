@@ -1178,7 +1178,7 @@ else
                     }
                     FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
 
-                    graphics.DrawString($"\"\r\n" +
+                    graphics.DrawString($" \r\n" +
                         $"\r\n" +
                         $"\r\n" +
                         $"    Año:{DateTime.Now.Year}  N°:{ordenFabricacion.PEDIDO} \r\n" +
@@ -1200,7 +1200,7 @@ else
                         $"          Arbros S.A.\r\n" +
                         $"       www.aerre.com.ar\r\n" +
                         $"     Industria  Argentina\r\n" +
-                        $"                              -", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                        $"                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
 
                     MemoryStream xx = new MemoryStream();
@@ -1372,9 +1372,9 @@ else
                     presionMostrar = presionMostrar.Substring(0, found);
                 }
 
-                graphics.DrawString($"\"\r\n\r\n\r\n        {ordenFabricacion.PEDIDO}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
+                graphics.DrawString($" \r\n\r\n\r\n        {ordenFabricacion.PEDIDO}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
                 $"\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{presionMostrar}" +
-                $"\r\n\r\n                              .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                $"\r\n\r\n                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
@@ -1401,7 +1401,7 @@ else
             MemoryStream xx = new MemoryStream();
             document1.Save(xx);
             document1.Close(true);
-            await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".wmf", xx.ToArray());
+            await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
         }
     }
     async Task DownloadText()
