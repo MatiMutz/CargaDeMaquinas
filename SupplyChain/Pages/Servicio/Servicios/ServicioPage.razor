@@ -549,100 +549,112 @@
                                         {
                                             if (ruta.CAMPO == "RUTAENSAYO")
                                             {
-                                               
-                                                    <div class="accordion" id="accordionExample">
-                                                        @{
+                                                <div class="accordion" id="accordionExample">
+                                                    @{
+                                                        string rutaDiscojpg = ruta.VALORC + $"{servicio.PEDIDO}_disco.jpg";
+                                                        string rutaToberajpg = ruta.VALORC + $"{servicio.PEDIDO}_tobera.jpg";
+                                                        string rutaResortejpg = ruta.VALORC + $"{servicio.PEDIDO}_resorte.jpg";
+                                                        string rutaRecepcionjpg = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.jpg";
+                                                        string rutaDespachojpg = ruta.VALORC + $"{servicio.PEDIDO}_despacho.jpg";
 
-                                                            string rutaDisco = ruta.VALORC + $"{servicio.PEDIDO}_Disco.jpg";
-                                                            string rutaTobera = ruta.VALORC + $"{servicio.PEDIDO}_Tobera.jpg";
-                                                            string rutaResorte = ruta.VALORC + $"{servicio.PEDIDO}_Resorte.jpg";
-                                                            string rutaRecepcion = ruta.VALORC + $"{servicio.PEDIDO}_Recepcion.jpg";
-                                                            string rutaDespacho = ruta.VALORC + $"{servicio.PEDIDO}_Despacho.jpg";
-                                                            
-                                                            string rutaDisco2 = ruta.VALORC + $"{servicio.PEDIDO}_Disco.png";
-                                                            string rutaTobera2 = ruta.VALORC + $"{servicio.PEDIDO}_Tobera.png";
-                                                            string rutaResorte2 = ruta.VALORC + $"{servicio.PEDIDO}_Resorte.png";
-                                                            string rutaRecepcion2 = ruta.VALORC + $"{servicio.PEDIDO}_Recepcion.png";
-                                                            string rutaDespacho2 = ruta.VALORC + $"{servicio.PEDIDO}_Despacho.png";
+                                                        string rutaDiscopng = ruta.VALORC + $"{servicio.PEDIDO}_disco.png";
+                                                        string rutaToberapng = ruta.VALORC + $"{servicio.PEDIDO}_tobera.png";
+                                                        string rutaResortepng = ruta.VALORC + $"{servicio.PEDIDO}_resorte.png";
+                                                        string rutaRecepcionpng = ruta.VALORC + $"{servicio.PEDIDO}_recepcion.png";
+                                                        string rutaDespachopng = ruta.VALORC + $"{servicio.PEDIDO}_despacho.png";
 
-
-                                                            //if (File.Exists(rutaDocumento))
-                                                            //{
-                                                                    <div class="card">
-                                                                        <div class="card-header" id="One">
-                                                                            <h2 class="mb-0">
-                                                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                                                                    Disco
-                                                                                </button>
-                                                                            </h2>
-                                                                        </div>
-
-                                                                        <div id="collapseOne" class="collapse" aria-labelledby="One" data-parent="#accordionExample">
-                                                                            <div class="card-body">
-                                                                               
-                                                                                <img src="@rutaDisco" alt="Alternate Text" />
-                                                                               
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="card-header" id="Two">
-                                                                            <h2 class="mb-0">
-                                                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                                                    Tobera
-                                                                                </button>
-                                                                            </h2>
-                                                                        </div>
-
-                                                                        <div id="collapseTwo" class="collapse" aria-labelledby="Two" data-parent="#accordionExample">
-                                                                            <div class="card-body">
-                                                                                <img src="@rutaTobera" alt="Alternate Text" />
-                                                                               
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="card-header" id="Three">
-                                                                            <h2 class="mb-0">
-                                                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                                                    Resorte
-                                                                                </button>
-                                                                            </h2>
-                                                                        </div>
-
-                                                                        <div id="collapseThree" class="collapse" aria-labelledby="Three" data-parent="#accordionExample">
-                                                                            <div class="card-body">
-                                                                                <img src="@rutaResorte" alt="Alternate Text" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="card-header" id="Four">
-                                                                            <h2 class="mb-0">
-                                                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                                                                    Recepción
-                                                                                </button>
-                                                                            </h2>
-                                                                        </div>
-
-                                                                        <div id="collapseFour" class="collapse" aria-labelledby="Four" data-parent="#accordionExample">
-                                                                            <div class="card-body">
-                                                                                <img src="@rutaRecepcion" alt="Alternate Text" />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="card-header" id="Five">
-                                                                            <h2 class="mb-0">
-                                                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                                                                    Despacho
-                                                                                </button>
-                                                                            </h2>
-                                                                        </div>
-
-                                                                        <div id="collapseFive" class="collapse" aria-labelledby="Five" data-parent="#accordionExample">
-                                                                            <div class="card-body">
-                                                                                <img src="@rutaDespacho" alt="Alternate Text" />
-                                                                            </div>
+                                                        <div class="card">
+                                                            @{
+                                                                if (File.Exists(rutaDiscojpg))
+                                                                {
+                                                                    <div class="card-header" id="One">
+                                                                        <h2 class="mb-0">
+                                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                                                Disco
+                                                                            </button>
+                                                                        </h2>
+                                                                    </div>
+                                                                    <div id="collapseOne" class="collapse" aria-labelledby="One" data-parent="#accordionExample">
+                                                                        <div class="card-body">
+                                                                            <img src="@rutaDiscojpg" alt="Alternate Text" />
                                                                         </div>
                                                                     </div>
-                                                               // }
+                                                                }
+                                                                else if (File.Exists(rutaDiscopng))
+                                                                {
+                                                                    <div class="card-header" id="One">
+                                                                        <h2 class="mb-0">
+                                                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                                                Disco
+                                                                            </button>
+                                                                        </h2>
+                                                                    </div>
+                                                                    <div id="collapseOne" class="collapse" aria-labelledby="One" data-parent="#accordionExample">
+                                                                        <div class="card-body">
+                                                                            <img src="@rutaDiscopng" alt="Alternate Text" />
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                                //aca iria el siguiente if, todo adentro de la llave de @{} :)
                                                             }
-                                                        
-                                                    </div>
-                                              
+                                                            <div class="card-header" id="Two">
+                                                                <h2 class="mb-0">
+                                                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                                        Tobera
+                                                                    </button>
+                                                                </h2>
+                                                            </div>
+
+                                                            <div id="collapseTwo" class="collapse" aria-labelledby="Two" data-parent="#accordionExample">
+                                                                <div class="card-body">
+                                                                    <img src="@rutaToberajpg" alt="Alternate Text" />
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-header" id="Three">
+                                                                <h2 class="mb-0">
+                                                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                                        Resorte
+                                                                    </button>
+                                                                </h2>
+                                                            </div>
+
+                                                            <div id="collapseThree" class="collapse" aria-labelledby="Three" data-parent="#accordionExample">
+                                                                <div class="card-body">
+                                                                    <img src="@rutaResortejpg" alt="Alternate Text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-header" id="Four">
+                                                                <h2 class="mb-0">
+                                                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                                        Recepción
+                                                                    </button>
+                                                                </h2>
+                                                            </div>
+
+                                                            <div id="collapseFour" class="collapse" aria-labelledby="Four" data-parent="#accordionExample">
+                                                                <div class="card-body">
+                                                                    <img src="@rutaRecepcionjpg" alt="Alternate Text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-header" id="Five">
+                                                                <h2 class="mb-0">
+                                                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                                                        Despacho
+                                                                    </button>
+                                                                </h2>
+                                                            </div>
+
+                                                            <div id="collapseFive" class="collapse" aria-labelledby="Five" data-parent="#accordionExample">
+                                                                <div class="card-body">
+                                                                    <img src="@rutaDespachojpg" alt="Alternate Text" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+
+                                                </div>
+
                                             }
                                         }
                                     }
