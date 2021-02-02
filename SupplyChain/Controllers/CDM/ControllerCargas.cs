@@ -77,7 +77,7 @@ namespace SupplyChain
                                     "LEFT JOIN PROD ON PROD.CG_PROD = A.CG_PROD " +
                                     "WHERE A.CG_PROD=B.CG_PROD AND LTRIM(RTRIM(A.CG_CELDA))=LTRIM(RTRIM(C.CG_CELDA)) " +
                                     "AND FECHA_PREVISTA_FABRICACION IS NOT NULL " +
-                                    "AND LTRIM(RTRIM(A.CG_CELDA)) != '' AND A.DIASFAB > 0 AND A.CG_ESTADOCARGA = 3 " +
+                                    "AND LTRIM(RTRIM(A.CG_CELDA)) != '' AND A.DIASFAB > 0 AND (A.CG_ESTADOCARGA = 3 OR A.CG_ESTADOCARGA = 2) " +
                                     "ORDER BY A.CG_ORDFASOC, A.CG_ORDFORIG";
                 xConexionSQL = new ConexionSQL(CadenaConexionSQL);
                 DataTable dbCargaTemp = xConexionSQL.EjecutarSQL(xSQLSelect);

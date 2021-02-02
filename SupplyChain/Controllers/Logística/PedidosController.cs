@@ -28,11 +28,11 @@ namespace SupplyChain
         public IEnumerable<Pedidos> Get(string PEDIDO)
         {
             string xSQL = string.Format("" +
-                "SELECT Pedidos.REGISTRO, Pedidos.PEDIDO, Pedidos.REMITO, Pedidos.FLAG, Pedidos.CG_ORDF, Pedidos.TIPOO, Pedidos.CG_TIRE, Pedidos.DES_CLI, Pedidos.CG_ART, Pedidos.DES_ART, Pedidos.DESPACHO, Pedidos.LOTE, Pedidos.FE_MOV, Pedidos.AVISO " +
+                "SELECT Pedidos.REGISTRO, Pedidos.PEDIDO, Pedidos.REMITO, Pedidos.FLAG, Pedidos.CG_ORDF, Pedidos.TIPOO, Pedidos.CG_TIRE, Pedidos.DES_CLI, Pedidos.CG_ART, Pedidos.DES_ART, Pedidos.DESPACHO, Pedidos.LOTE, Pedidos.FE_MOV, Pedidos.AVISO, Pedidos.CG_ORDEN " +
                 "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
                 "where(pedidos.FLAG = 0 AND Programa.CG_ESTADO = 3 AND Pedidos.CG_ORDF != 0 AND(Pedidos.TIPOO = 1)) " +
-                "UNION SELECT Pedidos.REGISTRO, Pedidos.PEDIDO, Pedidos.REMITO, Pedidos.FLAG, Pedidos.CG_ORDF, Pedidos.TIPOO, Pedidos.CG_TIRE, Pedidos.DES_CLI, Pedidos.CG_ART, Pedidos.DES_ART, Pedidos.DESPACHO, Pedidos.LOTE, Pedidos.FE_MOV, Pedidos.AVISO " +
+                "UNION SELECT Pedidos.REGISTRO, Pedidos.PEDIDO, Pedidos.REMITO, Pedidos.FLAG, Pedidos.CG_ORDF, Pedidos.TIPOO, Pedidos.CG_TIRE, Pedidos.DES_CLI, Pedidos.CG_ART, Pedidos.DES_ART, Pedidos.DESPACHO, Pedidos.LOTE, Pedidos.FE_MOV, Pedidos.AVISO, Pedidos.CG_ORDEN " +
                 "FROM((Pedcli INNER JOIN Programa ON Pedcli.PEDIDO = Programa.PEDIDO) " +
                 "INNER JOIN Pedidos ON pedcli.PEDIDO = Pedidos.PEDIDO) " +
                 "where Pedcli.PEDIDO NOT IN(select PEDIDO from Pedidos where TIPOO = 1) AND Programa.CG_ESTADO = 3  AND Pedcli.CANTPED > 0 AND Pedidos.TIPOO != 28");
