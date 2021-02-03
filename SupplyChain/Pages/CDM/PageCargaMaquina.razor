@@ -1001,7 +1001,7 @@ else
         {
             dbCarga = await Http.GetFromJsonAsync<List<ModeloCarga>>("api/Cargas");
         }
-        catch
+        catch (Exception ex)
         {
             throw;
         }
