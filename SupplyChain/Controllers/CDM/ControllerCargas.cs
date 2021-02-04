@@ -77,7 +77,7 @@ namespace SupplyChain
                                     "LEFT JOIN PROD ON PROD.CG_PROD = A.CG_PROD " +
                                     "WHERE A.CG_PROD=B.CG_PROD AND LTRIM(RTRIM(A.CG_CELDA))=LTRIM(RTRIM(C.CG_CELDA)) " +
                                     "AND FECHA_PREVISTA_FABRICACION IS NOT NULL " +
-                                    "AND LTRIM(RTRIM(A.CG_CELDA)) != '' AND A.DIASFAB > 0 AND (A.CG_ESTADOCARGA = 2 OR A.CG_ESTADOCARGA = 3)" +
+                                    "AND LTRIM(RTRIM(A.CG_CELDA)) != '' AND A.DIASFAB > 0 AND A.CG_ESTADOCARGA IN (2)" +
                                     "ORDER BY A.CG_ORDFASOC, A.CG_ORDFORIG";
                 xConexionSQL = new ConexionSQL(CadenaConexionSQL);
                 DataTable dbCargaTemp = xConexionSQL.EjecutarSQL(xSQLSelect);
@@ -115,7 +115,7 @@ namespace SupplyChain
                                 .ThenBy(r => r.Field<DateTime>("FECHA_PREVISTA_FABRICACION"))
                                 .CopyToDataTable();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return null;
                 }
@@ -428,85 +428,101 @@ namespace SupplyChain
 
         private bool CorrigeColumnasSegunDependencias()
         {
-            // Corrige Columnas de Barras segun dependencias
-            DataRow[] xDataRows;
-            DataTable xTablaDependencias;
-            int z;
-            Int32 xColumnaInicial;
-            int i;
-            bool xHayCambios = false;
-            // PRIMERO PONGO EL FLAG EN 0 PARA EVITAR QUE SE CORRIJAN DEPENDENCIAS POR 2DA VEZ
-            i = 0;
-            while (i < dbCarga.Rows.Count)
+            try
             {
-                dbCarga.Rows[i]["FLAG_DEPENDENCIAS"] = 0;
-                i++;
-            }
-            dbCarga.AcceptChanges();
-            i = 0;
-            while (i < dbCarga.Rows.Count)
-            {
-                if (Convert.ToInt32(dbCarga.Rows[i]["FLAG_DEPENDENCIAS"]) == 0)
+                // Corrige Columnas de Barras segun dependencias
+                DataRow[] xDataRows;
+                DataTable xTablaDependencias;
+                int z;
+                Int32 xColumnaInicial;
+                int i;
+                bool xHayCambios = false;
+                // PRIMERO PONGO EL FLAG EN 0 PARA EVITAR QUE SE CORRIJAN DEPENDENCIAS POR 2DA VEZ
+                i = 0;
+                while (i < dbCarga.Rows.Count)
                 {
-                    if (Convert.ToInt32(dbCarga.Rows[i]["CG_ORDFORIG"]) > 0)
+                    dbCarga.Rows[i]["FLAG_DEPENDENCIAS"] = 0;
+                    i++;
+                }
+                dbCarga.AcceptChanges();
+                i = 0;
+                while (i < dbCarga.Rows.Count)
+                {
+                    if (Convert.ToInt32(dbCarga.Rows[i]["FLAG_DEPENDENCIAS"]) == 0)
                     {
-                        // Corrige Columna de cada orden de cada Celda segun dependencias
-                        xDataRows = dbCarga.Select("CG_ORDFASOC = " + dbCarga.Rows[i]["CG_ORDFASOC"].ToString());
-                        if (xDataRows.Length > 1)
+                        if (Convert.ToInt32(dbCarga.Rows[i]["CG_ORDFORIG"]) > 0)
                         {
-                            xTablaDependencias = xDataRows.CopyToDataTable();
-                            xTablaDependencias.DefaultView.Sort = "CG_ORDFORIG";
-                            xTablaDependencias = xTablaDependencias.DefaultView.ToTable();
-                            z = 0;
-                            xColumnaInicial = 0;
-                            while (z < xTablaDependencias.Rows.Count)
+                            // Corrige Columna de cada orden de cada Celda segun dependencias
+                            xDataRows = dbCarga.Select("CG_ORDFASOC = " + dbCarga.Rows[i]["CG_ORDFASOC"].ToString());
+                            if (xDataRows.Length > 1)
                             {
-                                if (Convert.ToInt32(xTablaDependencias.Rows[z]["CG_ORDFORIG"]) > 0)
+                                xTablaDependencias = xDataRows.CopyToDataTable();
+                                xTablaDependencias.DefaultView.Sort = "CG_ORDFORIG";
+                                xTablaDependencias = xTablaDependencias.DefaultView.ToTable();
+                                z = 0;
+                                xColumnaInicial = 0;
+                                while (z < xTablaDependencias.Rows.Count)
                                 {
-                                    if (Convert.ToInt32(dbCarga.Rows[i]["COLUMNA"]) < (xColumnaInicial) && dbCarga.Rows[i]["CG_ORDF"].ToString() == xTablaDependencias.Rows[z]["CG_ORDF"].ToString())
+                                    if (Convert.ToInt32(xTablaDependencias.Rows[z]["CG_ORDFORIG"]) > 0)
                                     {
-                                        dbCarga.Rows[i]["COLUMNA"] = xColumnaInicial;
-                                        dbCarga.Rows[i]["FLAG_DEPENDENCIAS"] = 1;
-                                        xHayCambios = true;
-                                        break;
+                                        if (Convert.ToInt32(dbCarga.Rows[i]["COLUMNA"]) < (xColumnaInicial) && dbCarga.Rows[i]["CG_ORDF"].ToString() == xTablaDependencias.Rows[z]["CG_ORDF"].ToString())
+                                        {
+                                            dbCarga.Rows[i]["COLUMNA"] = xColumnaInicial;
+                                            dbCarga.Rows[i]["FLAG_DEPENDENCIAS"] = 1;
+                                            xHayCambios = true;
+                                            break;
+                                        }
                                     }
+                                    xColumnaInicial = Convert.ToInt32(xTablaDependencias.Rows[z]["COLUMNA"]) + Convert.ToInt32(xTablaDependencias.Rows[z]["COLUMNSPAN"]);
+                                    z++;
                                 }
-                                xColumnaInicial = Convert.ToInt32(xTablaDependencias.Rows[z]["COLUMNA"]) + Convert.ToInt32(xTablaDependencias.Rows[z]["COLUMNSPAN"]);
-                                z++;
                             }
                         }
                     }
+                    i++;
                 }
-                i++;
+                dbCarga.AcceptChanges();
+                return xHayCambios;
+
             }
-            dbCarga.AcceptChanges();
-            return xHayCambios;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         private bool CorrigeColumnasPorCelda()
         {
-            // Corrige Columnas de Barras celda por celda, puede haber superposiciones
-            bool xHayCambios = false;
-            string xCg_celda = "";
-            int xColumnaInicial;
-            int i = 0;
-            while (i < dbCarga.Rows.Count)
+            try
             {
-                // recorre en el while mientras sea la misma celda
-                xColumnaInicial = 0;
-                xCg_celda = dbCarga.Rows[i]["CG_CELDA"].ToString().Trim();
-                while (i < dbCarga.Rows.Count && xCg_celda == dbCarga.Rows[i]["CG_CELDA"].ToString().Trim())
+                // Corrige Columnas de Barras celda por celda, puede haber superposiciones
+                bool xHayCambios = false;
+                string xCg_celda = "";
+                int xColumnaInicial;
+                int i = 0;
+                while (i < dbCarga.Rows.Count)
                 {
-                    if (Convert.ToInt32(dbCarga.Rows[i]["COLUMNA"]) < xColumnaInicial)
+                    // recorre en el while mientras sea la misma celda
+                    xColumnaInicial = 0;
+                    xCg_celda = dbCarga.Rows[i]["CG_CELDA"].ToString().Trim();
+                    while (i < dbCarga.Rows.Count && xCg_celda == dbCarga.Rows[i]["CG_CELDA"].ToString().Trim())
                     {
-                        dbCarga.Rows[i]["COLUMNA"] = xColumnaInicial;
-                        xHayCambios = true;
+                        if (Convert.ToInt32(dbCarga.Rows[i]["COLUMNA"]) < xColumnaInicial)
+                        {
+                            dbCarga.Rows[i]["COLUMNA"] = xColumnaInicial;
+                            xHayCambios = true;
+                        }
+                        xColumnaInicial = Convert.ToInt32(dbCarga.Rows[i]["COLUMNA"]) + Convert.ToInt32(dbCarga.Rows[i]["COLUMNSPAN"]);
+                        i++;
                     }
-                    xColumnaInicial = Convert.ToInt32(dbCarga.Rows[i]["COLUMNA"]) + Convert.ToInt32(dbCarga.Rows[i]["COLUMNSPAN"]);
-                    i++;
                 }
+                dbCarga.AcceptChanges();
+                return xHayCambios;
+
             }
-            dbCarga.AcceptChanges();
-            return xHayCambios;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
