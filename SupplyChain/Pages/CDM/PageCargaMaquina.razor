@@ -1206,7 +1206,7 @@ else
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
                     document1.Close(true);
-                    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".wmf", xx.ToArray());
+                    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
                 }
                 else
                 {
@@ -1277,7 +1277,7 @@ else
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
                     document1.Close(true);
-                    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".wmf", xx.ToArray());
+                    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
                 }
             }
             if (ordenFabricacion.CG_PROD.Substring(0, 1) == "1")
@@ -1339,7 +1339,7 @@ else
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
-                await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".wmf", xx.ToArray());
+                await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
             }
             if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
                 ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
@@ -1379,7 +1379,7 @@ else
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
-                await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".wmf", xx.ToArray());
+                await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
             }
         }
         else
