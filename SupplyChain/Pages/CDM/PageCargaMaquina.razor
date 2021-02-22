@@ -1389,9 +1389,9 @@
                     presionMostrar = presionMostrar.Substring(0, found);
                 }
 
-                graphics.DrawString($" \r\n\r\n\r\n        {ordenFabricacion.PEDIDO}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
+                graphics.DrawString($"\"\r\n\r\n\r\n        {ordenFabricacion.PEDIDO}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
                 $"\r\n        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{presionMostrar}" +
-                $"\r\n\r\n                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                $"\r\n\r\n                              .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
