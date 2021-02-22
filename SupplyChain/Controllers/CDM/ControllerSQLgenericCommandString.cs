@@ -25,9 +25,9 @@ namespace SupplyChain
             }
             catch (DbUpdateConcurrencyException)
             {
-                BadRequest();
+                throw;
             }
-            return Ok("Gurdado correctamente" + SQLcommandString);
+            return NoContent();
         }
     }
 }

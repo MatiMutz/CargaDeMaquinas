@@ -29,16 +29,23 @@ else
         {
             if (ruta.CAMPO == "RUTAOF")
             {
-                codigo = ruta.VALORC + codigo.Substring(0, 7) + ".pdf";
-                if (File.Exists(codigo))
+                if (codigo.Length < 6)
                 {
-                    <div class="control-section">
-                        <SfPdfViewerServer DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewerServer>
-                    </div>
+                    <label>No hay planos asociados a reparaciones.</label>
                 }
                 else
                 {
-                    <label>No hay un plano asociado a la orden de Fabricación.</label>
+                    codigo = ruta.VALORC + codigo.Substring(0, 7) + ".pdf";
+                    if (File.Exists(codigo))
+                    {
+                        <div class="control-section">
+                            <SfPdfViewerServer DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewerServer>
+                        </div>
+                    }
+                    else
+                    {
+                        <label>No hay un plano asociado a la orden de Fabricación.</label>
+                    }
                 }
             }
         }
