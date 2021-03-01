@@ -960,7 +960,11 @@
         {
             isOrdenDialogVisible = false;
 
-            await Http.PutAsJsonAsync("api/OrdenesFabricacion/" + ordenFabricacion.CG_ORDF, ordenFabricacion);
+            var respuesta = await Http.PutAsJsonAsync("api/OrdenesFabricacion/" + ordenFabricacion.CG_ORDF, ordenFabricacion);
+            if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "ERROR ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+            }
             if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3 && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA))
             {
                 string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0},Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
@@ -991,7 +995,11 @@
             else if (ordenFabricacion.CG_ESTADOCARGA == 5)
             {
                 string sqlCommandString = "EXEC NET_PCP_Anular_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "'";
-                await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+                var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+                if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "ERROR ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+                }
                 StateHasChanged();
                 await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden anulada.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
                 ordenFabricacion = null;

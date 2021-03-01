@@ -31,7 +31,7 @@ namespace SupplyChain
                 List<ModeloGenericoStringString> xResultado = _context.ModelosGenericosStringString.FromSqlRaw(SQLcommandString).ToList<ModeloGenericoStringString>();
                 return xResultado;
             }
-            catch
+            catch (Exception ex)
             {
                 return new List<ModeloGenericoStringString>();
             }

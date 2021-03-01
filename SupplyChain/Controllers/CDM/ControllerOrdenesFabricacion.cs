@@ -45,6 +45,7 @@ namespace SupplyChain
             }
             catch (Exception ex)
             {
+                BadRequest(ex);
                 return new ModeloOrdenFabricacion();
             }
         }
@@ -73,10 +74,10 @@ namespace SupplyChain
                                           xItem.CG_ORDF);
                 await _context.Database.ExecuteSqlRawAsync(xSQL);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
                 {
-                    throw;
+                    BadRequest(ex);
                 }
             }
 
