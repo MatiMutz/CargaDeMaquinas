@@ -45,6 +45,8 @@ namespace SupplyChain
         public DbSet<Sobrepresion> Sobrepresion { get; set; }
         public DbSet<Tipo> Tipo { get; set; }
         public DbSet<Trabajosefec> Trabajosefec { get; set; }
+        //MODULO LOGIN
+        public DbSet<Usuarios> Usuarios { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
     }

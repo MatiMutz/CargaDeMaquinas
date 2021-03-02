@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SupplyChain.Auth;
+using SupplyChain.HelperService;
 using Syncfusion.Blazor;
 
 namespace SupplyChain
@@ -21,9 +25,19 @@ namespace SupplyChain
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddAuthenticationCore();
             services.AddRazorPages();
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+            //services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacion>();
+            //services.AddScoped<ILoginService, ProveedorAutenticacion>();
+            services.AddScoped<ProveedorAutenticacion>();
+            services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacion>(
+                provider => provider.GetRequiredService<ProveedorAutenticacion>());
+
+            services.AddScoped<ILoginService, ProveedorAutenticacion>(
+                provider => provider.GetRequiredService<ProveedorAutenticacion>());
             services.AddSingleton<CustomHttpClient>();
             services.AddSyncfusionBlazor();
             services.AddServerSideBlazor().AddHubOptions(o => { o.MaximumReceiveMessageSize = 102400000; });
@@ -47,8 +61,10 @@ namespace SupplyChain
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

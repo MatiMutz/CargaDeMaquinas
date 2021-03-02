@@ -22,6 +22,7 @@ namespace SupplyChain
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                   
                     webBuilder.UseStartup<Startup>();
                 });
     }

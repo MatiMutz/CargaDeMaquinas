@@ -1,4 +1,15 @@
-﻿@page "/"
+﻿@page "/index"
+@*@attribute [Authorize]*@
+
+@*<AuthorizeView>
+    <Authorized>
+        <h4>Hello, @context.User.Identity.Name!</h4>
+        <p>This content is only visible if user is authenticated.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>Please signed in.</p>
+    </NotAuthorized>
+</AuthorizeView>*@
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-4">Arbros S.A.</h1>
@@ -87,3 +98,13 @@
     <!--Grid column-->
 </div>
 <!--Grid row-->
+@code{
+    [CascadingParameter] public Task<AuthenticationState> authenticationState { get; set; }
+    public AuthenticationState AuthState { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        AuthState = await authenticationState;
+        var user = AuthState.User.Identity.Name;
+    }
+}
