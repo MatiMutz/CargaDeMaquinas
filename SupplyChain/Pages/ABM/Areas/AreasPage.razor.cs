@@ -30,7 +30,7 @@ namespace SupplyChain.Pages.Area
         "Edit",
         "Delete",
         "Print",
-        new ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
+        new Syncfusion.Blazor.Navigations.ItemModel { Text = "Copy", TooltipText = "Copy", PrefixIcon = "e-copy", Id = "copy" },
         "ExcelExport"
     };
 
