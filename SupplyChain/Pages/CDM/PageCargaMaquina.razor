@@ -219,7 +219,9 @@
                                     }
                                     else
                                     {
-                                        ValorBoton = dbCarga[i].CG_ORDF;
+                                        //ValorBoton = dbCarga[i].CG_ORDF;
+                                        //ValorBoton = dbCarga.ElementAt(i).CG_ORDFASOC;
+                                        ValorBoton = OrdenDeFabAlta;
                                     }
                                 }
                                 <div class="@("botonOrden" + xOrdenFabricacion.ToString())" id="ButtonHover">
@@ -236,8 +238,9 @@
                                                 @dbCarga.ElementAt(i).CG_PROD.Trim()<br />
                                                 @dbCarga.ElementAt(i).DES_PROD.Trim()<br />
                                                 <a class="font-weight-bold">Cantidad: </a>@(Decimal.ToInt32(dbCarga.ElementAt(i).CANT))<br />
+                                                @*<a class="font-weight-bold">OF Inicial: </a>@dbCarga.ElementAt(i).CG_ORDFASOC<br />*@
+                                                <a class="font-weight-bold">OF Proceso: </a>@dbCarga[i].CG_ORDF<br />
                                                 <a class="font-weight-bold">OF Inicial: </a>@dbCarga.ElementAt(i).CG_ORDFASOC<br />
-                                                <a class="font-weight-bold">OF Alta: </a>@OrdenDeFabAlta<br />
                                                 @dbCarga.ElementAt(i).PROCESO.Trim()
                                             </label>
                                         }
@@ -280,29 +283,39 @@
             <SfDialog AllowDragging="true" Target="#targetPreguntaFoto" CssClass="" IsModal="false" ShowCloseIcon="true" CloseOnEscape="true"
                       @bind-Visible="@isOrdenDialogVisible">
                 <DialogTemplates>
-                    <Header><p style="font-weight:800">@ordenTitulo</p></Header>
+                    <Header><p style="font-weight:800">@ordenTitulo - Cantidad: @(Decimal.ToInt32(ordenFabricacion.CANT))</p></Header>
                     <Content>
                         @if (ordenFabricacionEncabezado != null)
                         {
                             <div>
                                 @*INFORMACION GENERAL*@
                                 <div class="form-row">
-                                    <div class="form-group col-md-6" style="text-align:left">
-                                        @if (ordenFabricacion.EXIGEOA == true)
-                                        {
-                                            <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
-                                        }
-                                        else
-                                        {
-                                            <label class="font-weight-normal"><a class="font-weight-bold">Fecha de Entrega: </a>@ordenFabricacion.FE_ENTREGA</label>
-                                        }
-                                    </div>
                                     @if (ordenFabricacion.EXIGEOA == true)
                                     {
+                                        <div class="form-group col-md-3" style="text-align:left">
+                                            <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
+                                        </div>
+                                        <div class="form-group col-md-3" style="text-align:left">
+                                            <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
+                                        </div>
                                         <div class="form-group col-md-6" style="text-align:left">
                                             <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
                                         </div>
                                     }
+                                    else
+                                    {
+                                        <div class="form-group col-md-6" style="text-align:left">
+                                            <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
+                                        </div>
+                                        <div class="form-group col-md-6" style="text-align:left">
+                                            <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@ordenFabricacion.FE_ENTREGA.ToShortDateString()</label>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12" style="text-align:left">
+                                        <label class="font-weight-normal"><a class="font-weight-bold">Descripción: </a>@ordenFabricacion.DES_PROD</label>
+                                    </div>
                                 </div>
                                 <hr class="separator">
                                 @*PARAMETROS MODIFICABLES*@
@@ -382,6 +395,16 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
+                                        <label style="color:blue">Cantidad fabricada:</label>
+                                        <SfNumericTextBox TValue="decimal" Format="N0" @bind-Value="@ordenFabricacion.CANTFAB" ShowClearButton="true" Step="1"></SfNumericTextBox>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label style="color:blue">Seleccione Acción:</label>
+                                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ESTADOCARGA" DataSource="@dbEstadoCarga">
+                                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
+                                        </SfDropDownList>
+                                    </div>
+                                    <div class="form-group col-md-2">
                                         <label style="color:blue">Planificada Inicio:</label>
                                         <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
                                     </div>
@@ -392,16 +415,6 @@
                                     <div class="form-group col-md-2">
                                         <label style="color:blue">Finalización real:</label>
                                         <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label style="color:blue">Cantidad fabricada:</label>
-                                        <SfNumericTextBox TValue="decimal" Format="N0" @bind-Value="@ordenFabricacion.CANTFAB" ShowClearButton="true" Step="1"></SfNumericTextBox>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label style="color:blue">Seleccione Acción:</label>
-                                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ESTADOCARGA" DataSource="@dbEstadoCarga">
-                                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
-                                        </SfDropDownList>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label style="color:blue">Dependencia:</label>
@@ -425,8 +438,8 @@
                                         </div>
                                     }
                                     @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
-                           ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
-                           ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                                   ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                                   ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
                                     {
                                         <div class="form-group col-md-2">
                                             <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver en Modulo Servicios</SfButton>
@@ -441,24 +454,12 @@
                                             <SfButton IsPrimary="true" @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
                                         </div>
                                     }
-                                </div>
-                            </div>
-                            <hr class="separator">
-                            @*PRODUCTO*@
-                            <div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4" style="text-align:left">
-                                        <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
-                                    </div>
-                                    <div class="form-group col-md-4" style="text-align:left">
-                                        <label class="font-weight-normal"><a class="font-weight-bold">Descripción: </a>@ordenFabricacion.DES_PROD</label>
-                                    </div>
-                                    <div class="form-group col-md-2" style="text-align:left">
-                                        <label class="font-weight-normal"><a class="font-weight-bold">Cantidad: </a>@ordenFabricacion.CANT</label>
-                                    </div>
-                                    <div class="form-group col-md-2" style="text-align:left">
-                                        <label class="font-weight-normal"><a class="font-weight-bold">Avance: </a>@(ordenFabricacion.AVANCE.ToString() + " %")</label>
-                                    </div>
+                                    else
+                                    {
+                                        <div class="form-group col-md-2">
+                                            <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">Ver Programa</SfButton>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <hr class="separator">
@@ -1109,6 +1110,12 @@
     {
         //NavigationManager.NavigateTo($"sc/servicio/list/{pedido}");
         await JS.InvokeVoidAsync("open", new object[2] { $"sc/servicio/list/{pedido}", $"sc/servicio/list/{pedido}" });
+    }
+
+    protected async Task IrAPrograma(string cg_prod)
+    {
+        //Pdf/@(ordenFabricacion.CG_PROD)/RUTACNC
+        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{cg_prod}/RUTACNC", $"Pdf/{cg_prod}/RUTACNC" });
     }
 
     protected async Task Ensayos(string pedido)
