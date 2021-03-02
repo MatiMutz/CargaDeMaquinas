@@ -1,27 +1,16 @@
 ﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly">
+    <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <Authorizing>
-                    <div class="pt-5 mt-5">
-                        <text>Autorizando...</text>
-                    </div>
 
-                </Authorizing>
-                <NotAuthorized>
-                    <div class="pt-5 mt-3">
-                        <text>Iniciar Sesion</text>
-                    </div>
-                </NotAuthorized>
-                
             </AuthorizeRouteView>
+
         </Found>
         <NotFound>
-
             <LayoutView Layout="@typeof(MainLayout)">
-                <p class="mt-5 pt-5">Lo siento, No hay nada en esta ubicacion.</p>
+                <p>Sorry, there's nothing at this address.</p>
             </LayoutView>
-
         </NotFound>
     </Router>
 </CascadingAuthenticationState>

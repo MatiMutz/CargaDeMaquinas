@@ -48,7 +48,7 @@ namespace SupplyChain.Pages.Logins
                     Usuarios xUser = await Http.GetFromJsonAsync<Usuarios>($"api/Usuarios/{usuario.Usuario}/{usuario.Contras}");
                     if (xUser != null)
                     {
-                        await JsRuntime.InvokeVoidAsync("sessionStorage.setItem", "Usuario", xUser.Usuario);
+                        //await JsRuntime.InvokeVoidAsync("sessionStorage.setItem", "Usuario", xUser.Usuario);
 
                         //IsDialogLoginVisible = false;
                         //await this.ToastObj.Show(new ToastModel
@@ -59,6 +59,8 @@ namespace SupplyChain.Pages.Logins
                         //    Icon = "e-success toast-icons"
                         //});
 
+                        MyAuthStateProvider.Usuario = usuario;
+                        var authState = await MyAuthStateProvider.GetAuthenticationStateAsync();
                         await loginService.Login(xUser);
                         NavManager.NavigateTo("/index");
                     }

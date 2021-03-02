@@ -1,15 +1,15 @@
 ﻿@page "/index"
-@*@attribute [Authorize]*@
-
+@using Microsoft.AspNetCore.Authentication.Cookies
+@attribute [Authorize]
 @*<AuthorizeView>
-    <Authorized>
-        <h4>Hello, @context.User.Identity.Name!</h4>
-        <p>This content is only visible if user is authenticated.</p>
-    </Authorized>
-    <NotAuthorized>
-        <p>Please signed in.</p>
-    </NotAuthorized>
-</AuthorizeView>*@
+        <Authorized>
+            <h4>Hello, @context.User.Identity.Name!</h4>
+            <p>This content is only visible if user is authenticated.</p>
+        </Authorized>
+        <NotAuthorized>
+            <p>Please signed in.</p>
+        </NotAuthorized>
+    </AuthorizeView>*@
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-4">Arbros S.A.</h1>

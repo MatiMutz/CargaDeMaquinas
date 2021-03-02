@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
@@ -26,7 +27,13 @@ namespace SupplyChain
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddAuthenticationCore();
+            services.AddAuthenticationCore(options =>
+            {
+                // I believe this may be where the problem is: I can't specify both cookie auth AND JWT auth; it has to be one or the other.
+                //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
             services.AddRazorPages();
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
@@ -63,8 +70,7 @@ namespace SupplyChain
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
