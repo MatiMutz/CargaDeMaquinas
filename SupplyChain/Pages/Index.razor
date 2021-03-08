@@ -1,6 +1,7 @@
 ﻿@page "/index"
 @using Microsoft.AspNetCore.Authentication.Cookies
 @*@attribute [Authorize(Roles = "Administrador")]*@
+@attribute [Authorize]
 @*<AuthorizeView>
         <Authorized>
             <h4>Hello, @context.User.Identity.Name!</h4>

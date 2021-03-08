@@ -44,7 +44,7 @@ namespace SupplyChain.Pages.Servicios
         public bool Disabled = false;
         public bool Visible { get; set; } = true;
 
-        public void toolbarClick(ToolbarClickEventArgs args)
+        public void toolbarClick(ToolbarClickEventArgs<Service> args)
         {
             if (args.Item.Text == "Custom")
             {
@@ -52,7 +52,7 @@ namespace SupplyChain.Pages.Servicios
                 System.Diagnostics.Debug.Write("Custom item clicked");
             }
         }
-        public void menuClick(MenuClickEventArgs args)
+        public void menuClick(MenuClickEventArgs<Service> args)
         {
             if (args.Item.Text == "Custom")
             {

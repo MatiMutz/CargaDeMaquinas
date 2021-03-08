@@ -53,7 +53,7 @@ namespace SupplyChain
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzQ3MDcxQDMxMzgyZTMzMmUzMFFKM3ZwVjJ3aUgvL2ExdGxjMG1JNG5POUIwWWJTQkUydXlpWmdDTjVvc1k9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDA2NDQ2QDMxMzgyZTM0MmUzMEM0SisvUHFWRDRQeGVidDlVTFRqM2c3cHpvaEtjWi9OMGRsLzNYWEFnRVk9");
 
             if (env.IsDevelopment())
             {
@@ -70,14 +70,16 @@ namespace SupplyChain
             app.UseStaticFiles();
             app.UseRouting();
 
-
+            app.UseAuthentication();
+            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
 
-                endpoints.MapControllers();
             });
         }
     }
