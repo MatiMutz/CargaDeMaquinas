@@ -16,6 +16,20 @@ namespace SupplyChain.Pages.Logins
         [Inject] ProveedorAutenticacion MyAuthStateProvider { get; set; }
         protected Usuarios usuario = new Usuarios();
 
+        public string TxtType = "password";
+
+        public void ShowPassword()
+        {
+            if (this.TxtType == "password")
+            {
+                this.TxtType = "text";
+            }
+            else
+            {
+                this.TxtType = "password";
+            }
+        }
+
         protected async Task LoginDialogOk(Object args)
         {
             try

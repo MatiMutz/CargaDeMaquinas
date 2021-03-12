@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/login1"
 @page "/login"
 
 
@@ -11,34 +11,51 @@
     <h4 class="card-header">Login</h4>
     <div class="card-body">
         <EditForm Model="@usuario" OnValidSubmit="OnValidSubmit">
-            <div class="form-group">
-                <label>Username</label>
-                <InputText @bind-Value="@usuario.Usuario" class="form-control" />
+            <div class="form-group col-4">
+                <label>Usuario</label>
+                <Syncfusion.Blazor.Inputs.SfTextBox ShowClearButton="true" Placeholder="Ingresar Usuario" @bind-Value="@usuario.Usuario"
+                                                    FloatLabelType="FloatLabelType.Never" Type="InputType.Text"/>
             </div>
-            <div class="form-group">
-                <label>Password</label>
-                <InputText @bind-Value="@usuario.Contras" type="password" class="form-control" />
+            <div class="form-group col-4">
+                <label>Contraseña</label>
+                <div class='e-input-group'>
+                    <input class='e-input' type="@TxtType" placeholder='Enter Password' @bind-value="@usuario.Contras" />
+                    <span class='e-icons e-input-eye' @onclick="ShowPassword"></span>
+                </div>
+                <br />
+                <br />
+                @*<SfButton IsPrimary="true" OnClick="LoginDialogOk"
+                          CssClass="e-block">
+                    Ingresar
+                </SfButton>*@
+                <SfProgressButton Content="Ingresar" EnableProgress="false" IsPrimary="true" CssClass="e-block" @onclick="LoginDialogOk">
+                    <ProgressButtonSpinSettings Position="SpinPosition.Left"></ProgressButtonSpinSettings>
+                    <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.None" Duration="400" Easing="Linear"></ProgressButtonAnimationSettings>
+                </SfProgressButton>
             </div>
-            <button class="btn btn-primary" @onclick="LoginDialogOk">
-                Login
-            </button>
         </EditForm>
     </div>
 </div>
-
+<style>
+    .e-input-eye:before {
+        content: '\e345';
+        font-family: e-icons;
+        font-size: 13px;
+    }
+</style>
 
 
 @*<h1>Hello, world!</h1>
 
-    Welcome to your new app.
+        Welcome to your new app.
 
 
-<button @onclick="@(() => UpdateAuthentication(true))">
-    Set authenticated
-</button>
-<button @onclick="@(() => UpdateAuthentication(false))">
-    Set anonymous
-</button>
-<button @onclick="@(() => UpdateAuthentication(null))">
-    Set authenticating
-</button>*@
+    <button @onclick="@(() => UpdateAuthentication(true))">
+        Set authenticated
+    </button>
+    <button @onclick="@(() => UpdateAuthentication(false))">
+        Set anonymous
+    </button>
+    <button @onclick="@(() => UpdateAuthentication(null))">
+        Set authenticating
+    </button>*@
