@@ -28,29 +28,37 @@
         <div class="col-lg-12 control-section">
             <div class="content-wrapper">
                 <div class="row">
-                    <div class="col-sm-3 my-1">
+                    <div class="col-sm-4 my-1">
                         <SfTextBox Placeholder="Número de Pedido" Input="OnInputPedido" @bind-Value="BoxPedido" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
-                    <div class="col-sm-3 my-1">
+                    <div class="col-sm-4 my-1">
                         <SfTextBox Placeholder="Nombre de Cliente" Input="OnInputCliente" @bind-Value="BoxCliente" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
-                    <div class="col-sm-3 my-1">
+                    <div class="col-sm-4 my-1">
                         <SfTextBox Placeholder="Codigo de Producto" Input="OnInputCodigo" @bind-Value="BoxCodigo" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3 my-1">
+                    <div class="col-sm-2 my-1">
                         <button type="submit" class="btn btn-primary" @onclick="@BuscarTrazabilidad">Buscar Pedido</button>
                     </div>
-                    <div class="col-sm-3 my-1">
+                    <div class="col-sm-2 my-1">
                         <button type="submit" class="btn btn-primary" @onclick="@MostrarTrazabilidad">Mostrar Trazabilidad</button>
                     </div>
-                    <div class="col-sm-3 my-1">
-                        <button type="submit" class="btn btn-primary" @onclick="@Catalogo">Imprimir catálogo</button>
-                    </div>
-                    <div class="col-sm-3 my-1">
-                        <button type="submit" class="btn btn-primary" @onclick="@Etiqueta">Identificación</button>
-                    </div>
+                    @{
+                        if (Showgrid == true)
+                        {
+                            <div class="col-sm-2 my-1">
+                                <button type="submit" class="btn btn-primary" @onclick="@Catalogo">Imprimir catálogo</button>
+                            </div>
+                            <div class="col-sm-2 my-1">
+                                <button type="submit" class="btn btn-primary" @onclick="@Etiqueta">Identificación</button>
+                            </div>
+                            <div class="col-sm-2 my-1">
+                                <button type="submit" class="btn btn-primary" @onclick="@Ensayos">Ver ensayos</button>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -616,7 +624,7 @@
             }
         }
         //Load the image from the stream
-        FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
+        //FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
         FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
 
         //LINEA 1
@@ -645,7 +653,7 @@
         gridCell4.ColumnSpan = 2;
         gridCell4.RowSpan = 2;
         gridCell4.StringFormat = Centrado;
-        gridCell4.Value = new PdfBitmap(fs);
+        //gridCell4.Value = new PdfBitmap(fs);
         //Add RowSpan
         PdfGridCell gridCell5 = pdfGrid.Rows[2].Cells[2];
         gridCell5.ColumnSpan = 2;
@@ -924,10 +932,10 @@
     {
         if (true)
         {
-            if (BoxCodigo.Substring(0, 1) == "2")
+            if (CodNro.Substring(0, 1) == "2")
             {
                 string espaciosPedido = "";
-                string CLIENTE = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
+                string CLIENTE = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
                 if (CLIENTE.Contains("YPF") || CLIENTE.Contains("Y.P.F"))
                 {
                     //Chapa de 101 mm x 78 mm
@@ -940,12 +948,12 @@
                     PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
                     PdfLightTable pdfTable = new PdfLightTable();
                     page.Graphics.RotateTransform(-360);
-                    for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+                    for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
                     {
                         espaciosPedido = espaciosPedido + " ";
                     }
                     var tipo2 = from item in prodList
-                                where item.CG_PROD == BoxCodigo
+                                where item.CG_PROD == CodNro
                                 select item.CAMPOCOM6;
                     string tipo = "";
                     if (tipo2 is null || tipo2.Contains("System.Linq"))
@@ -961,17 +969,17 @@
                     graphics.DrawString($" \r\n" +
                         $"\r\n" +
                         $"\r\n" +
-                        $"    Año:{DateTime.Now.Year}  N°:{BoxPedido} \r\n" +
-                        $"    TAG:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
+                        $"    Año:{DateTime.Now.Year}  N°:{TrzNro} \r\n" +
+                        $"    TAG:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
                         $"    Tipo:\r\n" +
-                        $"    Codigo:{BoxCodigo.Trim()}\r\n" +
-                        $"    Medida:{prodList.Where(t => t.CG_PROD == BoxCodigo).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}  {prodList.Where(t => t.CG_PROD == BoxCodigo).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
-                        $"    Clase:{prodList.Where(t => t.CG_PROD == BoxCodigo).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
-                        $"    Temp:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}\r\n" +
-                        $"    Presion SET:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}\r\n" +
-                        $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
-                        $"    Ctra.P:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
-                        $"    Fluido:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
+                        $"    Codigo:{CodNro.Trim()}\r\n" +
+                        $"    Medida:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}  {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
+                        $"    Clase:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
+                        $"    Temp:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}\r\n" +
+                        $"    Presion SET:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}\r\n" +
+                        $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
+                        $"    Ctra.P:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
+                        $"    Fluido:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
                         $"    Cuerpo:\r\n" +
                         $"    Tobera:\r\n" +
                         $"    Resorte:\r\n" +
@@ -986,7 +994,7 @@
                     MemoryStream xx = new MemoryStream();
                     document1.Save(xx);
                     document1.Close(true);
-                    await JS.SaveAs("EtiquetaProd" + BoxCodigo.Trim() + ".pdf", xx.ToArray());
+                    await JS.SaveAs("EtiquetaProd" + CodNro.Trim() + ".pdf", xx.ToArray());
                 }
                 //else
                 //{
@@ -1060,7 +1068,7 @@
                 //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
                 //}
             }
-            if (BoxCodigo.Substring(0, 1) == "1")
+            if (CodNro.Substring(0, 1) == "1")
             {
                 //Chapa de 25 x 95
                 PdfDocument document1 = new PdfDocument();
@@ -1074,22 +1082,22 @@
                 PdfLightTable pdfTable = new PdfLightTable();
                 page.Graphics.RotateTransform(-90);
                 string espaciosTag = "";
-                for (int i = 0; i < (20 - BoxPedido.ToString().Length); i++)
+                for (int i = 0; i < (20 - TrzNro.ToString().Length); i++)
                 {
                     espaciosTag = espaciosTag + " ";
                 }
                 string espaciosAnio = "";
-                for (int i = 0; i < (32 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+                for (int i = 0; i < (32 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
                 {
                     espaciosAnio = espaciosAnio + " ";
                 }
                 string espaciosOrif = "";
-                for (int i = 0; i < (32 - prodList.Where(t => t.CG_PROD == BoxCodigo).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
+                for (int i = 0; i < (32 - prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
                 {
                     espaciosOrif = espaciosOrif + " ";
                 }
                 string espaciosClase = "";
-                for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim().Length); i++)
+                for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim().Length); i++)
                 {
                     espaciosClase = espaciosClase + " ";
                 }
@@ -1102,31 +1110,31 @@
                 //graphics.DrawString($"\r\n\r\n\r\n                  {ordenFabricacion.PEDIDO}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year} " +
                 //    $"\r\n\r\n                        {ordenFabricacion.CG_PROD.Trim()}{espaciosMed}{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
                 //    $"\r\n\r\n                                                                        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
-                if (!String.IsNullOrEmpty(PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()))
+                if (!String.IsNullOrEmpty(PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()))
                 {
-                    graphics.DrawString($"\r\n\r\n                                     {Convert.ToInt32(BoxPedido)}{espaciosSinLote}{DateTime.Now.Year}     .  .  .  .  ." +
-                        $"\r\n               {BoxCodigo.Trim()}          {prodList.Where(t => t.CG_PROD == BoxCodigo).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == BoxCodigo.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                        $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == BoxCodigo.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+                    graphics.DrawString($"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosSinLote}{DateTime.Now.Year}     .  .  .  .  ." +
+                        $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
+                        $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
                 }
                 else
                 {
-                    graphics.DrawString($"                                                                                                           \"\r\n\r\n                                     {Convert.ToInt32(BoxPedido)}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year}" +
-                    $"\r\n               {BoxCodigo.Trim()}          {prodList.Where(t => t.CG_PROD == BoxCodigo).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == BoxCodigo.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                    $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == BoxCodigo.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}" +
+                    graphics.DrawString($"                                                                                                           \"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year}" +
+                    $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
+                    $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}" +
                     $"\r\n\r\n._", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
                 }
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
-                await JS.SaveAs("ETOF" + BoxCodigo.Trim() + ".pdf", xx.ToArray());
+                await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
-            if (BoxCodigo.Substring(0, 4) == "0012" ||
-                BoxCodigo.Substring(0, 5) == "00130" ||
-                BoxCodigo.Substring(0, 5) == "00131")
+            if (CodNro.Substring(0, 4) == "0012" ||
+                CodNro.Substring(0, 5) == "00130" ||
+                CodNro.Substring(0, 5) == "00131")
             {
                 string espaciosbar = "";
-                for (int i = 0; i < (16 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+                for (int i = 0; i < (16 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
                 {
                     espaciosbar = espaciosbar + " ";
                 }
@@ -1141,25 +1149,25 @@
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
                 PdfLightTable pdfTable = new PdfLightTable();
 
-                string presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+                string presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
                 int found = presionMostrar.ToUpper().IndexOf("B");
                 if (found == -1)
                 {
-                    presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+                    presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
                 }
                 else
                 {
                     presionMostrar = presionMostrar.Substring(0, found);
                 }
 
-                graphics.DrawString($"\"\r\n\r\n\r\n        {Convert.ToInt32(BoxPedido)}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
-                $"\r\n        {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(BoxPedido)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{presionMostrar}" +
+                graphics.DrawString($"\"\r\n\r\n\r\n        {Convert.ToInt32(TrzNro)}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
+                $"\r\n        {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{presionMostrar}" +
                 $"\r\n\r\n                              .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
-                await JS.SaveAs("ETOF" + BoxCodigo.Trim() + ".pdf", xx.ToArray());
+                await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
         }
         //else
@@ -1183,5 +1191,10 @@
         //    document1.Close(true);
         //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
         //}
+    }
+    protected async Task Ensayos()
+    {
+        //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
+        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
     }
 }
