@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SupplyChain.Shared.Models;
 
 namespace SupplyChain
 {
@@ -13,6 +14,7 @@ namespace SupplyChain
         public virtual DbSet<ModeloOrdenFabricacion> OrdenesFabricacion { get; set; }
         public virtual DbSet<ModeloGenericoIntString> ModelosGenericosIntString { get; set; }
         public virtual DbSet<ModeloGenericoStringString> ModelosGenericosStringString { get; set; }
+        public virtual DbSet<ModeloPendientesFabricar> ModeloPendientesFabricar { get; set; }
         public virtual DbSet<Solution> Solution { get; set; }
         public virtual DbSet<Operario> Operario { get; set; }
         public virtual DbSet<Prod> Prod { get; set; }
@@ -21,6 +23,7 @@ namespace SupplyChain
         public DbSet<PedCli> PedCli { get; set; }
         public DbSet<Pedidos> Pedidos { get; set; }
         public DbSet<Programa> Programa { get; set; }
+        public DbSet<PresAnual> PresAnual { get; set; }
         //willy
         public DbSet<Areas> Areas { get; set; }
         public DbSet<Unidades> Unidades { get; set; }

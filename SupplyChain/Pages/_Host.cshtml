@@ -12,18 +12,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SupplyChain</title>
     <base href="~/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
-    <link href="css/site.css" rel="stylesheet" />
-    @*<link href="https://cdn.syncfusion.com/blazor/18.3.47/styles/bootstrap4.css" rel="stylesheet" />*@
-
+    @*<link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />*@
+    @*<link href="css/site.css" rel="stylesheet" />*@
+    <link href="~/css/app.css" rel="stylesheet" />
+    <link href="~/css/spinners.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="_content/Syncfusion.Blazor.Themes/fabric.css" rel="stylesheet" />
     <link href="~/Personalizado.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="~/css/animate.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/default-dark.css" rel="stylesheet" />
+    <link href="~/css/pages.css" rel="stylesheet" />
+    @*<link href="~/css/font-awesome/font-awesome.css" rel="stylesheet" />
+        <link href="~/css/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" />
+        <link href="~/css/themify-icons/themify-icons.css" rel="stylesheet" />
+        <link href="~/css/animate.css" rel="stylesheet" />
+        <link href="~/css/style.css" rel="stylesheet" />
+        <link href="~/css/default-dark.css" rel="stylesheet" />
+        <link href="~/css/pages.css" rel="stylesheet" />*@
+
     <script src="~/FuncionesJavaScript.js"></script>
 </head>
-<body>
+<body class="fix-header card-no-border fix-sidebar">
+    @*<div class="preloader">
+            <div class="loader">
+                <div class="loader__figure"></div>
+                <p class="loader__label">Arbros S.A.</p>
+            </div>
+        </div>*@
     <app>
+
         <component type="typeof(App)" render-mode="ServerPrerendered" />
+
     </app>
 
     <div id="blazor-error-ui">

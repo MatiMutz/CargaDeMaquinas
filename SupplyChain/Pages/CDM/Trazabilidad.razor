@@ -1114,13 +1114,13 @@
                 {
                     graphics.DrawString($"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosSinLote}{DateTime.Now.Year}     .  .  .  .  ." +
                         $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                        $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+                        $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
                 }
                 else
                 {
                     graphics.DrawString($"                                                                                                           \"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year}" +
                     $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                    $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}" +
+                    $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}" +
                     $"\r\n\r\n._", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
                 }
 

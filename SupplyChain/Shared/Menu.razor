@@ -1,0 +1,134 @@
+﻿
+@using Syncfusion.Blazor.Navigations
+
+<SfMenu Items="@MenuItems" Orientation="Orientation.Vertical"></SfMenu>
+@*<div id="preview">@eventName Event Triggered</div>*@
+
+@code{
+    public List<MenuItem> MenuItems = new List<MenuItem>();
+
+    public class CountryData
+    {
+        public string Country { get; set; }
+        public string Continent { get; set; }
+        public List<CountryData> Countries { get; set; }
+        public List<CountryData> Languages { get; set; }
+        public string Language { get; set; }
+    }
+
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateAsync { get; set; }
+    public AuthenticationState AuthState;
+    protected async override Task OnInitializedAsync()
+    {
+        AuthState = await AuthenticationStateAsync;
+        if (!AuthState.User.Identity.IsAuthenticated)
+        {
+            var autorizado = !AuthState.User.Identities.Any(i => i.Claims.Any(c => c.Value == "Admin"));
+            MenuItems = new List<MenuItem>();
+            //MenuItems = new List<MenuItem>{
+            //    new MenuItem{ Text = "ADMINISTRACIÓN", IconCss = "e-icons e-file", Items = new List<MenuItem>{
+            //        new MenuItem { Text= "Parámetros", IconCss= "e-icons e-open" },
+            //        new MenuItem { Separator= true },
+            //        new MenuItem { Text= "Recálculo de stock", IconCss= "e-icons e-save" },
+            //        new MenuItem { Text= "Monedas", Url= "/monedas"},
+            //        new MenuItem { Separator= true },
+            //        new MenuItem { Text= "índices y tasas de cambio" , Url="/indic" },
+            //        new MenuItem { Text= "Usuarios y contraseñas" }}},
+            //    new MenuItem{ Text = "VENTAS", IconCss = "e-icons e-file", Hidden = !autorizado , Items = new List<MenuItem>{
+            //        new MenuItem { Text= "Parámetros", IconCss= "e-icons e-open" },
+            //        new MenuItem { Separator= true },
+            //        new MenuItem { Text= "Logistica ", Url="/kanban", IconCss= "e-icons e-save" },
+            //        new MenuItem { Text= "Servicios", Url= "/sc/servicio/list"},
+            //        new MenuItem { Separator= true },
+            //        new MenuItem { Text= "índices y tasas de cambio" , Url="/indic" },
+            //        new MenuItem { Text= "Usuarios y contraseñas" }}},
+            //    new MenuItem{ Text = "ABASTECIMIENTO", IconCss = "e-icons e-edit", Items = new List<MenuItem>{
+            //        new MenuItem{ Text= "Compras", IconCss= "e-icons e-cut" },
+            //        new MenuItem { Separator= true },
+            //        new MenuItem{ Text= "Estado de ordenes de compras", IconCss= "e-icons e-copy" }}},
+
+            //    new MenuItem{ Text = "INVENTARIOS",IconCss = "e-icons e-file", Items = new List<MenuItem>{
+            //        new MenuItem { Text= "Administración de stock", Url="/stockoperaciones" },
+            //        new MenuItem { Separator= true },
+            //        new MenuItem{ Text = "Saldos de stock"}}},
+
+            //    new MenuItem { Text = "PCP", IconCss = "e-icons e-file",Items = new List<MenuItem>{
+            //        new MenuItem { Text= "Pronóstico de ventas" },
+            //        new MenuItem { Separator=true },
+            //        new MenuItem { Text= "Carga de Máquina", Url="/PageCargaMaquina" },
+            //        new MenuItem { Text= "Pedidos de clientes" },
+            //        new MenuItem { Text= "PCP", Url="/prev" }}},
+
+            //    new MenuItem { Text = "INGENIERÍA", IconCss = "e-icons e-file",Items = new List<MenuItem>{
+            //        new MenuItem { Text= "Lista de materiales y hoja de ruta" },
+            //        new MenuItem { Text= "Celdas", Url="/celdas" },
+            //        new MenuItem { Separator=true },
+            //        new MenuItem { Text= "Tipos de celdas", Url="/tipocelda" },
+            //        new MenuItem { Text= "Áreas" , Url="/area" },
+            //        new MenuItem { Text= "Líneas", Url="/linea" },
+            //        new MenuItem { Separator=true },
+            //        new MenuItem { Text= "Tipos de paradas de máquina" , Url="/parada"},
+            //        new MenuItem { Text= "Tipos de insumos" },
+            //        new MenuItem { Text= "Procesos" },
+            //        new MenuItem { Text= "Tareas de procesos" },
+            //        new MenuItem { Text= "Categoría de operarios", Url="/cateope" },
+            //        new MenuItem { Separator=true },
+            //        new MenuItem { Text = "Abms", Items = new List<MenuItem>{
+            //            new MenuItem { Text= "Clase", Url="/clase" },
+            //            new MenuItem { Text= "Depositos", Url="/depos" },
+            //            new MenuItem { Text= "Operarios", Url="/operario" },
+            //            new MenuItem { Text= "Países", Url="/pais" },
+            //            new MenuItem { Text= "prod", Url="/productos" },
+            //            new MenuItem { Text= "protab", Url="/protab" },
+            //            new MenuItem { Text= "protarea", Url="/protarea" },
+            //            new MenuItem { Text= "scrap", Url="/scrap" },
+            //            new MenuItem { Text= "tipo area", Url="/tipoarea" },
+            //            new MenuItem { Text= "turnos", Url="/turnos" }}}},},
+
+            //    new MenuItem { Text = "COSTOS", IconCss = "e-icons e-file",Items = new List<MenuItem>{
+            //        new MenuItem { Text= "Costos estándar" },
+            //        new MenuItem { Text= "Costos de productos dados de alta" }}},
+
+            //    new MenuItem { Text = "CONTROL DE CALIDAD", IconCss = "e-icons e-file", Items = new List<MenuItem>{
+            //        new MenuItem { Text= "Registro de no conformidades" },
+            //        new MenuItem { Separator= true },
+            //        new MenuItem { Text= "Tipos de no conformidades" , Url="/tiposnoconf" },
+            //        new MenuItem { Text= "Registro de ensayos" },
+            //        new MenuItem { Text= "Trazabilidad",Url="/Trazabilidad" }}}};
+        }
+    }
+
+
+    private string eventName = "No";
+    private void onOpen()
+    {
+        this.eventName = "OnOpen";
+    }
+
+    private void onClose()
+    {
+        this.eventName = "OnClose";
+    }
+
+    private void opened()
+    {
+        this.eventName = "Opened";
+    }
+
+    private void closed()
+    {
+        this.eventName = "Closed";
+    }
+
+    private void itemSelected()
+    {
+        this.eventName = "ItemSelected";
+    }
+}
+
+<style>
+    #preview {
+        float: right;
+        padding: 0 350px 0 0;
+    }
+</style>
