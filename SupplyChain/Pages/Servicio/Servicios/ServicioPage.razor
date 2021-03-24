@@ -22,9 +22,8 @@
 @inject NavigationManager NavManager
 @inherits SupplyChain.Pages.Servicios.ServicioPageBase
 @using System.IO
-@using Syncfusion.Blazor.Data
-@using Syncfusion.Blazor.DropDowns
-<nav class="navbar fixed-top navbar-light bg-light">
+
+@*<nav class="navbar fixed-top navbar-light bg-light">
     <a class="navbar-brand" href="#"><img src="aerre.jpg" alt="logo" /></a>
     <a class="navbar-brand" style=" font-weight: bold;" href="#">SERVICIO</a>
     <a class="btn btn-outline-primary btn-sm oi oi-arrow-left" href="/">
@@ -33,12 +32,14 @@
 </nav>
 <br />
 <br />
-<br />
+<br />*@
 <div class="col-lg-12 control-section">
     <div class="content-wrapper">
         <div class="row">
-            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
-                    @ref="Grid" DataSource="@servDesc" AllowExcelExport="true" AllowRowDragAndDrop="true" AllowGrouping="true" AllowMultiSorting="true"
+            <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" 
+                    EnablePersistence="true" Height="100%" Width="100%"
+                    @ref="Grid" DataSource="@servDesc" AllowExcelExport="true" AllowRowDragAndDrop="true" 
+                    AllowGrouping="true" AllowMultiSorting="true"
                     AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems">
                 <SfToolbar>
                     <ToolbarItems>
@@ -811,6 +812,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 @code {
 }
 

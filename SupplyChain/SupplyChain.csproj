@@ -18,7 +18,7 @@
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="18.4.0.47" />
     <PackageReference Include="Syncfusion.Blazor.Kanban" Version="18.4.0.47" />
     <PackageReference Include="Syncfusion.Blazor.PdfViewerServer.Windows" Version="18.4.0.47" />
-    <PackageReference Include="Syncfusion.Blazor.PivotTable" Version="18.4.0.47" />
+    <PackageReference Include="Syncfusion.Blazor.ProgressBar" Version="18.4.0.47" />
     <PackageReference Include="Syncfusion.Blazor.RichTextEditor" Version="18.4.0.47" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>

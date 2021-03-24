@@ -18,9 +18,8 @@
 <head>
 </head>
 
-<SfToast ID="toast_default" @ref="ToastObj">
-    <ToastPosition X="Center" Y="Buttom"></ToastPosition>
-</SfToast>
+
+<NotificacionToast @ref="NotificacionObj" Content="Guardado Correctamente!" Visible="ToastVisible"></NotificacionToast>
 
 <h3 class="card-title">Carga de Máquina</h3>
 <hr />
@@ -134,7 +133,7 @@
                             <tr class="CargaRowClass">
                                 @*CG_CELDA*@
                                 <td class="CargaCellClass">
-                                    <a href="url" class="CargaHyperLink">
+                                    <a href="/sc/celdas/list" class="CargaHyperLink">
                                         @dbCarga[i].CG_CELDA
                                     </a>
                                 </td>
@@ -142,7 +141,7 @@
                                 <td class="CargaCellClass" style="min-width:200px;border-right: solid;
                                                 border-right-width: thin;
                                                 border-right-color:lightgray;">
-                                    <a href="url"
+                                    <a href="/sc/celdas/list"
                                        class="CargaHyperLink">
                                         @dbCarga[i].DES_CELDA
                                     </a>
@@ -179,13 +178,13 @@
                                                 }
                                 <td class="CargaCellClass" colspan="@dbCarga[i].COLUMNSPAN">
                                     @{
-                                                        int xOrdenFabricacion = dbCarga.ElementAt(i).CG_ORDF;
-                                                        bool xExigeOA = dbCarga.ElementAt(i).EXIGEOA;
-                                                        int xPedido = dbCarga.ElementAt(i).PEDIDO;
-                                                        string xCgProd = dbCarga.ElementAt(i).CG_PROD;
-                                                        decimal xCantidad = dbCarga.ElementAt(i).CANT;
-                                                        ModeloCarga xCarga = dbCarga.ElementAt(i);
-                                                        OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == dbCarga.ElementAt(i).CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
+                                        int xOrdenFabricacion = dbCarga.ElementAt(i).CG_ORDF;
+                                        bool xExigeOA = dbCarga.ElementAt(i).EXIGEOA;
+                                        int xPedido = dbCarga.ElementAt(i).PEDIDO;
+                                        string xCgProd = dbCarga.ElementAt(i).CG_PROD;
+                                        decimal xCantidad = dbCarga.ElementAt(i).CANT;
+                                        ModeloCarga xCarga = dbCarga.ElementAt(i);
+                                        OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == dbCarga.ElementAt(i).CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
                                     }
 
                                     @*<SfTooltip CssClass="e-tooltip-css" OpensOn="Hover" Target="@(".botonOrden" + xOrdenFabricacion.ToString())" Width="700" Height="220" MouseTrail=true>
@@ -212,15 +211,16 @@
                                         </SfTooltip>*@
 
                                     @{
-                                                        int ValorBoton;
-                                                        if (dbCarga[i].EXIGEOA)
-                                                        {
-                                                            ValorBoton = dbCarga[i].PEDIDO;
-                                                        }
-                                                        else
-                                                        {
-                                                            ValorBoton = dbCarga[i].CG_ORDF;
-                                                        }
+                                        int ValorBoton;
+                                        if (dbCarga[i].EXIGEOA)
+                                        {
+                                            ValorBoton = dbCarga[i].PEDIDO;
+                                        }
+                                        else
+                                        {
+                                            //ValorBoton = dbCarga[i].CG_ORDF;
+                                            ValorBoton = OrdenDeFabAlta;
+                                        }
                                     }
                                     <div class="@("botonOrden" + xOrdenFabricacion.ToString())" id="ButtonHover">
                                         <input type="button"
@@ -287,500 +287,511 @@
         <Header><p style="font-weight:800">@ordenTitulo - Cantidad: @(Decimal.ToInt32(ordenFabricacion.CANT))</p></Header>
         <Content>
             @if (ordenFabricacionEncabezado != null)
-                    {
-            <div>
-                @*INFORMACION GENERAL*@
-                <div class="form-row">
-                    @if (ordenFabricacion.EXIGEOA == true)
-                                {
-                    <div class="form-group col-md-3" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
-                    </div>
-                    <div class="form-group col-md-3" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
-                    </div>
-                    <div class="form-group col-md-6" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
-                    </div>
-                    }
-                    else
-                    {
-                    <div class="form-group col-md-6" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
-                    </div>
-                    <div class="form-group col-md-6" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@ordenFabricacion.FE_ENTREGA.ToShortDateString()</label>
-                    </div>
-                    }
-                    @*@if (ordenFabricacion.EXIGEOA == true)
-                                {
-                    <div class="form-group col-md-6" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
-                    </div>
-                     }*@
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Descripción: </a>@ordenFabricacion.DES_PROD</label>
-                    </div>
-                </div>
-                <hr class="separator">
-                @*PARAMETROS MODIFICABLES*@
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        @{
-                                        if (ordenFabricacion.CG_CELDA == "BE3")
-                                        {
-                            <div>
-                                <label style="color:blue">Operario:</label>
+            {
+                <div>
+                    @*INFORMACION GENERAL*@
+                    <div class="form-row">
+                        @if (ordenFabricacion.EXIGEOA == true)
+                        {
+                            <div class="form-group col-md-3" style="text-align:left">
+                                <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
                             </div>
-                            <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                        @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosBE3">
-                                <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                <ComboBoxTemplates TItem="Operario">
-                                    <HeaderTemplate>
-                                        <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
-                                    </ItemTemplate>
-                                </ComboBoxTemplates>
-                            </SfComboBox>
-                                        }
-                                        else
-                                        {
-                            <div>
-                                <label style="color:blue">Operario:</label>
+                            <div class="form-group col-md-3" style="text-align:left">
+                                <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@ordenFabricacionEncabezado.ENTRPREV.ToShortDateString()</label>
                             </div>
-                            <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
-                                        @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosList">
-                                <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
-                                <ComboBoxTemplates TItem="Operario">
-                                    <HeaderTemplate>
-                                        <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
-                                    </ItemTemplate>
-                                </ComboBoxTemplates>
-                            </SfComboBox>
-                                        }
+                            <div class="form-group col-md-6" style="text-align:left">
+                                <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
+                            </div>
                         }
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label style="color:blue">Celda:</label>
-                        <SfComboBox TValue="string" TItem="ModeloGenericoStringString" PopupWidth="auto" AllowFiltering="true"
-                                    @bind-Value="@ordenFabricacion.CG_CELDA" DataSource="@dbCeldas">
-                            <ComboBoxFieldSettings Value="ID" Text="TEXTO"></ComboBoxFieldSettings>
-                            <ComboBoxTemplates TItem="ModeloGenericoStringString">
-                                <HeaderTemplate>
-                                    <table><tr><th class="e-text-center combo-width">Código</th><th>Celda</th></tr></table>
-                                </HeaderTemplate>
-                                <ItemTemplate>
-                                    <table><tbody><tr><td class="e-text-center combo-width">@((context as ModeloGenericoStringString).ID)</td><td>@((context as ModeloGenericoStringString).TEXTO)</td></tr> </tbody></table>
-                                </ItemTemplate>
-                            </ComboBoxTemplates>
-                        </SfComboBox>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <div>
-                            <label style="color:blue">Proceso:</label>
+                        else
+                        {
+                            <div class="form-group col-md-6" style="text-align:left">
+                                <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
+                            </div>
+                            <div class="form-group col-md-6" style="text-align:left">
+                                <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@ordenFabricacion.FE_ENTREGA.ToShortDateString()</label>
+                            </div>
+                        }
+                        @*@if (ordenFabricacion.EXIGEOA == true)
+                                    {
+                        <div class="form-group col-md-6" style="text-align:left">
+                            <label class="font-weight-normal"><a class="font-weight-bold">Cliente: </a>@(ordenFabricacionEncabezado.CG_CLI + " - " + ordenFabricacionEncabezado.DES_CLI)</label>
                         </div>
-                        <SfComboBox TValue="string" TItem="ModeloGenericoStringString" PopupWidth="auto" AllowFiltering="true"
-                                    @bind-Value="@ordenFabricacion.PROCESO" DataSource="@dbProcesos">
-                            <ComboBoxFieldSettings Value="ID" Text="TEXTO"></ComboBoxFieldSettings>
-                            <ComboBoxTemplates TItem="ModeloGenericoStringString">
-                                <HeaderTemplate>
-                                    <table><tr><th class="e-text-center combo-width">Código</th><th>Proceso</th></tr></table>
-                                </HeaderTemplate>
-                                <ItemTemplate>
-                                    <table><tbody><tr><td class="e-text-center combo-width">@((context as ModeloGenericoStringString).ID)</td><td>@((context as ModeloGenericoStringString).TEXTO)</td></tr> </tbody></table>
-                                </ItemTemplate>
-                            </ComboBoxTemplates>
-                        </SfComboBox>
+                         }*@
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Cantidad fabricada:</label>
-                        <SfNumericTextBox TValue="decimal" Format="N0" @bind-Value="@ordenFabricacion.CANTFAB" ShowClearButton="true" Step="1"></SfNumericTextBox>
+                    <div class="form-row">
+                        <div class="form-group col-md-12" style="text-align:left">
+                            <label class="font-weight-normal"><a class="font-weight-bold">Descripción: </a>@ordenFabricacion.DES_PROD</label>
+                        </div>
                     </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Seleccione Acción:</label>
-                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ESTADOCARGA" DataSource="@dbEstadoCarga">
-                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
-                        </SfDropDownList>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Planificada Inicio:</label>
-                        <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Inicio real:</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Finalización real:</label>
-                        <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label style="color:blue">Dependencia:</label>
-                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ORDFORIG"
-                                        DataSource="@dbOrdenesDependientes">
-                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
-                        </SfDropDownList>
-                    </div>
-                </div>
-            </div>
-            <hr class="separator">
-            @*BOTONES PARA OBTENER DATOS*@
-            <div>
-                <div class="form-row">
-                    <div class="form-group col-md-2">
-                        <SfButton IsPrimary="true" @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))">Ver plano</SfButton>
-                    </div>
-                    @if (ordenFabricacion.EXIGEOA == true)
+                    <hr class="separator">
+                    @*PARAMETROS MODIFICABLES*@
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            @{
+                                if (ordenFabricacion.CG_CELDA == "BE3")
                                 {
-                    <div class="form-group col-md-2">
-                        <SfButton IsPrimary="true" @onclick="@(async ()=> await DownloadText())">Descargar Datos</SfButton>
-                    </div>
-                                }
-                    @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
-                        ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
-                        ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
-                                {
-                    <div class="form-group col-md-2">
-                        <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver en Modulo Servicios</SfButton>
-                    </div>
-                                }
-                    <div class="form-group col-md-2">
-                        <SfButton IsPrimary="true" @onclick="@(async ()=> await Etiqueta())">Identificación</SfButton>
-                    </div>
-                    @if (ordenFabricacion.EXIGEOA == true)
-                                {
-                    <div class="form-group col-md-2">
-                        <SfButton IsPrimary="true" @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
-                    </div>
+                                    <div>
+                                        <label style="color:blue">Operario:</label>
+                                    </div>
+                                    <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosBE3">
+                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                        <ComboBoxTemplates TItem="Operario">
+                                            <HeaderTemplate>
+                                                <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
+                                            </ItemTemplate>
+                                        </ComboBoxTemplates>
+                                    </SfComboBox>
                                 }
                                 else
                                 {
-                    <div class="form-group col-md-2">
-                        <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">Ver Programa</SfButton>
-                    </div>
+                                    <div>
+                                        <label style="color:blue">Operario:</label>
+                                    </div>
+                                    <SfComboBox TValue="string" TItem="Operario" PopupWidth="auto" AllowFiltering="true"
+                                                @bind-Value="@ordenFabricacion.DES_OPER" DataSource="@operariosList">
+                                        <ComboBoxFieldSettings Value="DES_OPER" Text="DES_OPER"></ComboBoxFieldSettings>
+                                        <ComboBoxTemplates TItem="Operario">
+                                            <HeaderTemplate>
+                                                <table><tr><th class="e-text-center combo-width">Código</th><th>Operario</th></tr></table>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <table><tbody><tr><td class="e-text-center combo-width">@((context as Operario).CG_OPER)</td><td>@((context as Operario).DES_OPER)</td></tr> </tbody></table>
+                                            </ItemTemplate>
+                                        </ComboBoxTemplates>
+                                    </SfComboBox>
                                 }
+                            }
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label style="color:blue">Celda:</label>
+                            <SfComboBox TValue="string" TItem="ModeloGenericoStringString" PopupWidth="auto" AllowFiltering="true"
+                                        @bind-Value="@ordenFabricacion.CG_CELDA" DataSource="@dbCeldas">
+                                <ComboBoxFieldSettings Value="ID" Text="TEXTO"></ComboBoxFieldSettings>
+                                <ComboBoxTemplates TItem="ModeloGenericoStringString">
+                                    <HeaderTemplate>
+                                        <table><tr><th class="e-text-center combo-width">Código</th><th>Celda</th></tr></table>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as ModeloGenericoStringString).ID)</td><td>@((context as ModeloGenericoStringString).TEXTO)</td></tr> </tbody></table>
+                                    </ItemTemplate>
+                                </ComboBoxTemplates>
+                            </SfComboBox>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div>
+                                <label style="color:blue">Proceso:</label>
+                            </div>
+                            <SfComboBox TValue="string" TItem="ModeloGenericoStringString" PopupWidth="auto" AllowFiltering="true"
+                                        @bind-Value="@ordenFabricacion.PROCESO" DataSource="@dbProcesos">
+                                <ComboBoxFieldSettings Value="ID" Text="TEXTO"></ComboBoxFieldSettings>
+                                <ComboBoxTemplates TItem="ModeloGenericoStringString">
+                                    <HeaderTemplate>
+                                        <table><tr><th class="e-text-center combo-width">Código</th><th>Proceso</th></tr></table>
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <table><tbody><tr><td class="e-text-center combo-width">@((context as ModeloGenericoStringString).ID)</td><td>@((context as ModeloGenericoStringString).TEXTO)</td></tr> </tbody></table>
+                                    </ItemTemplate>
+                                </ComboBoxTemplates>
+                            </SfComboBox>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label style="color:blue">Cantidad fabricada:</label>
+                            <SfNumericTextBox TValue="decimal" Format="N0" @bind-Value="@ordenFabricacion.CANTFAB" ShowClearButton="true" Step="1"></SfNumericTextBox>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label style="color:blue">Seleccione Acción:</label>
+                            <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ESTADOCARGA" DataSource="@dbEstadoCarga">
+                                <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label style="color:blue">Planificada Inicio:</label>
+                            <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label style="color:blue">Inicio real:</label>
+                            <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label style="color:blue">Finalización real:</label>
+                            <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label style="color:blue">Dependencia:</label>
+                            <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ORDFORIG"
+                                            DataSource="@dbOrdenesDependientes">
+                                <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <hr class="separator">
-            @*PRODUCTO*@
-            <div>
-                <div class="form-row">
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
-                    </div>
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Descripción: </a>@ordenFabricacion.DES_PROD</label>
-                    </div>
-                    <div class="form-group col-md-2" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Cantidad: </a>@ordenFabricacion.CANT</label>
-                    </div>
-                    <div class="form-group col-md-2" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Avance: </a>@(ordenFabricacion.AVANCE.ToString() + " %")</label>
-                    </div>
-                </div>
-            </div>
-            <hr class="separator">
-            @*CAMPOS PERSONALIZADOS DE PEDCLI*@
-            @if (ordenFabricacion != null)
+                <hr class="separator">
+                @*BOTONES PARA OBTENER DATOS*@
+                <div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <SfButton IsPrimary="true" @onclick="@(async ()=> await VerPlano(ordenFabricacion.CG_PROD))">Ver plano</SfButton>
+                        </div>
+                        @if (ordenFabricacion.EXIGEOA == true)
                         {
-            @if (ordenFabricacion.PEDIDO > 0)
-                            {
-            <div>
-                <div class="form-row">
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM1: </a>@ordenFabricacionEncabezado.CAMPOCOM1</label>
-                    </div>
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM2: </a>@ordenFabricacionEncabezado.CAMPOCOM2</label>
-                    </div>
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM3: </a>@ordenFabricacionEncabezado.CAMPOCOM3</label>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM4: </a>@ordenFabricacionEncabezado.CAMPOCOM4</label>
-                    </div>
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM5: </a>@ordenFabricacionEncabezado.CAMPOCOM5</label>
-                    </div>
-                    <div class="form-group col-md-4" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM6: </a>@ordenFabricacionEncabezado.CAMPOCOM6</label>
-                    </div>
-                </div>
-            </div>
-            <hr class="separator">
-            <div>
-                <div class="form-row">
-                    <div class="form-group col-md-12" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">OBSERVACIONES: </a>@ordenFabricacionEncabezado.OBSERITEM</label>
-                    </div>
-                </div>
-            </div>
-                            }
+                            <div class="form-group col-md-2">
+                                <SfButton IsPrimary="true" @onclick="@(async ()=> await DownloadText())">Descargar Datos</SfButton>
+                            </div>
                         }
-            @*INFORMACION GENERAL*@
-            <div>
-                @if (ordenFabricacion.EXIGEOA == true)
-                            {
-                <div class="form-row">
-                    <div class="form-group col-md-6" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Transportista: </a>@(ordenFabricacionEncabezado.CG_TRANS + " - " + ordenFabricacionEncabezado.DES_TRANS)</label>
-                    </div>
-                    <div class="form-group col-md-6" style="text-align:left">
-                        <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@(ordenFabricacionEncabezado.DIRENT + " - " + ordenFabricacionEncabezado.DIRTRANS)</label>
+                        @if (ordenFabricacion.CG_PROD.Substring(0, 4) == "0012" ||
+                           ordenFabricacion.CG_PROD.Substring(0, 5) == "00130" ||
+                           ordenFabricacion.CG_PROD.Substring(0, 5) == "00131")
+                        {
+                            <div class="form-group col-md-2">
+                                <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAServicio(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver en Modulo Servicios</SfButton>
+                            </div>
+                        }
+                        <div class="form-group col-md-2">
+                            <SfButton IsPrimary="true" @onclick="@(async ()=> await Etiqueta())">Identificación</SfButton>
+                        </div>
+                        @if (ordenFabricacion.EXIGEOA == true)
+                        {
+                            <div class="form-group col-md-2">
+                                <SfButton IsPrimary="true" @onclick="@(async ()=> await Ensayos(ordenFabricacion.PEDIDO.ToString().Trim()))">Ver Ensayos</SfButton>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group col-md-2">
+                                <SfButton IsPrimary="true" @onclick="@(async ()=> await IrAPrograma(ordenFabricacion.CG_PROD.Trim()))">Ver Programa</SfButton>
+                            </div>
+                        }
                     </div>
                 </div>
-                            }
-            </div>
-            <hr class="separator">
+                <hr class="separator">
+                @*PRODUCTO*@
+                <div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4" style="text-align:left">
+                            <label class="font-weight-normal"><a class="font-weight-bold">Código: </a>@ordenFabricacion.CG_PROD</label>
+                        </div>
+                        <div class="form-group col-md-4" style="text-align:left">
+                            <label class="font-weight-normal"><a class="font-weight-bold">Descripción: </a>@ordenFabricacion.DES_PROD</label>
+                        </div>
+                        <div class="form-group col-md-2" style="text-align:left">
+                            <label class="font-weight-normal"><a class="font-weight-bold">Cantidad: </a>@ordenFabricacion.CANT</label>
+                        </div>
+                        <div class="form-group col-md-2" style="text-align:left">
+                            <label class="font-weight-normal"><a class="font-weight-bold">Avance: </a>@(ordenFabricacion.AVANCE.ToString() + " %")</label>
+                        </div>
+                    </div>
+                </div>
+                <hr class="separator">
+                @*CAMPOS PERSONALIZADOS DE PEDCLI*@
+                @if (ordenFabricacion != null)
+                {
+                    @if (ordenFabricacion.PEDIDO > 0)
+                    {
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4" style="text-align:left">
+                                    <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM1: </a>@ordenFabricacionEncabezado.CAMPOCOM1</label>
+                                </div>
+                                <div class="form-group col-md-4" style="text-align:left">
+                                    <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM2: </a>@ordenFabricacionEncabezado.CAMPOCOM2</label>
+                                </div>
+                                <div class="form-group col-md-4" style="text-align:left">
+                                    <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM3: </a>@ordenFabricacionEncabezado.CAMPOCOM3</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4" style="text-align:left">
+                                    <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM4: </a>@ordenFabricacionEncabezado.CAMPOCOM4</label>
+                                </div>
+                                <div class="form-group col-md-4" style="text-align:left">
+                                    <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM5: </a>@ordenFabricacionEncabezado.CAMPOCOM5</label>
+                                </div>
+                                <div class="form-group col-md-4" style="text-align:left">
+                                    <label class="font-weight-normal"><a class="font-weight-bold">@ordenFabricacionEncabezado.TITULO_CAMPOCOM6: </a>@ordenFabricacionEncabezado.CAMPOCOM6</label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="separator">
+                        <div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12" style="text-align:left">
+                                    <label class="font-weight-normal"><a class="font-weight-bold">OBSERVACIONES: </a>@ordenFabricacionEncabezado.OBSERITEM</label>
+                                </div>
+                            </div>
+                        </div>
                     }
+                }
+                @*INFORMACION GENERAL*@
+                <div>
+                    @if (ordenFabricacion.EXIGEOA == true)
+                    {
+                        <div class="form-row">
+                            <div class="form-group col-md-6" style="text-align:left">
+                                <label class="font-weight-normal"><a class="font-weight-bold">Transportista: </a>@(ordenFabricacionEncabezado.CG_TRANS + " - " + ordenFabricacionEncabezado.DES_TRANS)</label>
+                            </div>
+                            <div class="form-group col-md-6" style="text-align:left">
+                                <label class="font-weight-normal"><a class="font-weight-bold">Entrega: </a>@(ordenFabricacionEncabezado.DIRENT + " - " + ordenFabricacionEncabezado.DIRTRANS)</label>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <hr class="separator">
+            }
             <table width="100%">
                 <tbody>
                     <tr>
                         <td style="vertical-align:top">
                             @*ENCABEZADO*@
                             @if (ordenFabricacionEncabezado != null)
-                                    {
-                            <div class="form-group" style="margin-left:50px;margin-right:50px">
-                                <table width="100%">
-                                    @*MATERIAS PRIMAS*@
-                                    @if (ordenFabricacionMP != null)
-                                                {
-                                    @if (ordenFabricacionMP.Count > 0)
-                                                    {
-                                    <tr style="font-weight:bold">
-                                        <td colspan="2">
-                                            MATERIAS PRIMAS
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <table width="100%">
-                                                <tr class="font-weight-bold">
-                                                    <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Código</label>
+                            {
+                                <div class="form-group" style="margin-left:50px;margin-right:50px">
+                                    <table width="100%">
+                                        @*MATERIAS PRIMAS*@
+                                        @if (ordenFabricacionMP != null)
+                                        {
+                                            @if (ordenFabricacionMP.Count > 0)
+                                            {
+                                                <tr style="font-weight:bold">
+                                                    <td colspan="2">
+                                                        MATERIAS PRIMAS
                                                     </td>
-                                                    <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Descripción</label>
-                                                    </td>
-                                                    <td width="10%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Cantidad</label>
-                                                    </td>
-                                                    <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Lote</label>
-                                                    </td>
-                                                    <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Identific</label>
-                                                    </td>
-                                                    @if (ordenFabricacion.EXIGEOA)
-                                                                        {
-                                                    <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Serie</label>
-                                                    </td>
-                                                                        }
                                                 </tr>
-                                                @foreach (ModeloOrdenFabricacionMP xMP in ordenFabricacionMP)
-                                                                    {
                                                 <tr>
-                                                    <td>
-                                                        <label>@xMP.CG_ART</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xMP.DES_ART</label>
-                                                    </td>
-                                                    <td style="text-align:right">
-                                                        <label>@xMP.STOCK</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xMP.LOTE</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xMP.DESPACHO</label>
-                                                    </td>
-                                                    @if (ordenFabricacion.EXIGEOA)
-                                                                            {
-                                                    <td>
-                                                        <label>@xMP.SERIE</label>
-                                                    </td>
-                                                                            }
-                                                </tr>
-                                                                    }
-                                            </table>
-                                        </td>
-                                    </tr>
-                                                    }
-                                                }
-                                    @*SEMI ELABORADOS*@
-                                    @if (ordenFabricacionSE != null)
-                                                {
-                                    @if (ordenFabricacionSE.Count > 0)
-                                                    {
-                                    <tr style="font-weight:bold">
-                                        <td colspan="2">
-                                            SEMI ELABORADOS
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <table width="100%">
-                                                <tr class="font-weight-bold">
-                                                    <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Código</label>
-                                                    </td>
-                                                    <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Descripción</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Cantidad</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Lote</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Línea</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Ubicación</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Despacho</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Vale</label>
-                                                    </td>
-                                                </tr>
-                                                @foreach (ModeloOrdenFabricacionSE xSE in ordenFabricacionSE)
+                                                    <td colspan="2">
+                                                        <table width="100%">
+                                                            <tr class="font-weight-bold">
+                                                                <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Código</label>
+                                                                </td>
+                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Descripción</label>
+                                                                </td>
+                                                                <td width="10%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Cantidad</label>
+                                                                </td>
+                                                                <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Lote</label>
+                                                                </td>
+                                                                <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Identific</label>
+                                                                </td>
+                                                                @if (ordenFabricacion.EXIGEOA)
+                                                                {
+                                                                    <td width="10%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                        <label>Serie</label>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                            @foreach (ModeloOrdenFabricacionMP xMP in ordenFabricacionMP)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <label>@xMP.CG_ART</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xMP.DES_ART</label>
+                                                                    </td>
+                                                                    <td style="text-align:right">
+                                                                        <label>@xMP.STOCK</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xMP.LOTE</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xMP.DESPACHO</label>
+                                                                    </td>
+                                                                    @if (ordenFabricacion.EXIGEOA)
                                                                     {
-                                                <tr>
-                                                    <td>
-                                                        <label>@xSE.CG_ART</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xSE.DES_ART</label>
-                                                    </td>
-                                                    <td style="text-align:right">
-                                                        <label>@xSE.STOCK</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xSE.LOTE</label>
-                                                    </td>
-                                                    <td style="text-align:right">
-                                                        <label>@xSE.CG_LINEA</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xSE.UBICACION</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xSE.DESPACHO</label>
-                                                    </td>
-                                                    <td style="text-align:right">
-                                                        <label>@xSE.VALE</label>
-                                                    </td>
-                                                </tr>
+                                                                        <td>
+                                                                            <label>@xMP.SERIE</label>
+                                                                        </td>
                                                                     }
-                                            </table>
-                                        </td>
-                                    </tr>
-                                                    }
-                                                }
-                                    @*HOJA DE RUTA*@
-                                    @if (ordenFabricacionHojaRuta != null)
-                                                {
-                                    @if (ordenFabricacionHojaRuta.Count > 0)
-                                                    {
-                                    <tr style="font-weight:bold">
-                                        <td colspan="2">
-                                            HOJA DE RUTA
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <table width="100%">
-                                                <tr class="font-weight-bold">
-                                                    <td width="5%" style="text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Órden</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Proceso</label>
-                                                    </td>
-                                                    <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Descripción</label>
-                                                    </td>
-                                                    <td width="8%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Celda</label>
-                                                    </td>
-                                                    <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Descripción</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Tiempo</label>
-                                                    </td>
-                                                    <td width="5%" style="margin-left:10px;text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Proporc</label>
-                                                    </td>
-                                                    <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
-                                                        <label>Tiempo Unitario</label>
+                                                                </tr>
+                                                            }
+                                                        </table>
                                                     </td>
                                                 </tr>
-                                                @foreach (ModeloOrdenFabricacionHojaRuta xHojaRuta in ordenFabricacionHojaRuta)
-                                                                    {
+                                            }
+                                        }
+                                        @*SEMI ELABORADOS*@
+                                        @if (ordenFabricacionSE != null)
+                                        {
+                                            @if (ordenFabricacionSE.Count > 0)
+                                            {
+                                                <tr style="font-weight:bold">
+                                                    <td colspan="2">
+                                                        SEMI ELABORADOS
+                                                    </td>
+                                                </tr>
                                                 <tr>
-                                                    <td style="text-align:center">
-                                                        <label>@xHojaRuta.ORDEN</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xHojaRuta.PROCESO</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xHojaRuta.DESCRIP</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xHojaRuta.CG_CELDA</label>
-                                                    </td>
-                                                    <td>
-                                                        <label>@xHojaRuta.DES_CELDA</label>
-                                                    </td>
-                                                    <td style="text-align:right">
-                                                        <label>@xHojaRuta.TIEMPO_TOTAL</label>
-                                                    </td>
-                                                    <td style="text-align:center">
-                                                        <label>@xHojaRuta.PROPORC</label>
-                                                    </td>
-                                                    <td style="text-align:right">
-                                                        <label>@xHojaRuta.TIEMPO1</label>
+                                                    <td colspan="2">
+                                                        <table width="100%">
+                                                            <tr class="font-weight-bold">
+                                                                <td width="15%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Código</label>
+                                                                </td>
+                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Descripción</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Cantidad</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Lote</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Línea</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Ubicación</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Despacho</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Vale</label>
+                                                                </td>
+                                                            </tr>
+                                                            @foreach (ModeloOrdenFabricacionSE xSE in ordenFabricacionSE)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <label>@xSE.CG_ART</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xSE.DES_ART</label>
+                                                                    </td>
+                                                                    <td style="text-align:right">
+                                                                        <label>@xSE.STOCK</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xSE.LOTE</label>
+                                                                    </td>
+                                                                    <td style="text-align:right">
+                                                                        <label>@xSE.CG_LINEA</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xSE.UBICACION</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xSE.DESPACHO</label>
+                                                                    </td>
+                                                                    <td style="text-align:right">
+                                                                        <label>@xSE.VALE</label>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </table>
                                                     </td>
                                                 </tr>
-                                                                    }
-                                            </table>
-                                        </td>
-                                    </tr>
-                                                    }
-                                                }
-                                </table>
-                            </div>
-                                    }
+                                            }
+                                        }
+                                        @*HOJA DE RUTA*@
+                                        @if (ordenFabricacionHojaRuta != null)
+                                        {
+                                            @if (ordenFabricacionHojaRuta.Count > 0)
+                                            {
+                                                <tr style="font-weight:bold">
+                                                    <td colspan="2">
+                                                        HOJA DE RUTA
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <table width="100%">
+                                                            <tr class="font-weight-bold">
+                                                                <td width="5%" style="text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Órden</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Proceso</label>
+                                                                </td>
+                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Descripción</label>
+                                                                </td>
+                                                                <td width="8%" style="border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Celda</label>
+                                                                </td>
+                                                                <td style="margin-left:10px;white-space:nowrap;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Descripción</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Tiempo</label>
+                                                                </td>
+                                                                <td width="5%" style="margin-left:10px;text-align:center;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Proporc</label>
+                                                                </td>
+                                                                <td width="8%" style="margin-left:10px;text-align:right;border-top:solid;border-top-color:lightgray;border-top-width:0.2px;border-bottom:solid;border-bottom-color:lightgray;border-bottom-width:0.2px">
+                                                                    <label>Tiempo Unitario</label>
+                                                                </td>
+                                                            </tr>
+                                                            @foreach (ModeloOrdenFabricacionHojaRuta xHojaRuta in ordenFabricacionHojaRuta)
+                                                            {
+                                                                <tr>
+                                                                    <td style="text-align:center">
+                                                                        <label>@xHojaRuta.ORDEN</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xHojaRuta.PROCESO</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xHojaRuta.DESCRIP</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xHojaRuta.CG_CELDA</label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label>@xHojaRuta.DES_CELDA</label>
+                                                                    </td>
+                                                                    <td style="text-align:right">
+                                                                        <label>@xHojaRuta.TIEMPO_TOTAL</label>
+                                                                    </td>
+                                                                    <td style="text-align:center">
+                                                                        <label>@xHojaRuta.PROPORC</label>
+                                                                    </td>
+                                                                    <td style="text-align:right">
+                                                                        <label>@xHojaRuta.TIEMPO1</label>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            }
                         </td>
                     </tr>
                 </tbody>
             </table>
         </Content>
+        <FooterTemplate>
+            <SfProgressButton @ref="ProgressBtnObj" Content="Guardar" @onclick="@OrdenFabricacionOk" IsPrimary="true">
+            </SfProgressButton>
+            <SfButton CssClass="e-flat" @onclick="@OrdenFabricacionClose" IsPrimary="true">
+                <span class='e-btn-icon e-icons e-close-icon e-icon-left'></span>Cancelar
+            </SfButton>
+        </FooterTemplate>
     </DialogTemplates>
     <DialogEvents Closed="@OrdenFabricacionClose"></DialogEvents>
-    <DialogButtons>
-        <DialogButton Content="OK" IsPrimary="true" OnClick="@OrdenFabricacionOk" />
-        <DialogButton Content="Cancel" OnClick="@OrdenFabricacionClose" />
-    </DialogButtons>
+    @*<DialogButtons>
+        <DialogButton Content="Guardar" IsPrimary="true" OnClick="@OrdenFabricacionOk" 
+                      IconCss= "e-btn-icon e-icons e-ok-icon e-icon-left"
+                      IconPosition="IconPosition.Left"/>
+        <DialogButton Content="Cancelar" OnClick="@OrdenFabricacionClose" 
+                      IconCss= "e-btn-icon e-icons e-close-icon e-icon-left"
+                      IconPosition="IconPosition.Left" />
+    </DialogButtons>*@
 </SfDialog>
 </div>
 }
@@ -865,9 +876,15 @@
     protected List<Operario> operariosList = new List<Operario>();
     protected List<PedCli> PedCliList = new List<PedCli>();
     protected List<Prod> prodList = new List<Prod>();
+
+    SfProgressButton ProgressBtnObj;
     private SfSpinner SpinnerCDM;
     protected bool Visible = false;
     protected string MensajeCargando = "Cargando...";
+
+    protected NotificacionToast NotificacionObj;
+    protected bool ToastVisible { get; set; } = false;
+
     protected override async Task OnInitializedAsync()
     {
         Visible = true;
@@ -988,65 +1005,97 @@
 
     private async Task OrdenFabricacionOk(Object args)
     {
-        try
-        {
-            Visible = true;
+        Visible = true;
 
-            var respuesta = await Http.PutAsJsonAsync("api/OrdenesFabricacion/" + ordenFabricacion.CG_ORDF, ordenFabricacion);
+        var respuesta = await Http.PutAsJsonAsync("api/OrdenesFabricacion/" + ordenFabricacion.CG_ORDF, ordenFabricacion);
+        if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            string xSQL = string
+                    .Format("set dateformat mdy UPDATE Programa SET FECHA_PREVISTA_FABRICACION = '{0}', FECHA_INICIO_REAL_FABRICACION = '{1}', CANTFAB = {2}, FE_CIERRE = '{3}', " +
+                     "CG_ORDFORIG = {4}, CG_CELDA = '{5}', PROCESO = '{6}', CG_OPER = {7}, DES_OPER = '{8}' WHERE Cg_ordf = {9}",
+                                          ordenFabricacion.FECHA_PREVISTA_FABRICACION,
+                                          ordenFabricacion.FECHA_INICIO_REAL_FABRICACION,
+                                          ordenFabricacion.CANTFAB.ToString().Replace(",", "."),
+                                          ordenFabricacion.FE_CIERRE,
+                                          ordenFabricacion.CG_ORDFORIG,
+                                          ordenFabricacion.CG_CELDA,
+                                          ordenFabricacion.PROCESO,
+                                          ordenFabricacion.CG_OPER,
+                                          ordenFabricacion.DES_OPER,
+                                          ordenFabricacion.CG_ORDF);
+            await JsRuntime.InvokeAsync<string>("console.log", "Error al usar el api/OrdenesFabricacion");
+            await JsRuntime.InvokeAsync<string>("console.log", xSQL);
+            await NotificacionObj.ShowAsyncError();
+        }
+        else
+        {
+            await JsRuntime.InvokeAsync<string>("console.log", "Correctamente api/OrdenesFabricacion");
+            
+            await NotificacionObj.ShowAsync();
+        }
+
+
+
+        if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3
+            && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA) )
+        {
+            string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0},Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
+                                      ordenFabricacion.CG_ESTADOCARGA,
+                                      ordenFabricacionOriginal.CG_ESTADOCARGA,
+                                      ordenFabricacion.CG_ORDF);
+            respuesta = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
             if (respuesta.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                var mensServidor = await respuesta.Content.ReadAsStringAsync();
+                await JsRuntime.InvokeAsync<string>("console.log", mensServidor + "Error Query " + sqlCommandString) ;
+                await NotificacionObj.ShowAsyncError();
+            }
+            else
+            {
+                await NotificacionObj.ShowAsync();
+
+                ordenFabricacion = null;
+                await Refrescar();
+            }
+
+        }
+        else if (ordenFabricacion.CG_ESTADOCARGA == 4)
+        {
+            if (ordenFabricacion.CANTFAB == 0)
+            {
+                await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+            }
+
+            if (dbScrap != null)
+            {
+                isScrapDialogVisible = true;
+                StateHasChanged();
+            }
+            else
+            {
+                await CerrarOrdenFabricacion();
+            }
+        }
+        else if (ordenFabricacion.CG_ESTADOCARGA == 5)
+        {
+            string sqlCommandString = "EXEC NET_PCP_Anular_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "'";
+            var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
+            if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "ERROR ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
             }
-            if (ordenFabricacion.CG_ESTADOCARGA == 2 || ordenFabricacion.CG_ESTADOCARGA == 3 
-                && (ordenFabricacion.CG_ESTADOCARGA != ordenFabricacionOriginal.CG_ESTADOCARGA) )
-            {
-                string sqlCommandString = string.Format("UPDATE Programa SET CG_ESTADOCARGA = {0},Fe_curso = GETDATE(), CG_ESTADO = {1} WHERE (Cg_ordf = {2} OR Cg_ordfAsoc = {2})",
-                                          ordenFabricacion.CG_ESTADOCARGA,
-                                          ordenFabricacionOriginal.CG_ESTADOCARGA,
-                                          ordenFabricacion.CG_ORDF);
-                await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
-                ordenFabricacion = null;
-                await Refrescar();
-            }
-            else if (ordenFabricacion.CG_ESTADOCARGA == 4)
-            {
-                if (ordenFabricacion.CANTFAB == 0)
-                {
-                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden sin indicar cantidad fabricada. Se continuará igualmente.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                }
-
-                if (dbScrap != null)
-                {
-                    isScrapDialogVisible = true;
-                    StateHasChanged();
-                }
-                else
-                {
-                    await CerrarOrdenFabricacion();
-                }
-            }
-            else if (ordenFabricacion.CG_ESTADOCARGA == 5)
-            {
-                string sqlCommandString = "EXEC NET_PCP_Anular_OrdenFabricacion " + ordenFabricacion.CG_ORDF.ToString() + ", '" + Usuario + "'";
-                var respuesta2 = await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
-                if (respuesta2.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "ERROR ", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                }
-                StateHasChanged();
-                await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden anulada.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
-                ordenFabricacion = null;
-                await Refrescar();
-            }
-
-            isOrdenDialogVisible = false;
+            StateHasChanged();
+            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Órden anulada.", CssClass = "e-toast-warning", Icon = "e-warning toast-icons" });
+            ordenFabricacion = null;
             await Refrescar();
-            Visible = false;
         }
-        catch
-        {
-            throw;
-        }
+
+        isOrdenDialogVisible = false;
+
+        await Refrescar();
+        Visible = false;
+        await ProgressBtnObj.ProgressComplete();
+
     }
 
     private void Scrap_Selection(ModeloGenericoIntString args)
@@ -1103,7 +1152,8 @@
         await Http.PutAsJsonAsync("api/SQLgenericCommandString/" + sqlCommandString, ordenFabricacion);
         if (ordenFabricacion.CG_ORDF == ordenFabricacion.ULTIMAORDENASOCIADA)
         {
-            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Se dió de alta el producto terminado.", CssClass = "e-toast-success", Icon = "e-success toast-icons" });
+            await this.ToastObj.Show(new ToastModel { Title = "AVISO!",
+                Content = "Se dió de alta el producto terminado.", CssClass = "e-toast-success", Icon = "e-success toast-icons" });
         }
         ordenFabricacion = null;
         scrapSeleccionado = null;
@@ -1174,7 +1224,17 @@
         //byte[] file;
         if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
         {
-            await this.ToastObj.Show(new ToastModel { Title = "AVISO!", Content = "Antes de generar el archivo debe asignar un operario", CssClass = "e-toast-danger", Icon = "e-success toast-icons" });
+            await NotificacionObj.ShowAsyncError();
+        }
+
+
+        if (String.IsNullOrEmpty(ordenFabricacion.DES_OPER))
+        {
+            //await this.ToastObj.Show(new ToastModel { Title = "AVISO!",
+            //    Content = "Antes de generar el archivo debe asignar un operario", CssClass =
+            //    "e-toast-danger", Icon = "e-success toast-icons" });
+
+            await NotificacionObj.ShowAsyncError();
         }
         else
         {
@@ -1489,7 +1549,7 @@
         padding: 0px;
         padding-left: 0px;
         padding-right: 0px;
-        width: 100%;
+        width: 120%;
         height: 26px;
         border-width: 0px;
         border-right-width: thin;
@@ -1504,6 +1564,7 @@
         border-color: lightseagreen;
         font-size: 18px;
         font-weight: bold;
+        width:120%;
     }
 
     .CargaButtonClassBuscarOrden {
@@ -1598,5 +1659,13 @@
 
     #ButtonHover:hover .tooltiptext {
         visibility: visible;
+    }
+
+    .e-btn-icon.e-icons.e-ok-icon.e-icon-left:before {
+        content: '\e7ff';
+    }
+
+    .e-btn-icon.e-icons.e-close-icon.e-icon-left:before {
+        content: '\e825';
     }
 </style>
