@@ -1,0 +1,37 @@
+﻿@page "/pivot"
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@inject NavigationManager NavigationManager
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.PivotView
+@inject CustomHttpClient Http
+
+<div class="col-lg-9 control-section sb-property-border">
+    <div class="content-wrapper">
+        <SfPivotView TValue="Indicadores" ShowFieldList=true>
+            <PivotViewDataSourceSettings DataSource="@Data" ExpandAll=false EnableSorting=true>
+                <PivotViewColumns>
+                    <PivotViewColumn Name="Pedido"></PivotViewColumn>
+                    <PivotViewColumn Name="RazonSoc"></PivotViewColumn>
+                </PivotViewColumns>
+            </PivotViewDataSourceSettings>
+            @*<PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>*@
+        </SfPivotView>
+    </div>
+</div>
+<style>
+    .e-pivotview {
+        min-height: 200px;
+    }
+
+    html, body {
+        height: 100%;
+    }
+</style>
+@code{
+    public List<Indicadores> Data { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        this.Data = await Http.GetFromJsonAsync<List<Indicadores>>("api/Indicador");
+    }
+}
