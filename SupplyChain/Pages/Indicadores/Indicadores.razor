@@ -35,7 +35,7 @@
         height: 100%;
     }
 </style>
-<<<<<<< HEAD
+
 @code{
     public List<Indicadores> Data { get; set; } = new List<Indicadores>();
     protected override async Task OnInitializedAsync()
@@ -43,10 +43,3 @@
         //this.Data = await Http.GetFromJsonAsync<List<Indicadores>>("api/Indicador");
     }
 }
-=======
-@code{ public List<Indicadores> Data { get; set; }
-    protected override async Task OnInitializedAsync()
-    {
-        this.Data = await Http.GetFromJsonAsync<List<Indicadores>>("api/Indicador");
-    } }
->>>>>>> 078279635a3ae11195518498220bc74becfa4156
