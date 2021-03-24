@@ -4,16 +4,23 @@
 @inject NavigationManager NavigationManager
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.PivotView
+@using Syncfusion.Blazor.Data
 @inject CustomHttpClient Http
 
 <div class="col-lg-9 control-section sb-property-border">
     <div class="content-wrapper">
         <SfPivotView TValue="Indicadores" ShowFieldList=true>
-            <PivotViewDataSourceSettings DataSource="@Data" ExpandAll=false EnableSorting=true>
+            <PivotViewDataSourceSettings TValue="Indicadores" ExpandAll=false EnableSorting=true>
+                <SfDataManager Url="api/Indicador" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>
                 <PivotViewColumns>
                     <PivotViewColumn Name="Pedido"></PivotViewColumn>
-                    <PivotViewColumn Name="RazonSoc"></PivotViewColumn>
                 </PivotViewColumns>
+                <PivotViewRows>
+                    <PivotViewRow Name="RazonSoc"></PivotViewRow>
+                </PivotViewRows>
+                <PivotViewValues>
+                    <PivotViewValue Name="Cantped"></PivotViewValue>
+                </PivotViewValues>
             </PivotViewDataSourceSettings>
             @*<PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>*@
         </SfPivotView>
@@ -29,9 +36,9 @@
     }
 </style>
 @code{
-    public List<Indicadores> Data { get; set; }
+    public List<Indicadores> Data { get; set; } = new List<Indicadores>();
     protected override async Task OnInitializedAsync()
     {
-        this.Data = await Http.GetFromJsonAsync<List<Indicadores>>("api/Indicador");
+        //this.Data = await Http.GetFromJsonAsync<List<Indicadores>>("api/Indicador");
     }
 }
