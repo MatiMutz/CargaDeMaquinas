@@ -6,8 +6,8 @@ namespace SupplyChain
     public class AppDbContext : DbContext
     {
         //MODULO CARGA DE MAQUINA
-        public virtual DbSet<ModeloCarga> Cargas { get; set; }
         public virtual DbSet<Indicadores> Indicadoress { get; set; }
+        public virtual DbSet<ModeloCarga> Cargas { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionHojaRuta> OrdenesFabricacionHojaRuta { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionSE> OrdenesFabricacionSE { get; set; }
         public virtual DbSet<ModeloOrdenFabricacionMP> OrdenesFabricacionMP { get; set; }

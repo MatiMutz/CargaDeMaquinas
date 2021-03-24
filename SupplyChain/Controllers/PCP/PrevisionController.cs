@@ -29,7 +29,15 @@ namespace SupplyChain.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PresAnual>>> GetPrev()
         {
-            return await _context.PresAnual.ToListAsync();
+
+            try
+            {
+                return await _context.PresAnual.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         // GET: api/Prevision/GetProd

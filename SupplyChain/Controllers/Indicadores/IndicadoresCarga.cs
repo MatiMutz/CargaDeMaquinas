@@ -34,7 +34,8 @@ namespace SupplyChain
 
                 // Llena tabla de carga
                 List<Indicadores> dbCarga;
-                dbCarga = _context.Indicadoress.FromSqlRaw("use Solutiion EXEC NET_Listado_PedidosPendientes @xTipo = 'T', @xCliDesde = 1, @xCliHasta = 99999, @xFecDesde = '03-03-2021', @xFecHasta = '12-12-2100', @xDepos = 0, @xTipoFec = 'P', @xCgClas = 0; ").ToList<Indicadores>();
+                dbCarga = _context.Indicadoress
+                    .FromSqlRaw("EXEC NET_Listado_PedidosPendientes @xTipo = 'T', @xCliDesde = 1, @xCliHasta = 99999, @xFecDesde = '03-03-2020', @xFecHasta = '12-12-2100', @xDepos = 0, @xTipoFec = 'P', @xCgClas = 0; ").ToList<Indicadores>();
                 dbCarga = dbCarga.OrderBy(x => x.Pedido).ToList<Indicadores>();
 
                 return dbCarga;

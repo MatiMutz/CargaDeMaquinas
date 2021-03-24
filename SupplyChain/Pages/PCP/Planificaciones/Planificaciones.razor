@@ -1,0 +1,574 @@
+﻿@page "/planificacion"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using Syncfusion.Blazor.Spinner
+@using System.Text.Json
+@using System.Linq
+@using Syncfusion.Blazor.SplitButtons
+@*@attribute [Authorize]*@
+@inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
+@inject NavigationManager NavManager
+@inherits SupplyChain.Pages.Planific.PlanifPageBase
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:none!important;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/prev">Previsión</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/PedPend">Pendientes de entrega</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/pendfab">Pendientes de fabricar</a>
+            </li>
+            <li class="nav-item active" style="background-color:lightblue;">
+                <a class="nav-link" href="/planificacion">Planificación</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/abastecimiento">Abastecimiento</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/fabricacion">Fabricación</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/CargaMaquina">Carga De Máquina</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <div>
+                <SfButton OnClick="@((e) => Emitir())" CssClass="emitir" IsPrimary="false"
+                          IconCss="fas fa-check-circle">Emitir Órden para un solo producto</SfButton>
+            </div>
+            <div>
+                <SfCheckBox @bind-Checked="@armadoCheck" @onchange="@CheckCambio" Label="Incluir también órdenes de Armado"></SfCheckBox>
+            </div>
+            <div>
+                <SfCheckBox @bind-Checked="@emitidasCheck" @onchange="@CheckCambio" Label="Incluir también órdenes Emitidas"></SfCheckBox>
+            </div>
+            <div>
+                <SfButton IconCss="fas fa-ban" @onclick="@(async ()=> await OrdCerradas())" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Órdenes cerradas y anuladas</SfButton>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    if (listaPlanificacion.Count() == 0 || listaPlanificacion is null)
+    {
+        VisibleProperty = true;
+    }
+    else
+    {
+        VisibleProperty = false;
+    }
+    if (VisibleProperty == false)
+    {
+        <div class="col-lg-12 control-section">
+            <div class="content-wrapper">
+                <div class="row">
+                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                            @ref="Grid" DataSource="@listaPlanificacion" AllowExcelExport="true" AllowGrouping="true"
+                            ID="Planificacion" Height="100%" Width="100%"
+                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                        <GridEvents CommandClicked="@CommandClickHandler" OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="Planificacion"></GridEvents>
+                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                        <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                        <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
+                            <Template>
+                                @{
+                                    var planif = (context as Planificacion);
+                                    <div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Orden:</label>
+                                                <br />
+                                                <SfNumericTextBox ID="CG_ORDEN" Format="N0" @bind-Value="@(planif.CG_ORDF)" Enabled="false"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Estado:</label>
+                                                <br />
+                                                <SfDropDownList ID="Estado" TItem="Estado" @bind-Value="@(planif.CG_ESTADOCARGA)" TValue="int" Placeholder="Estado" DataSource="@Estados">
+                                                    <DropDownListFieldSettings Value="Valor" Text="Texto"></DropDownListFieldSettings>
+                                                </SfDropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Fecha de entrega:</label>
+                                                <br />
+                                                <SfDatePicker ID="FE_ENTREGA" @bind-Value="@(planif.FE_ENTREGA)" Enabled="true" Placeholder="Fecha de entrega"></SfDatePicker>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Cantidad:</label>
+                                                <br />
+                                                <SfNumericTextBox ID="CANT" Format="N0" @bind-Value="@(planif.CANT)" Enabled="true"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </Template>
+                        </GridEditSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(Planificacion.CG_ORDEN) Format="N0" HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CG_ORDF) Format="N0" HeaderText="Orden" TextAlign="TextAlign.Left" Width="90px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CG_R) HeaderText="Tipo de Orden" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            @*ORIGEN*@
+                            <GridColumn HeaderText="Origen" Width="90px">
+                                <Template>
+                                    @{
+                                        Planificacion Value = (context as Planificacion);
+                                        if (Value.SEM_ORIGEN == 0)
+                                        {
+                                            <span class="dotwhite"></span>
+                                        }
+                                        else if (Value.SEM_ORIGEN == 1)
+                                        {
+                                            <span class="dotlightgreen"></span>
+                                        }
+                                        else if (Value.SEM_ORIGEN == 2)
+                                        {
+                                            <span class="dotyellow"></span>
+                                        }
+                                        else if (Value.SEM_ORIGEN == 3)
+                                        {
+                                            <span class="dotred"></span>
+                                        }
+                                        else if (Value.SEM_ORIGEN == 4)
+                                        {
+                                            <span class="dotblue"></span>
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
+                            @*QUEDA STOCK*@
+                            <GridColumn HeaderText="Queda stock" Width="90px">
+                                <Template>
+                                    @{
+                                        Planificacion Value = (context as Planificacion);
+                                        if (Value.SEM_ABAST_PURO == 0)
+                                        {
+                                            <span class="dotwhite"></span>
+                                        }
+                                        else if (Value.SEM_ABAST_PURO == 1)
+                                        {
+                                            <span class="dotlightgreen"></span>
+                                        }
+                                        else if (Value.SEM_ABAST_PURO == 2)
+                                        {
+                                            <span class="dotyellow"></span>
+                                        }
+                                        else if (Value.SEM_ABAST_PURO == 3)
+                                        {
+                                            <span class="dotred"></span>
+                                        }
+                                        else if (Value.SEM_ABAST_PURO == 4)
+                                        {
+                                            <span class="dotblue"></span>
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
+                            @*HAY STOCK*@
+                            <GridColumn HeaderText="Hay stock" Width="90px">
+                                <Template>
+                                    @{
+                                        Planificacion Value = (context as Planificacion);
+                                        if (Value.SEM_ABAST == 0)
+                                        {
+                                            <span class="dotwhite"></span>
+                                        }
+                                        else if (Value.SEM_ABAST == 1)
+                                        {
+                                            <span class="dotlightgreen"></span>
+                                        }
+                                        else if (Value.SEM_ABAST == 2)
+                                        {
+                                            <span class="dotyellow"></span>
+                                        }
+                                        else if (Value.SEM_ABAST == 3)
+                                        {
+                                            <span class="dotred"></span>
+                                        }
+                                        else if (Value.SEM_ABAST == 4)
+                                        {
+                                            <span class="dotblue"></span>
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CG_ESTADOCARGA) Format="N0" HeaderText="Estado" Width="200px">
+                                <Template>
+                                    @{
+                                        Planificacion Value = (context as Planificacion);
+                                        if (Value.CG_ESTADOCARGA == 0)
+                                        {
+                                            <span>EMITIDA</span>
+                                        }
+                                        else if (Value.CG_ESTADOCARGA == 1)
+                                        {
+                                            <span>PLANEADA</span>
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
+                            @*DESPIECE Y DISPONIBILIDAD DE STOCK*@
+                            <GridColumn HeaderText="Despiece" Width="90px">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.None" Title="Despiece"
+                                                       ButtonOption="@(new CommandButtonOptions()
+                                                           {
+                                                               IconCss = "fas fa-list-ul black", Content="", CssClass="botonGrilla"
+                                                           })" />
+                                </GridCommandColumns>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.PEDIDO) Format="N0" HeaderText="Pedido" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.DES_PROD) HeaderText="Descripción del producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CANT) Format="N0" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CANTFAB) Format="N0" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_ENTREGA) HeaderText="Fecha de Entrega" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.DIASFAB) HeaderText="Días de fabricación" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.CG_FORM) Format="N0" HeaderText="Fórmula" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            @*<GridColumn Field=@nameof(Planificacion.DIASFAB) Format="N0" HeaderText="Planificadas" TextAlign="TextAlign.Left" Width="110px"></GridColumn>*@
+                            @*<GridColumn HeaderText="Activo" Width="90px">
+                                    <Template>
+                                        <SfButton OnClick="@((e)=> Despiece())" IconCss="fas fa-chart-line" CssClass="botonDespiece" IsPrimary="true"></SfButton>
+                                    </Template>
+                                </GridColumn>*@
+                            <GridColumn HeaderText="Activo" Width="90px">
+                                <GridCommandColumns>
+                                    <GridCommandColumn Type="CommandButtonType.None" Title="Activo"
+                                                       ButtonOption="@(new CommandButtonOptions()
+                                                           {
+                                                               IconCss = "fas fa-chart-line", Content="", CssClass="botonGrilla"
+                                                           })" />
+                                </GridCommandColumns>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_EMIT) HeaderText="Fecha de emisión" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_PLAN) HeaderText="fecha planificada" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <SfSpinner @bind-Visible="@VisibleProperty">
+        </SfSpinner>
+    }
+}
+
+@*DIALOG PARA DESPIECE*@
+<SfDialog Width="1300px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible">
+    <DialogTemplates>
+        <Content>
+            <SfGrid @ref="Grid2" DataSource="@listaDespiece" EnablePersistence="true" ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridEvents TValue="DespiecePlanificacion"></GridEvents>
+                <GridColumns>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.CG_SE) HeaderText="Semi Elaborado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.CG_MAT) HeaderText="Materia prima" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.DES_PROD) HeaderText="Descripción" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.STOCK) Format="N2" HeaderText="Stock" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.CANT_MAT) Format="N2" HeaderText="Cantidad Necesaria de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.SALDO) Format="N2" HeaderText="Saldo de la Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.CANT_PLANEADAS) Format="N2" HeaderText="Cantidad Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_PLANEADAS) Format="N2" HeaderText="Saldo Ordenes planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.CANT_TOTAL) Format="N2" HeaderText="Cantidad Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(DespiecePlanificacion.SALDO_TOTAL) Format="N2" HeaderText="Saldo Emitidas + Planeadas" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+@*DIALOG PARA FORMULA*@
+<SfDialog Width="200px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible2">
+    <DialogTemplates>
+        <Content>
+            <SfGrid @ref="Grid3" DataSource="@listaFormula" EnablePersistence="true" ID="Formula" GridLines="GridLine.Both" AllowResizing="true">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridEvents RowSelected="OnSelected" TValue="FormulaPlanificacion"></GridEvents>
+                <GridColumns>
+                    <GridColumn Field=@nameof(FormulaPlanificacion.DES_FORM) HeaderText="SELECCIONAR FORMULA" TextAlign="TextAlign.Center" Width="110px"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+@*DIALOG PARA ORDENES CERRADAS Y ANULADAS*@
+<SfDialog Width="1300px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible3">
+    <DialogTemplates>
+        <Content>
+            <SfGrid @ref="Grid4" DataSource="@listaCerradasAnuladas" EnablePersistence="true" ID="Despiece" GridLines="GridLine.Both" AllowReordering="true" AllowResizing="true">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridEvents TValue="Planificacion"></GridEvents>
+                <GridColumns>
+                    <GridColumn Field=@nameof(Planificacion.CG_ORDEN) HeaderText="Tipo producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CG_ORDF) HeaderText="Orden" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CLASE) HeaderText="Clase" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CG_R) HeaderText="Tipo" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CG_ESTADOCARGA) Format="N0" HeaderText="Estado" Width="200px">
+                        <Template>
+                            @{
+                                Planificacion Value = (context as Planificacion);
+                                if (Value.CG_ESTADOCARGA == 4)
+                                {
+                                    <span>CERRADA</span>
+                                }
+                                else if (Value.CG_ESTADOCARGA == 5)
+                                {
+                                    <span>ANULADA</span>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.PEDIDO) HeaderText="Pedido" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.DES_PROD) HeaderText="Descripción de producto" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CANT) Format="N2" HeaderText="Cantidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CANTFAB) Format="N2" HeaderText="Cantidad fabricada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.UNID) HeaderText="Unidad" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.UNIDSEG) HeaderText="Unidad comercial" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.DIASFAB) Format="N2" HeaderText="Días de fabricación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CG_CELDA) HeaderText="Celda" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.CG_FORM) HeaderText="Fórmula" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.FE_ENTREGA) HeaderText="Fecha de entrega" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.FE_EMIT) HeaderText="Fecha de emisión" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.FE_PLAN) HeaderText="Fecha planificada" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.FE_FIRME) HeaderText="Fecha en firme" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.FE_CURSO) HeaderText="Fecha en curso" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.FE_ANUL) HeaderText="Fecha de anulación" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                    <GridColumn Field=@nameof(Planificacion.FE_CIERRE) HeaderText="Fecha de cierre" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+            @{
+                if (listaCerradasAnuladas.Count == CantidadMostrar)
+                {
+                    <div class="col-sm-3 my-1">
+                        <button type="submit" class="btn btn-primary" @onclick="@AgregarValores">Ver más</button>
+                    </div>
+                }
+            }
+        </Content>
+    </DialogTemplates>
+    <DialogEvents OnClose="@Validation"></DialogEvents>
+</SfDialog>
+
+@*DIALOG PARA EMITIR ORDEN DE FABRICACION DE UN PRODUCTO*@
+<SfDialog Width="500px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible4">
+    <DialogTemplates>
+        <Content>
+            @*<div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label style="color:blue">Planificada Inicio:</label>
+                        <SfDateTimePicker Format="dd/MM/yyyy" TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_PREVISTA_FABRICACION"></SfDateTimePicker>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label style="color:blue">Inicio real:</label>
+                        <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FECHA_INICIO_REAL_FABRICACION"></SfDateTimePicker>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label style="color:blue">Finalización real:</label>
+                        <SfDateTimePicker TValue="DateTime" @bind-Value="@ordenFabricacion.FE_CIERRE"></SfDateTimePicker>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label style="color:blue">Cantidad fabricada:</label>
+                        <SfNumericTextBox TValue="decimal" Format="N0" @bind-Value="@ordenFabricacion.CANTFAB" ShowClearButton="true" Step="1"></SfNumericTextBox>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label style="color:blue">Seleccione Acción:</label>
+                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ESTADOCARGA" DataSource="@dbEstadoCarga">
+                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label style="color:blue">Dependencia:</label>
+                        <SfDropDownList TValue="int" TItem="ModeloGenericoIntString" @bind-Value="@ordenFabricacion.CG_ORDFORIG" DataSource="@dbOrdenesDependientes">
+                            <DropDownListFieldSettings Value="ID" Text="TEXTO"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                </div>*@
+            <div class="form-row">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <SfTextBox Placeholder="Código de Producto" Input="OnInputCG_PROD" @bind-Value="CgString" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <SfTextBox Placeholder="Descripción de Producto" Input="OnInputDES_PROD" @bind-Value="DesString" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 my-1">
+                        <SfButton OnClick="@((e)=> BuscarProductoPrevision())" IconCss="fas fa-search" CssClass="btn btn-sm btn-outline-primary" IsPrimary="false">Buscar</SfButton>
+                    </div>
+                </div>
+            </div>
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+
+<SfDialog Width="1000px" IsModal="true" ShowCloseIcon="true" @bind-Visible="@IsVisible5">
+    <DialogTemplates>
+        <Content>
+            <SfGrid @ref="Grid5" DataSource="@Busquedalist">
+                <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                <GridEvents RowSelected="OnSelected2" TValue="Prod"></GridEvents>
+                <GridColumns>
+                    <GridColumn Field=@nameof(Prod.CG_PROD) HeaderText="Producto" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                    <GridColumn Field=@nameof(Prod.DES_PROD) HeaderText="Descripcion" TextAlign="TextAlign.Left" Width="150px"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+            @{
+                if (Busquedalist.Count == CantidadMostrar)
+                {
+                    <div class="col-sm-3 my-1">
+                        <button type="submit" class="btn btn-primary" @onclick="@AgregarValores2">Buscar más</button>
+                    </div>
+                }
+            }
+        </Content>
+    </DialogTemplates>
+</SfDialog>
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+
+    .emitir {
+        color: black !important;
+        background-color: cornflowerblue !important;
+    }
+
+    .gris {
+        background-color: lightgrey;
+    }
+
+    .e-checkbox-wrapper .e-frame.e-check, .e-css.e-checkbox-wrapper .e-frame.e-check {
+        background-color: white;
+        border-color: black;
+        color: black;
+    }
+
+    .dotwhite {
+        background-color: white;
+        border-width: 2px;
+        border-style: solid;
+        border-color: gray;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+    .dotlightgreen {
+        background-color: lightgreen;
+        border-width: 2px;
+        border-style: solid;
+        border-color: darkgreen;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+    .dotyellow {
+        background-color: yellow;
+        border-width: 2px;
+        border-style: solid;
+        border-color: yellowgreen;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+    .dotred {
+        background-color: red;
+        border-width: 2px;
+        border-style: solid;
+        border-color: darkred;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+    .dotblue {
+        background-color: blue;
+        border-width: 2px;
+        border-style: solid;
+        border-color: darkblue;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        display: flex;
+        margin: auto;
+    }
+
+    .botonGrilla {
+        color: black;
+        background-color: white;
+        border-width: 2px;
+        border-style: solid;
+        border-color: black;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        margin: auto;
+    }
+
+    .e-btn.e-primary, .e-css.e-btn.e-primary {
+        background-color: lightgrey;
+        border-color: lightgrey;
+        color: blue;
+    }
+</style>
+@code {
+}

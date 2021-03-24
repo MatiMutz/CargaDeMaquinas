@@ -22,12 +22,16 @@ namespace SupplyChain
             try
             {
                 await _context.Database.ExecuteSqlRawAsync(SQLcommandString);
+                return Ok();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException dbex)
             {
-                throw;
+                return BadRequest(dbex);
             }
-            return NoContent();
+            catch(Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

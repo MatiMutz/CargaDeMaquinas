@@ -7,8 +7,8 @@ using System.Text;
 
 namespace SupplyChain
 {
-    public class Indicadores
-    {
+	public class Indicadores
+	{
 		[Key]
 		public int? Pedido { get; set; } = 0;
 		public int? Presup { get; set; } = 0;

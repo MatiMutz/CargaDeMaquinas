@@ -1,0 +1,170 @@
+﻿@page "/PendFab"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using System.Configuration;
+@using System.Data.SqlClient;
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.BarcodeGenerator
+@using Syncfusion.Blazor.Spinner
+@using System.Text.Json
+@using System.Linq
+@*@attribute [Authorize]*@
+@inject IJSRuntime JsRuntime
+@using SupplyChain
+@using System.Net.Http.Json
+
+@inject NavigationManager NavManager
+@inherits SupplyChain.Pages.PendFab.PendFabPageBase
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:none!important;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/prev">Previsión</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/PedPend">Pendientes de entrega</a>
+            </li>
+            <li class="nav-item active" style="background-color:lightblue;">
+                <a class="nav-link" href="/pendfab">Pendientes de fabricar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/planificacion">Planificación</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/abastecimiento">Abastecimiento</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/fabricacion">Fabricación</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/CargaMaquina">Carga De Máquina</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <div>
+                <SfButton OnClick="@((e) => EmitirOrden())" CssClass="emitir" IsPrimary="false"
+                          IconCss="fas fa-check-circle">Emitir Ordenes</SfButton>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    if (listaPendFab is null)
+    {
+        VisibleProperty = true;
+    }
+    else
+    {
+        VisibleProperty = false;
+    }
+    if (VisibleProperty == false)
+    {
+        <div class="col-lg-12 control-section">
+            <div class="content-wrapper">
+                <div class="row">
+                    <SfGrid AllowReordering="true" ShowColumnChooser="true" ShowColumnMenu="true" AllowResizing="true" EnablePersistence="true"
+                            @ref="Grid" DataSource="@listaPendFab" AllowExcelExport="true" AllowGrouping="true" 
+                            ID="PendienteFabricar" Height="100%" Width="100%"
+                            AllowSorting="true" AllowPaging="true" AllowFiltering="true" Toolbar="@Toolbaritems" GridLines="GridLine.Both">
+                        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                        <GridEvents OnToolbarClick="@ClickHandler" QueryCellInfo="QueryCellInfoHandler" OnActionBegin="ActionBegin" TValue="ModeloPendientesFabricar"></GridEvents>
+                        <GridFilterSettings Type="@Syncfusion.Blazor.Grids.FilterType.CheckBox"></GridFilterSettings>
+                        <GridGroupSettings ShowGroupedColumn="true"></GridGroupSettings>
+                        <GridEditSettings AllowDeleting="true" AllowEditing="true" Mode="@EditMode.Dialog" Dialog="DialogParams">
+                            <Template>
+                                @{
+                                    var pfab = (context as ModeloPendientesFabricar);
+                                    <div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Pedido:</label>
+                                                <br />
+                                                <SfNumericTextBox ID="PEDIDO" Format="N" @bind-Value="@(pfab.PEDIDO)" Enabled="false"></SfNumericTextBox>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class="e-float-text e-label-top">Cantidad a Emitir:</label>
+                                                <br />
+                                                <SfNumericTextBox ID="CANTEMITIR" Format="N" @bind-Value="@(pfab.CANTEMITIR)" Enabled="true"></SfNumericTextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </Template>
+                        </GridEditSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.REGISTRO) HeaderText="Registro" TextAlign="TextAlign.Left" Visible="Disabled" Width="90px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.PEDIDO) Format="N0" HeaderText="Pedido" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.EXIGEOA) HeaderText="Tipo de Orden" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.CG_ART) HeaderText="Producto" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.CANTPED) Format="N0" HeaderText="Comprometido pedidos" TextAlign="TextAlign.Left" Visible="Enabled" Width="130px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.DES_ART) HeaderText="Descripcion de producto" TextAlign="TextAlign.Left" Visible="Enabled" Width="200px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.CG_FORM) Format="N0" HeaderText="Formula" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.PREVISION) Format="N0" HeaderText="Comprometido Prevision" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.CANTEMITIR) Format="N0" HeaderText="Cantidad sugerida a emitir" TextAlign="TextAlign.Left" Visible="Enabled" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.COMP_EMITIDAS) Format="N0" HeaderText="Emitidas" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.LOPTIMO) Format="N0" HeaderText="Lote optimo" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.CALCULADO) Format="N0" HeaderText="Calculado" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.STOCK) Format="N0" HeaderText="Stock fisico" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.STOCKMIN) Format="N0" HeaderText="Stock de seguridad" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                            <GridColumn Field=@nameof(ModeloPendientesFabricar.STOCKENT) Format="N0" HeaderText="Planificadas" TextAlign="TextAlign.Left" Width="110px"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <SfSpinner @bind-Visible="@VisibleProperty">
+        </SfSpinner>
+
+    }
+}
+
+<style>
+    .form-group.col-md-6 {
+        width: 200px;
+    }
+
+    label.e-float-text {
+        position: relative;
+        padding-left: 0;
+        top: 10%;
+    }
+
+    .emitir {
+        color: black !important;
+        background-color: lightgreen !important;
+    }
+
+    .e-input-group.e-control-wrapper.customClass {
+        color: black;
+        background-color: lightblue;
+    }
+
+    .e-grid .e-gridcontent .e-rowcell.rojas {
+        background-color: #FF0000;
+    }
+
+    .gris {
+        background-color: lightgrey;
+    }
+</style>
+@code {
+}

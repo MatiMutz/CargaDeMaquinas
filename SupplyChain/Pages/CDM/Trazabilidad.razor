@@ -456,745 +456,746 @@
             NroCertificado = this.Grid.GetSelectedRecords().Result.FirstOrDefault().DESPACHO;
             if (rutas != null)
             {
-                @foreach (Solution rutaX in rutas)
-                {
-                    if (rutaX.CAMPO == "RUTATRAZABILIDAD")
-                    {
-                        // Only get files that begin with the letter "c".
-                        ruta = rutaX.VALORC + NroCertificado.Trim() + ".pdf";
-                        if (File.Exists(ruta))
-                        {
-                            IsVisibleCertificado = true;
-                            ShowCertificado = true;
-                        }
-                        else
-                        {
-                            IsVisibleCertificado = true;
-                            ShowCertificado = false;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    protected async Task OnInputPedido(InputEventArgs args)
-    {
-        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorPedido/{args.Value}");
-        if (Pedidoslist.Count > 0)
-        {
-            BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
-            BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
-        }
-        else
-        {
-            BoxCliente = "";
-            BoxCodigo = "";
-        }
-    }
-
-    protected async Task OnInputCodigo(InputEventArgs args)
-    {
-        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCodigo/{args.Value}");
-        if (Pedidoslist.Count > 0)
-        {
-            BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
-            BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
-        }
-        else
-        {
-            BoxCliente = "";
-            BoxPedido = "";
-        }
-    }
-
-    protected async Task OnInputCliente(InputEventArgs args)
-    {
-        Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
-        if (Pedidoslist.Count > 0)
-        {
-            BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
-            TrzNro = BoxPedido;
-            BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
-        }
-        else
-        {
-            BoxPedido = "";
-            BoxCodigo = "";
-        }
-    }
-
-    protected async Task BuscarTrazabilidad()
-    {
-        CantidadMostrar = 100;
-        if (BoxPedido != "")
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
-        }
-        else if (BoxCliente != "")
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
-        }
-        else if (BoxCodigo != "")
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
-        }
-        else
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
-        }
-        IsVisible = true;
-    }
-    protected async Task MostrarTrazabilidad()
-    {
-        pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
-        Showgrid = true;
-        BoxPedido = "";
-        BoxCliente = "";
-        BoxCodigo = "";
-    }
-    protected async Task Catalogo()
-    {
-        ProdCertificado = await Http.GetFromJsonAsync<List<Prod>>($"api/Prod/BuscarPorCG_PROD/{CodNro}");
-        PedcliCertificado = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/BuscarPorPedido/{TrzNro}");
-        PedidosCertificado = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BusquedaParaFE_MOV/{TrzNro}");
-        string roscas = "";
-        string Ansi_Api = "";
-        if (CodNro.Substring(0, 1) == "1")
-        {
-            roscas = "Aprobado";
-            Ansi_Api = "-";
-        }
-        else
-        {
-            roscas = "-";
-            Ansi_Api = "Aprobado";
-        }
-        //Create a new PDF document
-        PdfDocument document = new PdfDocument();
-        //Create the page
-        PdfPage page = document.Pages.Add();
-        //Create PDF graphics for the page
-        FileStream fontStream = new FileStream("wwwroot\\Calibri 400.ttf", FileMode.Open, FileAccess.Read);
-        //Create a PdfGrid
-        PdfGrid pdfGrid = new PdfGrid();
-
-        PdfGraphics graphics = page.Graphics;
-        //PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
-        //PdfFont font = new PdfTrueTypeFont("wwwroot\\Calibri 400.ttf", 24);
-        PdfFont font = new PdfTrueTypeFont(fontStream, 10, PdfFontStyle.Bold);
-
-        //Create and customize the string formats
-        PdfStringFormat Centrado = new PdfStringFormat();
-        Centrado.Alignment = PdfTextAlignment.Center;
-        Centrado.LineAlignment = PdfVerticalAlignment.Middle;
-        //Create and customize the string formats
-        PdfStringFormat Izquierda = new PdfStringFormat();
-        Izquierda.Alignment = PdfTextAlignment.Left;
-        Izquierda.LineAlignment = PdfVerticalAlignment.Middle;
-        //Add columns to PdfGrid
-        for (int i = 0; i < 6; i++)
-        {
-            PdfGridColumn column = pdfGrid.Columns.Add();
-            if (i == 0 || i == 1 || i == 4 || i == 5)
+                @*@foreach (Solution rutaX in rutas)
+                {*@
+            Solution rutaX = rutas.Where(r => r.CAMPO == "RUTATRAZABILIDAD").FirstOrDefault();
+            if (rutaX.CAMPO == "RUTATRAZABILIDAD")
             {
-                column.Width = 64;
-            }
-            if (i == 2 || i == 3)
-            {
-
-                column.Width = 128;
-            }
-        }
-        //Add rows to PdfGrid
-        for (int i = 0; i < 32; i++)
-        {
-            PdfGridRow row = pdfGrid.Rows.Add();
-            if (i == 0 || i == 1 || i == 2 || i == 3 || i == 7 || i == 17 || i == 21)
-            {
-                row.Height = 26;
-            }
-            else if (i == 31)
-            {
-                row.Height = 47;
-            }
-            else
-            {
-                row.Height = 22;
-            }
-        }
-        //Load the image from the stream
-        //FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
-        FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
-
-        //LINEA 1
-        //Add RowSpan
-        PdfGridCell gridCell1 = pdfGrid.Rows[0].Cells[0];
-        gridCell1.ColumnSpan = 2;
-        gridCell1.RowSpan = 2;
-        gridCell1.StringFormat = Centrado;
-        gridCell1.Value = new PdfTextElement("ARBROS S.A.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell2 = pdfGrid.Rows[0].Cells[2];
-        gridCell2.ColumnSpan = 2;
-        gridCell2.RowSpan = 2;
-        gridCell2.StringFormat = Centrado;
-        gridCell2.Value = new PdfTextElement("ACTA DE INSPECCIÓN", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell3 = pdfGrid.Rows[0].Cells[4];
-        gridCell3.ColumnSpan = 2;
-        gridCell3.RowSpan = 2;
-        gridCell3.StringFormat = Centrado;
-        gridCell3.Value = new PdfTextElement($"Cliente: \n {PedcliCertificado.FirstOrDefault().DES_CLI.Trim()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-
-        //LINEA 2
-        //Add RowSpan
-        PdfGridCell gridCell4 = pdfGrid.Rows[2].Cells[0];
-        gridCell4.ColumnSpan = 2;
-        gridCell4.RowSpan = 2;
-        gridCell4.StringFormat = Centrado;
-        //gridCell4.Value = new PdfBitmap(fs);
-        //Add RowSpan
-        PdfGridCell gridCell5 = pdfGrid.Rows[2].Cells[2];
-        gridCell5.ColumnSpan = 2;
-        gridCell5.RowSpan = 2;
-        gridCell5.StringFormat = Centrado;
-        gridCell5.Value = new PdfTextElement("VÁLVULAS DE SEGURIDAD Y ALIVIO", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[4];
-        gridCell6.ColumnSpan = 2;
-        gridCell6.RowSpan = 2;
-        gridCell6.StringFormat = Centrado;
-        gridCell6.Value = new PdfTextElement($"O.C.I.: {PedcliCertificado.FirstOrDefault().NUMOCI}\n" +
-                                             $"{PedidosCertificado.FirstOrDefault().FE_MOV.ToShortDateString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-
-        //GENERALIDADES
-        //Add RowSpan
-        PdfGridCell gridCell7 = pdfGrid.Rows[4].Cells[0];
-        gridCell7.ColumnSpan = 2;
-        gridCell7.StringFormat = Izquierda;
-        gridCell7.Value = new PdfTextElement($"GENERALIDADES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell8 = pdfGrid.Rows[4].Cells[2];
-        gridCell8.ColumnSpan = 1;
-        gridCell8.StringFormat = Izquierda;
-        gridCell8.Value = $"   Orden de compra:\n" +
-                          $"   Remito de entrega:";
-        //Add RowSpan
-        PdfGridCell gridCell9 = pdfGrid.Rows[4].Cells[3];
-        gridCell9.ColumnSpan = 3;
-        gridCell9.StringFormat = Izquierda;
-        gridCell9.Value = $"   {PedcliCertificado.FirstOrDefault().ORCO.Trim()}\n" +
-                          $"   {PedcliCertificado.FirstOrDefault().REMITO.Trim()}";
-
-        //DATOS DE PLACA
-        //Add RowSpan
-        PdfGridCell gridCell10 = pdfGrid.Rows[5].Cells[0];
-        gridCell10.ColumnSpan = 2;
-        gridCell10.RowSpan = 8;
-        gridCell10.StringFormat = Izquierda;
-        gridCell10.Value = new PdfTextElement("DATOS DE PLACA", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell11 = pdfGrid.Rows[5].Cells[2];
-        gridCell11.ColumnSpan = 1;
-        gridCell11.RowSpan = 8;
-        gridCell11.StringFormat = Izquierda;
-        gridCell11.Value = $"   Linea de Producto:\n" +
-                           $"   Nro de Serie:\n" +
-                           $"   TAG:\n" +
-                           $"   Medida (Ent x Sal):\n" +
-                           $"   Clase (Ent x Sal):\n" +
-                           $"   Orif. API 526 / Area:\n" +
-                           $"   Presión de Apertura:\n" +
-                           $"   Contrapresión:\n" +
-                           $"   Presión de ajuste en Banco:\n" +
-                           $"   Fluido:\n" +
-                           $"   Temperatura:\n" +
-                           $"   Código de Resorte:\n" +
-                           $"   Código de la válvula:";
-        //Add RowSpan
-        PdfGridCell gridCell12 = pdfGrid.Rows[5].Cells[3];
-        gridCell12.ColumnSpan = 3;
-        gridCell12.RowSpan = 8;
-        gridCell12.StringFormat = Izquierda;
-        gridCell12.Value = $"   {ProdCertificado.FirstOrDefault().CAMPOCOM1.Trim()}\n" +
-                           $"   {TrzNro}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().LOTE.Trim()}\n" +
-                           $"   {ProdCertificado.FirstOrDefault().CAMPOCOM2.Trim()}\n" +
-                           $"   {ProdCertificado.FirstOrDefault().CAMPOCOM5.Trim()}\n" +
-                           $"   {ProdCertificado.FirstOrDefault().CAMPOCOM3.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM1.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM5.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM4.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM3.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM6.Trim()}\n" +
-                           $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM2.Trim()}\n" +
-                           $"   {CodNro}";
-
-        //CONTROL DIMENSIONAL
-        //Add RowSpan
-        PdfGridCell gridCell13 = pdfGrid.Rows[13].Cells[0];
-        gridCell13.ColumnSpan = 2;
-        gridCell13.RowSpan = 2;
-        gridCell13.StringFormat = Izquierda;
-        gridCell13.Value = new PdfTextElement("CONTROL DIMENSIONAL", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell14 = pdfGrid.Rows[13].Cells[2];
-        gridCell14.ColumnSpan = 1;
-        gridCell14.StringFormat = Izquierda;
-        gridCell14.RowSpan = 2;
-        gridCell14.Value = $"   ANSI B-16.5 (Ent-Sal)\n" +
-                           $"   Roscas (Ent-Sal)\n" +
-                           $"   API 526";
-        //Add RowSpan
-        PdfGridCell gridCell15 = pdfGrid.Rows[13].Cells[3];
-        gridCell15.ColumnSpan = 3;
-        gridCell15.StringFormat = Izquierda;
-        gridCell15.RowSpan = 2;
-        gridCell15.Value = $"   {Ansi_Api}\n" +
-                           $"   {roscas}\n" +
-                           $"   {Ansi_Api}";
-
-        //PRUEBA HIDRAULICA Y MATERIALES
-        //Add RowSpan
-        PdfGridCell gridCell16 = pdfGrid.Rows[15].Cells[0];
-        gridCell16.ColumnSpan = 2;
-        gridCell16.RowSpan = 8;
-        gridCell16.StringFormat = Izquierda;
-        gridCell16.Value = new PdfTextElement("PRUEBA HIDRAULICA Y MATERIALES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell17 = pdfGrid.Rows[15].Cells[2];
-        gridCell17.ColumnSpan = 1;
-        gridCell17.RowSpan = 2;
-        gridCell17.StringFormat = Izquierda;
-        gridCell17.Value = $"   Material Disco\n" +
-                           $"   Identificación Disco\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell18 = pdfGrid.Rows[15].Cells[3];
-        gridCell18.ColumnSpan = 3;
-        gridCell18.RowSpan = 2;
-        gridCell18.StringFormat = Izquierda;
-        gridCell18.Value = $"   X1";
-        //Add RowSpan
-        PdfGridCell gridCell19 = pdfGrid.Rows[17].Cells[2];
-        gridCell19.ColumnSpan = 1;
-        gridCell19.RowSpan = 2;
-        gridCell19.StringFormat = Izquierda;
-        gridCell19.Value = $"   Material Tobera\n" +
-                           $"   Identificación Tobera\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell20 = pdfGrid.Rows[17].Cells[3];
-        gridCell20.ColumnSpan = 3;
-        gridCell20.RowSpan = 2;
-        gridCell20.StringFormat = Izquierda;
-        gridCell20.Value = $"   X2";
-        //Add RowSpan
-        PdfGridCell gridCell21 = pdfGrid.Rows[19].Cells[2];
-        gridCell21.ColumnSpan = 1;
-        gridCell21.RowSpan = 2;
-        gridCell21.StringFormat = Izquierda;
-        gridCell21.Value = $"   Material Cuerpo\n" +
-                           $"   Identificación Cuerpo\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell22 = pdfGrid.Rows[19].Cells[3];
-        gridCell22.ColumnSpan = 3;
-        gridCell22.RowSpan = 2;
-        gridCell22.StringFormat = Izquierda;
-        gridCell22.Value = $"   X3";
-        //Add RowSpan
-        PdfGridCell gridCell23 = pdfGrid.Rows[21].Cells[2];
-        gridCell23.ColumnSpan = 1;
-        gridCell23.RowSpan = 2;
-        gridCell23.StringFormat = Izquierda;
-        gridCell23.Value = $"   Material Bonete\n" +
-                           $"   Identificación Bonete\n" +
-                           $"   Presión de Prueba Hidráulica";
-        //Add RowSpan
-        PdfGridCell gridCell24 = pdfGrid.Rows[21].Cells[3];
-        gridCell24.ColumnSpan = 3;
-        gridCell24.RowSpan = 2;
-        gridCell24.StringFormat = Izquierda;
-        gridCell24.Value = $"   X4";
-
-        //ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO
-        //Add RowSpan
-        PdfGridCell gridCell25 = pdfGrid.Rows[23].Cells[0];
-        gridCell25.ColumnSpan = 2;
-        gridCell25.RowSpan = 4;
-        gridCell25.StringFormat = Izquierda;
-        gridCell25.Value = new PdfTextElement("ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO - FLUIDO AIRE A TEMP. AMBIENTE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell26 = pdfGrid.Rows[23].Cells[2];
-        gridCell26.ColumnSpan = 3;
-        gridCell26.RowSpan = 3;
-        gridCell26.StringFormat = Izquierda;
-        gridCell26.Value = $"   Calibracion a la presión segun ASME PTC-25.3:\n" +
-                           $"   Ensayos de repetitividad (3):\n" +
-                           $"   Control estanqueidad de asientos segun API 527:";
-        //Add RowSpan
-        PdfGridCell gridCell27 = pdfGrid.Rows[23].Cells[5];
-        gridCell27.ColumnSpan = 1;
-        gridCell27.RowSpan = 3;
-        gridCell27.StringFormat = Izquierda;
-        gridCell27.Value = $"   X1";
-        //Add RowSpan
-        PdfGridCell gridCell28 = pdfGrid.Rows[26].Cells[2];
-        gridCell28.ColumnSpan = 3;
-        gridCell28.StringFormat = Izquierda;
-        gridCell28.Value = $" Patrón Utilizado:";
-        //Add RowSpan
-        PdfGridCell gridCell29 = pdfGrid.Rows[26].Cells[5];
-        gridCell29.ColumnSpan = 1;
-        gridCell29.StringFormat = Izquierda;
-        gridCell29.Value = $"   X1";
-
-        //RESULTADO
-        //Add RowSpan
-        PdfGridCell gridCell30 = pdfGrid.Rows[27].Cells[0];
-        gridCell30.ColumnSpan = 2;
-        gridCell30.StringFormat = Izquierda;
-        gridCell30.Value = new PdfTextElement("RESULTADO ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCell31 = pdfGrid.Rows[27].Cells[2];
-        gridCell31.ColumnSpan = 4;
-        gridCell31.StringFormat = Izquierda;
-        gridCell31.Value = new PdfTextElement("X1", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-
-        //FIRMA
-        //Add RowSpan
-        PdfGridCell gridCellx35 = pdfGrid.Rows[28].Cells[0];
-        gridCellx35.ColumnSpan = 2;
-        gridCellx35.RowSpan = 2;
-        gridCellx35.StringFormat = Izquierda;
-        gridCellx35.Value = new PdfTextElement("FIRMA INSPECTOR AERRE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCellx36 = pdfGrid.Rows[28].Cells[2];
-        gridCellx36.ColumnSpan = 4;
-        gridCellx36.RowSpan = 2;
-        gridCellx36.StringFormat = Izquierda;
-        gridCellx36.Value = new PdfBitmap(IMR);
-
-        //PRECINTO
-        //Add RowSpan
-        PdfGridCell gridCellx37 = pdfGrid.Rows[30].Cells[0];
-        gridCellx37.ColumnSpan = 2;
-        gridCellx37.StringFormat = Izquierda;
-        gridCellx37.Value = new PdfTextElement("PRECINTO Nro.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
-        //Add RowSpan
-        PdfGridCell gridCellx38 = pdfGrid.Rows[30].Cells[2];
-        gridCellx38.ColumnSpan = 4;
-        gridCellx38.StringFormat = Izquierda;
-        gridCellx38.Value = $"   AERRE 00024 ";
-
-        //GARANTIA
-        //Add RowSpan
-        PdfGridCell gridCell58 = pdfGrid.Rows[31].Cells[0];
-        gridCell58.ColumnSpan = 6;
-        gridCell58.StringFormat = Centrado;
-        gridCell58.Value = "GARANTIA: \n Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica, contra todo defecto de materiales y / o fabricación, limitada a la reposición sin cargo en nuestra fábrica de un elemento similar. Esta garantía no ampara el desgaste anormal por la utilización en condiciones distintas a las especificadas";
-
-        //Draw the PdfGrid
-        pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 0));
-        //Saving the PDF to the MemoryStream
-        MemoryStream stream = new MemoryStream();
-        document.Save(stream);
-        //Set the position as '0'
-        stream.Position = 0;
-        //Close the document
-        document.Close(true);
-        await JS.SaveAs($" Certificado" + ".pdf", stream.ToArray());
-    }
-    protected async Task AgregarValores()
-    {
-        CantidadMostrar = CantidadMostrar + 100;
-        if (BoxPedido != "")
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
-        }
-        else if (BoxCliente != "")
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
-        }
-        else if (BoxCodigo != "")
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
-        }
-        else
-        {
-            Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
-        }
-    }
-
-    protected async Task Etiqueta()
-    {
-        if (true)
-        {
-            if (CodNro.Substring(0, 1) == "2")
-            {
-                string espaciosPedido = "";
-                string CLIENTE = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
-                if (CLIENTE.Contains("YPF") || CLIENTE.Contains("Y.P.F"))
+                // Only get files that begin with the letter "c".
+                ruta = rutaX.VALORC + NroCertificado.Trim() + ".pdf";
+                if (File.Exists(ruta))
                 {
-                    //Chapa de 101 mm x 78 mm
-                    PdfDocument document1 = new PdfDocument();
-                    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
-                    document1.PageSettings.Margins.All = 0;
-                    PdfGrid pdfGrid1 = new PdfGrid();
-                    PdfPage page = document1.Pages.Add();
-                    PdfGraphics graphics = page.Graphics;
-                    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
-                    PdfLightTable pdfTable = new PdfLightTable();
-                    page.Graphics.RotateTransform(-360);
-                    for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
-                    {
-                        espaciosPedido = espaciosPedido + " ";
-                    }
-                    var tipo2 = from item in prodList
-                                where item.CG_PROD == CodNro
-                                select item.CAMPOCOM6;
-                    string tipo = "";
-                    if (tipo2 is null || tipo2.Contains("System.Linq"))
-                    {
-                        tipo = "";
-                    }
-                    else
-                    {
-                        tipo = tipo2.ToString();
-                    }
-                    FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
-
-                    graphics.DrawString($" \r\n" +
-                        $"\r\n" +
-                        $"\r\n" +
-                        $"    Año:{DateTime.Now.Year}  N°:{TrzNro} \r\n" +
-                        $"    TAG:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
-                        $"    Tipo:\r\n" +
-                        $"    Codigo:{CodNro.Trim()}\r\n" +
-                        $"    Medida:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}  {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
-                        $"    Clase:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
-                        $"    Temp:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}\r\n" +
-                        $"    Presion SET:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}\r\n" +
-                        $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
-                        $"    Ctra.P:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
-                        $"    Fluido:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
-                        $"    Cuerpo:\r\n" +
-                        $"    Tobera:\r\n" +
-                        $"    Resorte:\r\n" +
-                        $"    T.OPDS N°:8/11\r\n" +
-                        $"    M.OPDS N°:47642\r\n" +
-                        $"          Arbros S.A.\r\n" +
-                        $"       www.aerre.com.ar\r\n" +
-                        $"     Industria  Argentina\r\n" +
-                        $"                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-
-
-                    MemoryStream xx = new MemoryStream();
-                    document1.Save(xx);
-                    document1.Close(true);
-                    await JS.SaveAs("EtiquetaProd" + CodNro.Trim() + ".pdf", xx.ToArray());
-                }
-                //else
-                //{
-
-                //    string espaciosPedidox = "";
-                //    string espaciosAnio = "";
-                //    string espaciosSegundoCampo3bis = "";
-                //    string espaciosSegundoCampo4bis = "";
-                //    string espaciosSegundoCampo5bis = "";
-
-                //    //Chapa de 101 mm x 78 mm
-                //    PdfDocument document1 = new PdfDocument();
-                //    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
-                //    document1.PageSettings.Margins.All = 0;
-                //    PdfGrid pdfGrid1 = new PdfGrid();
-                //    PdfPage page = document1.Pages.Add();
-                //    PdfGraphics graphics = page.Graphics;
-                //    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
-                //    PdfLightTable pdfTable = new PdfLightTable();
-                //    page.Graphics.RotateTransform(-360);
-
-                //    for (int i = 0; i < (25 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Length); i++)
-                //    {
-                //        espaciosPedidox = espaciosPedidox + " ";
-                //    }
-                //    for (int i = 0; i < (16 - ordenFabricacion.CG_PROD.Length); i++)
-                //    {
-                //        espaciosAnio = espaciosAnio + " ";
-                //    }
-                //    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim().Length); i++)
-                //    {
-                //        espaciosSegundoCampo3bis = espaciosSegundoCampo3bis + " ";
-                //    }
-                //    for (int i = 0; i < (25 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim().Length); i++)
-                //    {
-                //        espaciosSegundoCampo4bis = espaciosSegundoCampo4bis + " ";
-                //    }
-                //    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim().Length); i++)
-                //    {
-                //        espaciosSegundoCampo5bis = espaciosSegundoCampo5bis + " ";
-                //    }
-
-                //    string xd1 = prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim();
-                //    string xd2 = prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim();
-                //    int UbicacionXMedida = xd1.ToLower().IndexOf('x');
-                //    int UbicacionXMedida2 = xd2.ToLower().IndexOf('x');
-
-                //    string primeramedida1 = xd1.Substring(0, UbicacionXMedida);
-                //    string segundamedida1 = xd1.Substring(UbicacionXMedida + 1);
-                //    string primeramedida2 = xd2.Substring(0, UbicacionXMedida2);
-                //    string segundamedida2 = xd2.Substring(UbicacionXMedida2 + 1);
-
-                //    graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE}{espaciosPedidox}{ordenFabricacion.PEDIDO} " +
-                //        $"\r\n\r\n         {ordenFabricacion.CG_PROD} {espaciosAnio}     {DateTime.Now.Year} " +
-                //        $"\r\n             {primeramedida1}                {segundamedida1}" +
-                //        $"\r\n\r\n    {primeramedida2}   {segundamedida2}        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
-                //        $"\r\n                     { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
-                //        $"\r\n\r\n       {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} " +
-                //        $"\r\n         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
-                //        $"\r\n\r\n" +
-                //        $"\r\n" +
-                //        $"\r\n\r\n                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}   " +
-                //        $"\r\n                     {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
-                //        $"\r\n\r\n" +
-                //        $"\r\n    " +
-                //        $"\r\n    ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
-
-                //    MemoryStream xx = new MemoryStream();
-                //    document1.Save(xx);
-                //    document1.Close(true);
-                //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
-                //}
-            }
-            if (CodNro.Substring(0, 1) == "1")
-            {
-                //Chapa de 25 x 95
-                PdfDocument document1 = new PdfDocument();
-                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(359, 94);
-                document1.PageSettings.Margins.All = 0;
-                document1.PageSettings.Rotate = PdfPageRotateAngle.RotateAngle180;
-                PdfGrid pdfGrid1 = new PdfGrid();
-                PdfPage page = document1.Pages.Add();
-                PdfGraphics graphics = page.Graphics;
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
-                PdfLightTable pdfTable = new PdfLightTable();
-                page.Graphics.RotateTransform(-90);
-                string espaciosTag = "";
-                for (int i = 0; i < (20 - TrzNro.ToString().Length); i++)
-                {
-                    espaciosTag = espaciosTag + " ";
-                }
-                string espaciosAnio = "";
-                for (int i = 0; i < (32 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
-                {
-                    espaciosAnio = espaciosAnio + " ";
-                }
-                string espaciosOrif = "";
-                for (int i = 0; i < (32 - prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
-                {
-                    espaciosOrif = espaciosOrif + " ";
-                }
-                string espaciosClase = "";
-                for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim().Length); i++)
-                {
-                    espaciosClase = espaciosClase + " ";
-                }
-                string espaciosSinLote = "";
-                for (int i = 0; i < 43; i++)
-                {
-                    espaciosSinLote = espaciosSinLote + " ";
-                }
-
-                //graphics.DrawString($"\r\n\r\n\r\n                  {ordenFabricacion.PEDIDO}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year} " +
-                //    $"\r\n\r\n                        {ordenFabricacion.CG_PROD.Trim()}{espaciosMed}{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                //    $"\r\n\r\n                                                                        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
-                if (!String.IsNullOrEmpty(PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()))
-                {
-                    graphics.DrawString($"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosSinLote}{DateTime.Now.Year}     .  .  .  .  ." +
-                        $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                        $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+                    IsVisibleCertificado = true;
+                    ShowCertificado = true;
                 }
                 else
                 {
-                    graphics.DrawString($"                                                                                                           \"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year}" +
-                    $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
-                    $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}" +
-                    $"\r\n\r\n._", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+                    IsVisibleCertificado = true;
+                    ShowCertificado = false;
                 }
-
-                MemoryStream xx = new MemoryStream();
-                document1.Save(xx);
-                document1.Close(true);
-                await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
-            if (CodNro.Substring(0, 4) == "0012" ||
-                CodNro.Substring(0, 5) == "00130" ||
-                CodNro.Substring(0, 5) == "00131")
+            //}
+        }
+    }
+}
+
+protected async Task OnInputPedido(InputEventArgs args)
+{
+    Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorPedido/{args.Value}");
+    if (Pedidoslist.Count > 0)
+    {
+        BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
+        BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+    }
+    else
+    {
+        BoxCliente = "";
+        BoxCodigo = "";
+    }
+}
+
+protected async Task OnInputCodigo(InputEventArgs args)
+{
+    Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCodigo/{args.Value}");
+    if (Pedidoslist.Count > 0)
+    {
+        BoxCliente = Pedidoslist.FirstOrDefault().DES_CLI;
+        BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+    }
+    else
+    {
+        BoxCliente = "";
+        BoxPedido = "";
+    }
+}
+
+protected async Task OnInputCliente(InputEventArgs args)
+{
+    Pedidoslist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarPorCliente/{args.Value}");
+    if (Pedidoslist.Count > 0)
+    {
+        BoxPedido = Pedidoslist.FirstOrDefault().PEDIDO.ToString();
+        TrzNro = BoxPedido;
+        BoxCodigo = Pedidoslist.FirstOrDefault().CG_ART;
+    }
+    else
+    {
+        BoxPedido = "";
+        BoxCodigo = "";
+    }
+}
+
+protected async Task BuscarTrazabilidad()
+{
+    CantidadMostrar = 100;
+    if (BoxPedido != "")
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
+    }
+    else if (BoxCliente != "")
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
+    }
+    else if (BoxCodigo != "")
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
+    }
+    else
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
+    }
+    IsVisible = true;
+}
+protected async Task MostrarTrazabilidad()
+{
+    pedidos = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/MostrarTrazabilidad/{BoxPedido}");
+    Showgrid = true;
+    BoxPedido = "";
+    BoxCliente = "";
+    BoxCodigo = "";
+}
+protected async Task Catalogo()
+{
+    ProdCertificado = await Http.GetFromJsonAsync<List<Prod>>($"api/Prod/BuscarPorCG_PROD/{CodNro}");
+    PedcliCertificado = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/BuscarPorPedido/{TrzNro}");
+    PedidosCertificado = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BusquedaParaFE_MOV/{TrzNro}");
+    string roscas = "";
+    string Ansi_Api = "";
+    if (CodNro.Substring(0, 1) == "1")
+    {
+        roscas = "Aprobado";
+        Ansi_Api = "-";
+    }
+    else
+    {
+        roscas = "-";
+        Ansi_Api = "Aprobado";
+    }
+    //Create a new PDF document
+    PdfDocument document = new PdfDocument();
+    //Create the page
+    PdfPage page = document.Pages.Add();
+    //Create PDF graphics for the page
+    FileStream fontStream = new FileStream("wwwroot\\Calibri 400.ttf", FileMode.Open, FileAccess.Read);
+    //Create a PdfGrid
+    PdfGrid pdfGrid = new PdfGrid();
+
+    PdfGraphics graphics = page.Graphics;
+    //PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 10, PdfFontStyle.Bold);
+    //PdfFont font = new PdfTrueTypeFont("wwwroot\\Calibri 400.ttf", 24);
+    PdfFont font = new PdfTrueTypeFont(fontStream, 10, PdfFontStyle.Bold);
+
+    //Create and customize the string formats
+    PdfStringFormat Centrado = new PdfStringFormat();
+    Centrado.Alignment = PdfTextAlignment.Center;
+    Centrado.LineAlignment = PdfVerticalAlignment.Middle;
+    //Create and customize the string formats
+    PdfStringFormat Izquierda = new PdfStringFormat();
+    Izquierda.Alignment = PdfTextAlignment.Left;
+    Izquierda.LineAlignment = PdfVerticalAlignment.Middle;
+    //Add columns to PdfGrid
+    for (int i = 0; i < 6; i++)
+    {
+        PdfGridColumn column = pdfGrid.Columns.Add();
+        if (i == 0 || i == 1 || i == 4 || i == 5)
+        {
+            column.Width = 64;
+        }
+        if (i == 2 || i == 3)
+        {
+
+            column.Width = 128;
+        }
+    }
+    //Add rows to PdfGrid
+    for (int i = 0; i < 32; i++)
+    {
+        PdfGridRow row = pdfGrid.Rows.Add();
+        if (i == 0 || i == 1 || i == 2 || i == 3 || i == 7 || i == 17 || i == 21)
+        {
+            row.Height = 26;
+        }
+        else if (i == 31)
+        {
+            row.Height = 47;
+        }
+        else
+        {
+            row.Height = 22;
+        }
+    }
+    //Load the image from the stream
+    //FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
+    FileStream IMR = new FileStream("wwwroot\\IMR.jpg", FileMode.Open);
+
+    //LINEA 1
+    //Add RowSpan
+    PdfGridCell gridCell1 = pdfGrid.Rows[0].Cells[0];
+    gridCell1.ColumnSpan = 2;
+    gridCell1.RowSpan = 2;
+    gridCell1.StringFormat = Centrado;
+    gridCell1.Value = new PdfTextElement("ARBROS S.A.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell2 = pdfGrid.Rows[0].Cells[2];
+    gridCell2.ColumnSpan = 2;
+    gridCell2.RowSpan = 2;
+    gridCell2.StringFormat = Centrado;
+    gridCell2.Value = new PdfTextElement("ACTA DE INSPECCIÓN", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell3 = pdfGrid.Rows[0].Cells[4];
+    gridCell3.ColumnSpan = 2;
+    gridCell3.RowSpan = 2;
+    gridCell3.StringFormat = Centrado;
+    gridCell3.Value = new PdfTextElement($"Cliente: \n {PedcliCertificado.FirstOrDefault().DES_CLI.Trim()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+
+    //LINEA 2
+    //Add RowSpan
+    PdfGridCell gridCell4 = pdfGrid.Rows[2].Cells[0];
+    gridCell4.ColumnSpan = 2;
+    gridCell4.RowSpan = 2;
+    gridCell4.StringFormat = Centrado;
+    //gridCell4.Value = new PdfBitmap(fs);
+    //Add RowSpan
+    PdfGridCell gridCell5 = pdfGrid.Rows[2].Cells[2];
+    gridCell5.ColumnSpan = 2;
+    gridCell5.RowSpan = 2;
+    gridCell5.StringFormat = Centrado;
+    gridCell5.Value = new PdfTextElement("VÁLVULAS DE SEGURIDAD Y ALIVIO", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell6 = pdfGrid.Rows[2].Cells[4];
+    gridCell6.ColumnSpan = 2;
+    gridCell6.RowSpan = 2;
+    gridCell6.StringFormat = Centrado;
+    gridCell6.Value = new PdfTextElement($"O.C.I.: {PedcliCertificado.FirstOrDefault().NUMOCI}\n" +
+                                         $"{PedidosCertificado.FirstOrDefault().FE_MOV.ToShortDateString()}", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+
+    //GENERALIDADES
+    //Add RowSpan
+    PdfGridCell gridCell7 = pdfGrid.Rows[4].Cells[0];
+    gridCell7.ColumnSpan = 2;
+    gridCell7.StringFormat = Izquierda;
+    gridCell7.Value = new PdfTextElement($"GENERALIDADES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell8 = pdfGrid.Rows[4].Cells[2];
+    gridCell8.ColumnSpan = 1;
+    gridCell8.StringFormat = Izquierda;
+    gridCell8.Value = $"   Orden de compra:\n" +
+                      $"   Remito de entrega:";
+    //Add RowSpan
+    PdfGridCell gridCell9 = pdfGrid.Rows[4].Cells[3];
+    gridCell9.ColumnSpan = 3;
+    gridCell9.StringFormat = Izquierda;
+    gridCell9.Value = $"   {PedcliCertificado.FirstOrDefault().ORCO.Trim()}\n" +
+                      $"   {PedcliCertificado.FirstOrDefault().REMITO.Trim()}";
+
+    //DATOS DE PLACA
+    //Add RowSpan
+    PdfGridCell gridCell10 = pdfGrid.Rows[5].Cells[0];
+    gridCell10.ColumnSpan = 2;
+    gridCell10.RowSpan = 8;
+    gridCell10.StringFormat = Izquierda;
+    gridCell10.Value = new PdfTextElement("DATOS DE PLACA", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell11 = pdfGrid.Rows[5].Cells[2];
+    gridCell11.ColumnSpan = 1;
+    gridCell11.RowSpan = 8;
+    gridCell11.StringFormat = Izquierda;
+    gridCell11.Value = $"   Linea de Producto:\n" +
+                       $"   Nro de Serie:\n" +
+                       $"   TAG:\n" +
+                       $"   Medida (Ent x Sal):\n" +
+                       $"   Clase (Ent x Sal):\n" +
+                       $"   Orif. API 526 / Area:\n" +
+                       $"   Presión de Apertura:\n" +
+                       $"   Contrapresión:\n" +
+                       $"   Presión de ajuste en Banco:\n" +
+                       $"   Fluido:\n" +
+                       $"   Temperatura:\n" +
+                       $"   Código de Resorte:\n" +
+                       $"   Código de la válvula:";
+    //Add RowSpan
+    PdfGridCell gridCell12 = pdfGrid.Rows[5].Cells[3];
+    gridCell12.ColumnSpan = 3;
+    gridCell12.RowSpan = 8;
+    gridCell12.StringFormat = Izquierda;
+    gridCell12.Value = $"   {ProdCertificado.FirstOrDefault().CAMPOCOM1.Trim()}\n" +
+                       $"   {TrzNro}\n" +
+                       $"   {PedcliCertificado.FirstOrDefault().LOTE.Trim()}\n" +
+                       $"   {ProdCertificado.FirstOrDefault().CAMPOCOM2.Trim()}\n" +
+                       $"   {ProdCertificado.FirstOrDefault().CAMPOCOM5.Trim()}\n" +
+                       $"   {ProdCertificado.FirstOrDefault().CAMPOCOM3.Trim()}\n" +
+                       $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM1.Trim()}\n" +
+                       $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM5.Trim()}\n" +
+                       $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM4.Trim()}\n" +
+                       $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM3.Trim()}\n" +
+                       $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM6.Trim()}\n" +
+                       $"   {PedcliCertificado.FirstOrDefault().CAMPOCOM2.Trim()}\n" +
+                       $"   {CodNro}";
+
+    //CONTROL DIMENSIONAL
+    //Add RowSpan
+    PdfGridCell gridCell13 = pdfGrid.Rows[13].Cells[0];
+    gridCell13.ColumnSpan = 2;
+    gridCell13.RowSpan = 2;
+    gridCell13.StringFormat = Izquierda;
+    gridCell13.Value = new PdfTextElement("CONTROL DIMENSIONAL", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell14 = pdfGrid.Rows[13].Cells[2];
+    gridCell14.ColumnSpan = 1;
+    gridCell14.StringFormat = Izquierda;
+    gridCell14.RowSpan = 2;
+    gridCell14.Value = $"   ANSI B-16.5 (Ent-Sal)\n" +
+                       $"   Roscas (Ent-Sal)\n" +
+                       $"   API 526";
+    //Add RowSpan
+    PdfGridCell gridCell15 = pdfGrid.Rows[13].Cells[3];
+    gridCell15.ColumnSpan = 3;
+    gridCell15.StringFormat = Izquierda;
+    gridCell15.RowSpan = 2;
+    gridCell15.Value = $"   {Ansi_Api}\n" +
+                       $"   {roscas}\n" +
+                       $"   {Ansi_Api}";
+
+    //PRUEBA HIDRAULICA Y MATERIALES
+    //Add RowSpan
+    PdfGridCell gridCell16 = pdfGrid.Rows[15].Cells[0];
+    gridCell16.ColumnSpan = 2;
+    gridCell16.RowSpan = 8;
+    gridCell16.StringFormat = Izquierda;
+    gridCell16.Value = new PdfTextElement("PRUEBA HIDRAULICA Y MATERIALES", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell17 = pdfGrid.Rows[15].Cells[2];
+    gridCell17.ColumnSpan = 1;
+    gridCell17.RowSpan = 2;
+    gridCell17.StringFormat = Izquierda;
+    gridCell17.Value = $"   Material Disco\n" +
+                       $"   Identificación Disco\n" +
+                       $"   Presión de Prueba Hidráulica";
+    //Add RowSpan
+    PdfGridCell gridCell18 = pdfGrid.Rows[15].Cells[3];
+    gridCell18.ColumnSpan = 3;
+    gridCell18.RowSpan = 2;
+    gridCell18.StringFormat = Izquierda;
+    gridCell18.Value = $"   X1";
+    //Add RowSpan
+    PdfGridCell gridCell19 = pdfGrid.Rows[17].Cells[2];
+    gridCell19.ColumnSpan = 1;
+    gridCell19.RowSpan = 2;
+    gridCell19.StringFormat = Izquierda;
+    gridCell19.Value = $"   Material Tobera\n" +
+                       $"   Identificación Tobera\n" +
+                       $"   Presión de Prueba Hidráulica";
+    //Add RowSpan
+    PdfGridCell gridCell20 = pdfGrid.Rows[17].Cells[3];
+    gridCell20.ColumnSpan = 3;
+    gridCell20.RowSpan = 2;
+    gridCell20.StringFormat = Izquierda;
+    gridCell20.Value = $"   X2";
+    //Add RowSpan
+    PdfGridCell gridCell21 = pdfGrid.Rows[19].Cells[2];
+    gridCell21.ColumnSpan = 1;
+    gridCell21.RowSpan = 2;
+    gridCell21.StringFormat = Izquierda;
+    gridCell21.Value = $"   Material Cuerpo\n" +
+                       $"   Identificación Cuerpo\n" +
+                       $"   Presión de Prueba Hidráulica";
+    //Add RowSpan
+    PdfGridCell gridCell22 = pdfGrid.Rows[19].Cells[3];
+    gridCell22.ColumnSpan = 3;
+    gridCell22.RowSpan = 2;
+    gridCell22.StringFormat = Izquierda;
+    gridCell22.Value = $"   X3";
+    //Add RowSpan
+    PdfGridCell gridCell23 = pdfGrid.Rows[21].Cells[2];
+    gridCell23.ColumnSpan = 1;
+    gridCell23.RowSpan = 2;
+    gridCell23.StringFormat = Izquierda;
+    gridCell23.Value = $"   Material Bonete\n" +
+                       $"   Identificación Bonete\n" +
+                       $"   Presión de Prueba Hidráulica";
+    //Add RowSpan
+    PdfGridCell gridCell24 = pdfGrid.Rows[21].Cells[3];
+    gridCell24.ColumnSpan = 3;
+    gridCell24.RowSpan = 2;
+    gridCell24.StringFormat = Izquierda;
+    gridCell24.Value = $"   X4";
+
+    //ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO
+    //Add RowSpan
+    PdfGridCell gridCell25 = pdfGrid.Rows[23].Cells[0];
+    gridCell25.ColumnSpan = 2;
+    gridCell25.RowSpan = 4;
+    gridCell25.StringFormat = Izquierda;
+    gridCell25.Value = new PdfTextElement("ENSAYOS OPERACIONALES EN BANCO HIDRONEUMÁTICO - FLUIDO AIRE A TEMP. AMBIENTE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell26 = pdfGrid.Rows[23].Cells[2];
+    gridCell26.ColumnSpan = 3;
+    gridCell26.RowSpan = 3;
+    gridCell26.StringFormat = Izquierda;
+    gridCell26.Value = $"   Calibracion a la presión segun ASME PTC-25.3:\n" +
+                       $"   Ensayos de repetitividad (3):\n" +
+                       $"   Control estanqueidad de asientos segun API 527:";
+    //Add RowSpan
+    PdfGridCell gridCell27 = pdfGrid.Rows[23].Cells[5];
+    gridCell27.ColumnSpan = 1;
+    gridCell27.RowSpan = 3;
+    gridCell27.StringFormat = Izquierda;
+    gridCell27.Value = $"   X1";
+    //Add RowSpan
+    PdfGridCell gridCell28 = pdfGrid.Rows[26].Cells[2];
+    gridCell28.ColumnSpan = 3;
+    gridCell28.StringFormat = Izquierda;
+    gridCell28.Value = $" Patrón Utilizado:";
+    //Add RowSpan
+    PdfGridCell gridCell29 = pdfGrid.Rows[26].Cells[5];
+    gridCell29.ColumnSpan = 1;
+    gridCell29.StringFormat = Izquierda;
+    gridCell29.Value = $"   X1";
+
+    //RESULTADO
+    //Add RowSpan
+    PdfGridCell gridCell30 = pdfGrid.Rows[27].Cells[0];
+    gridCell30.ColumnSpan = 2;
+    gridCell30.StringFormat = Izquierda;
+    gridCell30.Value = new PdfTextElement("RESULTADO ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCell31 = pdfGrid.Rows[27].Cells[2];
+    gridCell31.ColumnSpan = 4;
+    gridCell31.StringFormat = Izquierda;
+    gridCell31.Value = new PdfTextElement("X1", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+
+    //FIRMA
+    //Add RowSpan
+    PdfGridCell gridCellx35 = pdfGrid.Rows[28].Cells[0];
+    gridCellx35.ColumnSpan = 2;
+    gridCellx35.RowSpan = 2;
+    gridCellx35.StringFormat = Izquierda;
+    gridCellx35.Value = new PdfTextElement("FIRMA INSPECTOR AERRE ", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCellx36 = pdfGrid.Rows[28].Cells[2];
+    gridCellx36.ColumnSpan = 4;
+    gridCellx36.RowSpan = 2;
+    gridCellx36.StringFormat = Izquierda;
+    gridCellx36.Value = new PdfBitmap(IMR);
+
+    //PRECINTO
+    //Add RowSpan
+    PdfGridCell gridCellx37 = pdfGrid.Rows[30].Cells[0];
+    gridCellx37.ColumnSpan = 2;
+    gridCellx37.StringFormat = Izquierda;
+    gridCellx37.Value = new PdfTextElement("PRECINTO Nro.", font, new PdfPen(PdfColor.Empty), PdfBrushes.Black, Centrado);
+    //Add RowSpan
+    PdfGridCell gridCellx38 = pdfGrid.Rows[30].Cells[2];
+    gridCellx38.ColumnSpan = 4;
+    gridCellx38.StringFormat = Izquierda;
+    gridCellx38.Value = $"   AERRE 00024 ";
+
+    //GARANTIA
+    //Add RowSpan
+    PdfGridCell gridCell58 = pdfGrid.Rows[31].Cells[0];
+    gridCell58.ColumnSpan = 6;
+    gridCell58.StringFormat = Centrado;
+    gridCell58.Value = "GARANTIA: \n Los productos están garantizados por el término de 12 meses a partir de la salida de fábrica, contra todo defecto de materiales y / o fabricación, limitada a la reposición sin cargo en nuestra fábrica de un elemento similar. Esta garantía no ampara el desgaste anormal por la utilización en condiciones distintas a las especificadas";
+
+    //Draw the PdfGrid
+    pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, 0));
+    //Saving the PDF to the MemoryStream
+    MemoryStream stream = new MemoryStream();
+    document.Save(stream);
+    //Set the position as '0'
+    stream.Position = 0;
+    //Close the document
+    document.Close(true);
+    await JS.SaveAs($" Certificado" + ".pdf", stream.ToArray());
+}
+protected async Task AgregarValores()
+{
+    CantidadMostrar = CantidadMostrar + 100;
+    if (BoxPedido != "")
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/Vacio/Vacio/{CantidadMostrar}");
+    }
+    else if (BoxCliente != "")
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/{BoxCliente}/Vacio/{CantidadMostrar}");
+    }
+    else if (BoxCodigo != "")
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/Vacio/Vacio/{BoxCodigo}/{CantidadMostrar}");
+    }
+    else
+    {
+        Busquedalist = await Http.GetFromJsonAsync<List<Pedidos>>($"api/Pedidos/BuscarTrazabilidad/{BoxPedido}/{BoxCliente}/{BoxCodigo}/{CantidadMostrar}");
+    }
+}
+
+protected async Task Etiqueta()
+{
+    if (true)
+    {
+        if (CodNro.Substring(0, 1) == "2")
+        {
+            string espaciosPedido = "";
+            string CLIENTE = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().DES_CLI.Trim();
+            if (CLIENTE.Contains("YPF") || CLIENTE.Contains("Y.P.F"))
             {
-                string espaciosbar = "";
-                for (int i = 0; i < (16 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
-                {
-                    espaciosbar = espaciosbar + " ";
-                }
-                //Chapa de 31 x 78
+                //Chapa de 101 mm x 78 mm
                 PdfDocument document1 = new PdfDocument();
-                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(117, 295);
-                document1.PageSettings.Orientation = PdfPageOrientation.Landscape;
+                document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
                 document1.PageSettings.Margins.All = 0;
                 PdfGrid pdfGrid1 = new PdfGrid();
                 PdfPage page = document1.Pages.Add();
                 PdfGraphics graphics = page.Graphics;
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
                 PdfLightTable pdfTable = new PdfLightTable();
-
-                string presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
-                int found = presionMostrar.ToUpper().IndexOf("B");
-                if (found == -1)
+                page.Graphics.RotateTransform(-360);
+                for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
                 {
-                    presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+                    espaciosPedido = espaciosPedido + " ";
+                }
+                var tipo2 = from item in prodList
+                            where item.CG_PROD == CodNro
+                            select item.CAMPOCOM6;
+                string tipo = "";
+                if (tipo2 is null || tipo2.Contains("System.Linq"))
+                {
+                    tipo = "";
                 }
                 else
                 {
-                    presionMostrar = presionMostrar.Substring(0, found);
+                    tipo = tipo2.ToString();
                 }
+                FileStream fs = new FileStream("wwwroot\\logo_aerre.jpg", FileMode.Open);
 
-                graphics.DrawString($"\"\r\n\r\n\r\n        {Convert.ToInt32(TrzNro)}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
-                $"\r\n        {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{presionMostrar}" +
-                $"\r\n\r\n                              .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+                graphics.DrawString($" \r\n" +
+                    $"\r\n" +
+                    $"\r\n" +
+                    $"    Año:{DateTime.Now.Year}  N°:{TrzNro} \r\n" +
+                    $"    TAG:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}\r\n" +
+                    $"    Tipo:\r\n" +
+                    $"    Codigo:{CodNro.Trim()}\r\n" +
+                    $"    Medida:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}  {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
+                    $"    Clase:{prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
+                    $"    Temp:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM6.Trim()}\r\n" +
+                    $"    Presion SET:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}\r\n" +
+                    $"    P. Aj Banco:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}\r\n" +
+                    $"    Ctra.P:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}\r\n" +
+                    $"    Fluido:{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}\r\n" +
+                    $"    Cuerpo:\r\n" +
+                    $"    Tobera:\r\n" +
+                    $"    Resorte:\r\n" +
+                    $"    T.OPDS N°:8/11\r\n" +
+                    $"    M.OPDS N°:47642\r\n" +
+                    $"          Arbros S.A.\r\n" +
+                    $"       www.aerre.com.ar\r\n" +
+                    $"     Industria  Argentina\r\n" +
+                    $"                               ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
 
                 MemoryStream xx = new MemoryStream();
                 document1.Save(xx);
                 document1.Close(true);
-                await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
+                await JS.SaveAs("EtiquetaProd" + CodNro.Trim() + ".pdf", xx.ToArray());
             }
+            //else
+            //{
+
+            //    string espaciosPedidox = "";
+            //    string espaciosAnio = "";
+            //    string espaciosSegundoCampo3bis = "";
+            //    string espaciosSegundoCampo4bis = "";
+            //    string espaciosSegundoCampo5bis = "";
+
+            //    //Chapa de 101 mm x 78 mm
+            //    PdfDocument document1 = new PdfDocument();
+            //    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(382, 295);
+            //    document1.PageSettings.Margins.All = 0;
+            //    PdfGrid pdfGrid1 = new PdfGrid();
+            //    PdfPage page = document1.Pages.Add();
+            //    PdfGraphics graphics = page.Graphics;
+            //    PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
+            //    PdfLightTable pdfTable = new PdfLightTable();
+            //    page.Graphics.RotateTransform(-360);
+
+            //    for (int i = 0; i < (25 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Length); i++)
+            //    {
+            //        espaciosPedidox = espaciosPedidox + " ";
+            //    }
+            //    for (int i = 0; i < (16 - ordenFabricacion.CG_PROD.Length); i++)
+            //    {
+            //        espaciosAnio = espaciosAnio + " ";
+            //    }
+            //    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim().Length); i++)
+            //    {
+            //        espaciosSegundoCampo3bis = espaciosSegundoCampo3bis + " ";
+            //    }
+            //    for (int i = 0; i < (25 - PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim().Length); i++)
+            //    {
+            //        espaciosSegundoCampo4bis = espaciosSegundoCampo4bis + " ";
+            //    }
+            //    for (int i = 0; i < (25 - prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim().Length); i++)
+            //    {
+            //        espaciosSegundoCampo5bis = espaciosSegundoCampo5bis + " ";
+            //    }
+
+            //    string xd1 = prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim();
+            //    string xd2 = prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM5.Trim();
+            //    int UbicacionXMedida = xd1.ToLower().IndexOf('x');
+            //    int UbicacionXMedida2 = xd2.ToLower().IndexOf('x');
+
+            //    string primeramedida1 = xd1.Substring(0, UbicacionXMedida);
+            //    string segundamedida1 = xd1.Substring(UbicacionXMedida + 1);
+            //    string primeramedida2 = xd2.Substring(0, UbicacionXMedida2);
+            //    string segundamedida2 = xd2.Substring(UbicacionXMedida2 + 1);
+
+            //    graphics.DrawString($"\r\n\r\n\r\n\r\n\r\n\r\n    {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE}{espaciosPedidox}{ordenFabricacion.PEDIDO} " +
+            //        $"\r\n\r\n         {ordenFabricacion.CG_PROD} {espaciosAnio}     {DateTime.Now.Year} " +
+            //        $"\r\n             {primeramedida1}                {segundamedida1}" +
+            //        $"\r\n\r\n    {primeramedida2}   {segundamedida2}        {prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM3.Trim()}" +
+            //        $"\r\n                     { PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}    " +
+            //        $"\r\n\r\n       {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM3.Trim()}{espaciosSegundoCampo4bis} " +
+            //        $"\r\n         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM5.Trim()}                        " +
+            //        $"\r\n\r\n" +
+            //        $"\r\n" +
+            //        $"\r\n\r\n                         {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}   " +
+            //        $"\r\n                     {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM2.Trim()}" +
+            //        $"\r\n\r\n" +
+            //        $"\r\n    " +
+            //        $"\r\n    ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+            //    MemoryStream xx = new MemoryStream();
+            //    document1.Save(xx);
+            //    document1.Close(true);
+            //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
+            //}
         }
-        //else
-        //{
-        //    PdfDocument document1 = new PdfDocument();
-        //    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
-        //    document1.PageSettings.Margins.All = 0;
-        //    PdfGrid pdfGrid1 = new PdfGrid();
-        //    PdfPage page = document1.Pages.Add();
-        //    PdfGraphics graphics = page.Graphics;
-        //    PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
-        //    PdfLightTable pdfTable = new PdfLightTable();
-        //    page.Graphics.RotateTransform(-90);
+        if (CodNro.Substring(0, 1) == "1")
+        {
+            //Chapa de 25 x 95
+            PdfDocument document1 = new PdfDocument();
+            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(359, 94);
+            document1.PageSettings.Margins.All = 0;
+            document1.PageSettings.Rotate = PdfPageRotateAngle.RotateAngle180;
+            PdfGrid pdfGrid1 = new PdfGrid();
+            PdfPage page = document1.Pages.Add();
+            PdfGraphics graphics = page.Graphics;
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
+            PdfLightTable pdfTable = new PdfLightTable();
+            page.Graphics.RotateTransform(-90);
+            string espaciosTag = "";
+            for (int i = 0; i < (20 - TrzNro.ToString().Length); i++)
+            {
+                espaciosTag = espaciosTag + " ";
+            }
+            string espaciosAnio = "";
+            for (int i = 0; i < (32 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+            {
+                espaciosAnio = espaciosAnio + " ";
+            }
+            string espaciosOrif = "";
+            for (int i = 0; i < (32 - prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim().Length); i++)
+            {
+                espaciosOrif = espaciosOrif + " ";
+            }
+            string espaciosClase = "";
+            for (int i = 0; i < (20 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim().Length); i++)
+            {
+                espaciosClase = espaciosClase + " ";
+            }
+            string espaciosSinLote = "";
+            for (int i = 0; i < 43; i++)
+            {
+                espaciosSinLote = espaciosSinLote + " ";
+            }
 
-        //    OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
-        //    graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+            //graphics.DrawString($"\r\n\r\n\r\n                  {ordenFabricacion.PEDIDO}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year} " +
+            //    $"\r\n\r\n                        {ordenFabricacion.CG_PROD.Trim()}{espaciosMed}{prodList.Where(t => t.CG_PROD == ordenFabricacion.CG_PROD).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
+            //    $"\r\n\r\n                                                                        {PedCliList.Where(t => t.PEDIDO == ordenFabricacion.PEDIDO).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM4.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == ordenFabricacion.CG_PROD.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()} ", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+            if (!String.IsNullOrEmpty(PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()))
+            {
+                graphics.DrawString($"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosSinLote}{DateTime.Now.Year}     .  .  .  .  ." +
+                    $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
+                    $"\r\n.                                            {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}     .  .  .  .  .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+            }
+            else
+            {
+                graphics.DrawString($"                                                                                                           \"\r\n\r\n                                     {Convert.ToInt32(TrzNro)}{espaciosTag}{PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosAnio}{DateTime.Now.Year}" +
+                $"\r\n               {CodNro.Trim()}          {prodList.Where(t => t.CG_PROD == CodNro).OrderByDescending(t => t.CG_PROD).FirstOrDefault().CAMPOCOM2.Trim()}{espaciosOrif}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM3.Trim()} " +
+                $"\r\n                                             {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim()}{espaciosClase}{prodList.Where(t => t.CG_PROD.Trim() == CodNro.Trim()).OrderByDescending(t => t.CG_PROD.Trim()).FirstOrDefault().CAMPOCOM5.Trim()}" +
+                $"\r\n\r\n._", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-359, 0));
+            }
 
-        //    document1.PageSettings.Margins.All = 0;
-        //    MemoryStream xx = new MemoryStream();
-        //    document1.Save(xx);
-        //    document1.Close(true);
-        //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
-        //}
+            MemoryStream xx = new MemoryStream();
+            document1.Save(xx);
+            document1.Close(true);
+            await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
+        }
+        if (CodNro.Substring(0, 4) == "0012" ||
+            CodNro.Substring(0, 5) == "00130" ||
+            CodNro.Substring(0, 5) == "00131")
+        {
+            string espaciosbar = "";
+            for (int i = 0; i < (16 - PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim().Length); i++)
+            {
+                espaciosbar = espaciosbar + " ";
+            }
+            //Chapa de 31 x 78
+            PdfDocument document1 = new PdfDocument();
+            document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(117, 295);
+            document1.PageSettings.Orientation = PdfPageOrientation.Landscape;
+            document1.PageSettings.Margins.All = 0;
+            PdfGrid pdfGrid1 = new PdfGrid();
+            PdfPage page = document1.Pages.Add();
+            PdfGraphics graphics = page.Graphics;
+            PdfFont font = new PdfStandardFont(PdfFontFamily.Courier, 16);
+            PdfLightTable pdfTable = new PdfLightTable();
+
+            string presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+            int found = presionMostrar.ToUpper().IndexOf("B");
+            if (found == -1)
+            {
+                presionMostrar = PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().CAMPOCOM1.Trim();
+            }
+            else
+            {
+                presionMostrar = presionMostrar.Substring(0, found);
+            }
+
+            graphics.DrawString($"\"\r\n\r\n\r\n        {Convert.ToInt32(TrzNro)}           {DateTime.Now.Month}/{DateTime.Now.Year} " +
+            $"\r\n        {PedCliList.Where(t => t.PEDIDO == Convert.ToInt32(TrzNro)).OrderByDescending(t => t.PEDIDO).FirstOrDefault().LOTE.Trim()}{espaciosbar}{presionMostrar}" +
+            $"\r\n\r\n                              .", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+
+            MemoryStream xx = new MemoryStream();
+            document1.Save(xx);
+            document1.Close(true);
+            await JS.SaveAs("ETOF" + CodNro.Trim() + ".pdf", xx.ToArray());
+        }
     }
-    protected async Task Ensayos()
-    {
-        //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
-        await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
-    }
+    //else
+    //{
+    //    PdfDocument document1 = new PdfDocument();
+    //    document1.PageSettings.Size = new Syncfusion.Drawing.SizeF(227, 70);//110
+    //    document1.PageSettings.Margins.All = 0;
+    //    PdfGrid pdfGrid1 = new PdfGrid();
+    //    PdfPage page = document1.Pages.Add();
+    //    PdfGraphics graphics = page.Graphics;
+    //    PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 10);
+    //    PdfLightTable pdfTable = new PdfLightTable();
+    //    page.Graphics.RotateTransform(-90);
+
+    //    OrdenDeFabAlta = dbCarga.Where(t => t.CG_ORDFASOC == ordenFabricacion.CG_ORDFASOC).OrderByDescending(t => t.CG_ORDF).FirstOrDefault().CG_ORDF;
+    //    graphics.DrawString($"        OF ALTA: {OrdenDeFabAlta}\r\n            {ordenFabricacion.CG_PROD}\r\n{ordenFabricacion.DES_PROD}\r\nCANTIDAD {ordenFabricacion.CANTFAB}    {ordenFabricacion.FE_CIERRE}", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(-200, 10));
+
+    //    document1.PageSettings.Margins.All = 0;
+    //    MemoryStream xx = new MemoryStream();
+    //    document1.Save(xx);
+    //    document1.Close(true);
+    //    await JS.SaveAs("ETOF" + ordenFabricacion.CG_PROD.Trim() + ".pdf", xx.ToArray());
+    //}
+}
+protected async Task Ensayos()
+{
+    //NavigationManager.NavigateTo($"Pdf/{pedido}/ENSAYOS");
+    await JS.InvokeVoidAsync("open", new object[2] { $"Pdf/{TrzNro}/ENSAYOS", $"Pdf/{TrzNro}/ENSAYOS" });
+}
 }
