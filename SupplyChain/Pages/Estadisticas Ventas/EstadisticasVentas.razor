@@ -1,0 +1,72 @@
+﻿@page "/pivot"
+@using Syncfusion.Blazor.PivotView
+@inject CustomHttpClient Http
+<!--<div class="col-lg-9 control-section sb-property-border">
+    <div class="content-wrapper">
+        <SfPivotView TValue="Indicadores" ShowFieldList=true>
+            <PivotViewDataSourceSettings DataSource="@Data" ExpandAll=false EnableSorting=true>
+                <PivotViewColumns>
+                    <PivotViewColumn Name="RazonSoc"></PivotViewColumn>
+                </PivotViewColumns>
+                <PivotViewRows>
+                    <PivotViewRow Name="FechaPed"></PivotViewRow>
+                </PivotViewRows>
+                <PivotViewValues>
+                    <PivotViewValue Name="Cantped" Caption="Quantity"></PivotViewValue>
+                </PivotViewValues>
+                <PivotViewFormatSettings>
+                    <PivotViewFormatSetting Name="DolaresPedido" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                </PivotViewFormatSettings>
+            </PivotViewDataSourceSettings>-->
+@*<PivotViewDisplayOption View=View.Chart></PivotViewDisplayOption>*@
+<!--</SfPivotView>
+    </div>
+</div>-->
+
+@if (DataEstad is null)
+{
+<em>Cargandooo.</em> 
+}
+else
+{
+
+    
+<SfPivotView TValue="Indicadores" Height="300" EnableValueSorting=true ShowTooltip=false ShowFieldList=true>
+    <PivotViewDataSourceSettings TValue="Indicadores" DataSource="@DataEstad" ExpandAll=true EnableSorting=true>
+        @*<SfDataManager Url="api/Indicador" Adaptor="Syncfusion.Blazor.Adaptors.WebApiAdaptor"></SfDataManager>*@
+        <PivotViewColumns>
+            <PivotViewColumn Name="DES_CATEG"></PivotViewColumn>
+        </PivotViewColumns>
+        <PivotViewRows>
+            <PivotViewRow Name="Pedido"></PivotViewRow>
+            @*<PivotViewRow Name="ShipCity"></PivotViewRow>*@
+        </PivotViewRows>
+        <PivotViewValues>
+            <PivotViewValue Name="Cantped" Caption="Quantity"></PivotViewValue>
+            @*<PivotViewValue Name="UnitPrice" Caption="Unit Price"></PivotViewValue>*@
+        </PivotViewValues>
+        <PivotViewFormatSettings>
+            <PivotViewFormatSetting Name="DolaresPresupuesto" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+        </PivotViewFormatSettings>
+    </PivotViewDataSourceSettings>
+    <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+</SfPivotView>}
+
+
+<style>
+    .e-pivotview {
+        min-height: 200px;
+    }
+
+    html, body {
+        height: 100%;
+    }
+</style>
+@code{ public List<Indicadores> DataEstad { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.DataEstad = await Http.GetFromJsonAsync<List<Indicadores>>("api/Indicador");
+        await InvokeAsync(StateHasChanged);
+    }
+}

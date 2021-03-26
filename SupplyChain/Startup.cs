@@ -1,3 +1,5 @@
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -7,9 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OData.Edm;
 using SupplyChain.Auth;
 using SupplyChain.HelperService;
 using Syncfusion.Blazor;
+using System.Linq;
+
 
 namespace SupplyChain
 {
@@ -26,6 +31,11 @@ namespace SupplyChain
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //services.AddControllers(mvcOptions =>
+            //    mvcOptions.EnableEndpointRouting = false);
+
+            //services.AddOData();
 
             services.AddAuthenticationCore(options =>
             {
@@ -72,6 +82,8 @@ namespace SupplyChain
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+
             
 
             app.UseEndpoints(endpoints =>
@@ -81,6 +93,22 @@ namespace SupplyChain
                 endpoints.MapFallbackToPage("/_Host");
 
             });
+
+            //app.UseMvc(routeBuilder =>
+            //{
+            //    routeBuilder.EnableDependencyInjection();
+            //    routeBuilder.Expand().Select().Count().OrderBy().Filter();
+            //    routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
+            //});
+
         }
+
+        //IEdmModel GetEdmModel()
+        //{
+        //    var odataBuilder = new ODataConventionModelBuilder();
+        //    odataBuilder.EntitySet<Indicadores>("Indicadores");
+
+        //    return odataBuilder.GetEdmModel();
+        //}
     }
 }

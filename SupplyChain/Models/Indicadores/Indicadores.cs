@@ -7,6 +7,7 @@ using System.Text;
 
 namespace SupplyChain
 {
+	[Table("Logistica")]
 	public class Indicadores
 	{
 		[Key]
@@ -48,6 +49,7 @@ namespace SupplyChain
 		public string ConFactu { get; set; } = "";
 		public string ConPed { get; set; } = "";
 		public int? MesPedido { get; set; } = 0;
+		public decimal? AnoPedido { get; set; } = 0;
 		public decimal? UnidEqui { get; set; } = 0;
 		public int? DiasAtraso { get; set; } = 0;
 		public int? DiasDemoraEntrega { get; set; } = 0;
