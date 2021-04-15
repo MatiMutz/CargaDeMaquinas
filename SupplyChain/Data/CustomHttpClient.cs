@@ -10,7 +10,18 @@ namespace SupplyChain
 {
     public class CustomHttpClient : HttpClient
     {
-        private string serverUri = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("ServerUri");
+        private string serverUri = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build().GetConnectionString("ServerUri");
+
+
+        public new async Task<HttpResponseMessage> GetAsync(string requestUri)
+        {
+            HttpClient httpClient = new HttpClient();
+            var httpContent = await httpClient.GetAsync(serverUri + requestUri);
+            httpContent.Dispose();
+            httpClient.Dispose();
+            return httpContent;
+        }
 
         public async Task<T> GetFromJsonAsync<T>(string requestUri)
         {

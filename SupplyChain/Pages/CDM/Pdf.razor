@@ -36,11 +36,11 @@ else
                 }
                 else
                 {
-                    codigo = ruta.VALORC + codigo.Substring(0, 7) + ".pdf";
+                    codigo = ruta.VALORC + "/"+ codigo.Substring(0, 7) + ".pdf";
                     if (File.Exists(codigo))
                     {
                         <div class="control-section">
-                            <SfPdfViewerServer DocumentPath="@codigo" Height="2000px" Width="100%"></SfPdfViewerServer>
+                            <SfPdfViewerServer DocumentPath="@codigo" Height="1200px" Width="100%"></SfPdfViewerServer>
                         </div>
                     }
                     else
@@ -61,13 +61,17 @@ else
                 string[] dirs = Directory.GetFiles(@$"{ruta.VALORC}", $"{codigo.Substring(0, 7)}*");
                 for (int i = 0; i < dirs.Length; i++)
                 {
+                    var namefile = dirs.GetValue(i).ToString().Substring(ruta.VALORC.Length);
+                    var path = dirs.GetValue(i).ToString();
                     <div class="accordion" id="accordionExample">
                         <div class="card">
                             <div class="card-header" id="@i">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" 
+                                            data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
                                         @(dirs.GetValue(i).ToString().Substring(ruta.VALORC.Length))
                                     </button>
+                                    <SfButton IsPrimary="true" OnClick="@(() => Descargar(namefile, path))" Content="Descargar"></SfButton>
                                 </h2>
                             </div>
                             <div id="collapse@(i)" class="collapse" aria-labelledby="@i" data-parent="#accordionExample">
@@ -162,9 +166,18 @@ else
 
         await base.OnInitializedAsync();
     }
-    private void DownloadText(string Nombre)
+    private void DownloadText(string Nombre, string filePath)
     {
         File.OpenRead(Nombre);
         //JS.InvokeVoidAsync("BlazorDownloadFile", $"{Nombre}.txt", "text/plain", Nombre);
+
+    }
+
+    private void Descargar(string fileName,string filePath)
+    {
+        byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+        //File(filePath, "application/force-download", "file1.xlsx");
+
+        JS.SaveAs(fileName + ".txt", fileBytes);
     }
 }

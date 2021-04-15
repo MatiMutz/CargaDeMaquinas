@@ -32,11 +32,10 @@ namespace SupplyChain
         }
 
 
-        [HttpGet("GetPedidos")]
+        [HttpGet("GetPedidos/{PEDIDO}")]
         public IEnumerable<PedCli> Gets(string PEDIDO)
         {
-            string xSQL = string.Format("SELECT * FROM Pedcli ");
-            return _context.PedCli.FromSqlRaw(xSQL).ToList<PedCli>();
+            return _context.PedCli.Where(p=> p.PEDIDO.ToString() == PEDIDO).ToList();
         }
 
         // PUT: api/Servicios/5

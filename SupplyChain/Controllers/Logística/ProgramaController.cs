@@ -40,5 +40,14 @@ namespace SupplyChain
         }
 
 
+        [HttpGet("EnviarCsvDataCore")]
+        public async Task<ActionResult> EnviarCsv()
+        {
+            string xSQL = string.Format("EXEC INTERFACE_DATACORE");
+            await _context.Database.ExecuteSqlRawAsync(xSQL);
+            return Ok();
+        }
+
+
     }
 }

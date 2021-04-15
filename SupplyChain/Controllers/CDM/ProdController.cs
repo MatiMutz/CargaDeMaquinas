@@ -27,11 +27,10 @@ namespace SupplyChain
         }
 
 
-        [HttpGet("GetPedidos")]
-        public IEnumerable<Prod> Gets(string PEDIDO)
+        [HttpGet("GetPedidos/{cg_prod}")]
+        public IEnumerable<Prod> Gets(string cg_prod)
         {
-            string xSQL = string.Format("SELECT * FROM Prod ");
-            return _context.Prod.FromSqlRaw(xSQL).ToList<Prod>();
+            return _context.Prod.Where(p=> p.CG_PROD == cg_prod).ToList();
         }
 
 
