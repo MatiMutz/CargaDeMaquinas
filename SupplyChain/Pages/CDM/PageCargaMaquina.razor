@@ -24,7 +24,7 @@
 
 <h3 class="card-title">Carga de Máquina</h3>
 <hr />
-<div class="row">
+<div class="form-row">
     <div class="col">
         <div>
             <SfNumericTextBox TValue="int" @bind-Value="@ordenAbuscar" Format="N0" ShowClearButton="true" Width="150" 
@@ -39,7 +39,7 @@
     </div>
     <div class="col">
         <div>
-            <SfButton CssClass="btn btn-danger" IsPrimary="false" IconCss="fa fa-share-square"
+            <SfButton CssClass="btn btn-secondary" IsPrimary="false" IconCss="fa fa-share-square"
                       @onclick="@(async()=> await EnviarCSVDataCore())">Enivar OFs a DataCore</SfButton>
         </div>
     </div>
@@ -982,12 +982,15 @@
             // Procesos
             xSQLcommand = String.Format("SELECT PROCESO ID, DESCRIP TEXTO FROM PROTAB ORDER BY PROCESO");
             dbProcesos = await Http.GetFromJsonAsync<List<ModeloGenericoStringString>>("api/ModelosGenericosStringString/" + xSQLcommand);
+
+            var cg_ordfAsoc = dbCarga.Where(c => c.CG_ORDF == ordenNumero).OrderBy(c => c.CG_ORDF).FirstOrDefault().CG_ORDFASOC;
+
             // Datos del encabezado del detalle
             ordenFabricacionEncabezado = await Http.GetFromJsonAsync<ModeloOrdenFabricacionEncabezado>("api/OrdenesFabricacionEncabezado/" + ordenNumero.ToString());
             // Materias primas
-            ordenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>("api/OrdenesFabricacionMP/" + ordenNumero.ToString());
+            ordenFabricacionMP = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionMP>>("api/OrdenesFabricacionMP/" + cg_ordfAsoc.ToString());
             // Semi elaborados
-            ordenFabricacionSE = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionSE>>("api/OrdenesFabricacionSE/" + ordenNumero.ToString());
+            ordenFabricacionSE = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionSE>>("api/OrdenesFabricacionSE/" + cg_ordfAsoc.ToString());
             // Semi elaborados
             ordenFabricacionHojaRuta = await Http.GetFromJsonAsync<List<ModeloOrdenFabricacionHojaRuta>>("api/OrdenesFabricacionHojaRuta/" + xCgProd + "/" + xCantidad.ToString());
             isOrdenDialogVisible = true;
@@ -1268,7 +1271,7 @@
     protected async Task IrAServicio(string pedido)
     {
         //NavigationManager.NavigateTo($"sc/servicio/list/{pedido}");
-        await JS.InvokeVoidAsync("open", new object[2] { $"sc/servicio/list/{pedido}", $"sc/servicio/list/{pedido}" });
+        await JS.InvokeVoidAsync("open", new object[2] { $"servicio/list/{pedido}", $"servicio/list/{pedido}" });
     }
 
     protected async Task IrAPrograma(string cg_prod)
@@ -1345,12 +1348,7 @@
     }
     protected async Task Etiqueta()
     {
-
-        if (ordenFabricacion.PEDIDO == 0)
-        {
-            return;
-        }
-
+        //MUESTRA LA IDENTIFICACION DE ACUERDO AL TIPO DE INSUMO
         PedCliList = await Http.GetFromJsonAsync<List<PedCli>>($"api/PedCli/GetPedidos/{ordenFabricacion.PEDIDO.ToString()}");
         prodList = await Http.GetFromJsonAsync<List<Prod>>($"api/Prod/GetPedidos/{ordenFabricacion.CG_PROD.Trim()}");
 

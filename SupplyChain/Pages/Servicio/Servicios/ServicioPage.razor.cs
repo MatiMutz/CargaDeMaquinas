@@ -129,13 +129,15 @@ namespace SupplyChain.Pages.Servicios
 
         protected override async Task OnInitializedAsync()
         {
-            servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
+            
             if (!string.IsNullOrEmpty(pedido))
             {
+                servicios = await Http.GetFromJsonAsync<List<Service>>("api/Servicios");
                 servDesc = servicios.Where(s => s.PEDIDO == pedido).ToList();
             }
             else
             {
+                servicios = await Http.GetFromJsonAsync<List<Service>>($"api/Servicios/{pedido}");
                 servDesc = servicios.OrderByDescending(s => s.PEDIDO).ToList();
             }
             medidas = await Http.GetFromJsonAsync<List<Medida>>("api/Medida");

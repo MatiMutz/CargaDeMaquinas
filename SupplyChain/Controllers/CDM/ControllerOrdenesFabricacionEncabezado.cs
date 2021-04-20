@@ -45,7 +45,7 @@ namespace SupplyChain
                                             "WHERE C.CG_ORDF = {0}"
                                             , idOrden);
 
-                return _context.OrdenesFabricacionEncabezado.FromSqlRaw(xSQL).ToList<ModeloOrdenFabricacionEncabezado>().FirstOrDefault<ModeloOrdenFabricacionEncabezado>();
+                return _context.OrdenesFabricacionEncabezado.FromSqlRaw(xSQL).ToList().FirstOrDefault();
             }
             catch
             {

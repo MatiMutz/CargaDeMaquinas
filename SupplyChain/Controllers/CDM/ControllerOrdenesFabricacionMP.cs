@@ -30,9 +30,10 @@ namespace SupplyChain
             {
                 string xSQL = string.Format("SELECT REGISTRO, CG_ART, DES_ART, " +
                                             "convert(numeric(10, 4), (STOCK * - 1)) AS STOCK, LOTE, DESPACHO, SERIE " +
-                                            "FROM Pedidos WHERE TIPOO IN (10, 11, 28) AND CG_ORDEN = 4 AND CG_ORDF = {0} ORDER BY REGISTRO"
+                                            "FROM Pedidos WHERE TIPOO IN (10, 11, 28) AND CG_ORDEN = 4 " +
+                                            "AND CG_ORDF = {0} ORDER BY REGISTRO"
                                             ,idOrden);
-                return _context.OrdenesFabricacionMP.FromSqlRaw(xSQL).ToList<ModeloOrdenFabricacionMP>();
+                return _context.OrdenesFabricacionMP.FromSqlRaw(xSQL).ToList();
             }
             catch
             {
